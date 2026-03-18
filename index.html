@@ -13,20 +13,17 @@
 html,body{width:100%;height:100%;overflow:hidden;position:fixed;top:0;left:0;}
 body{background:#0a0a09;font-family:'Courier New',Courier,monospace;-webkit-user-select:none;user-select:none;}
 
-/* SCREENS */
+/* ── SCREENS ── */
 .screen{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden;}
 .screen.active{display:flex;}
 #screen-cover,#screen-threshold{align-items:center;justify-content:center;}
 
-/* ══ COVER ══ */
+/* ── COVER ── */
 #screen-cover{background:#0a0a09;}
 .cover-face{
-background-color:#1A3A5C;
-position:relative;overflow:visible;
+background-color:#1A3A5C;position:relative;overflow:visible;
 box-shadow:0 20px 60px rgba(0,0,0,0.9);
-height:min(78vh,560px);
-aspect-ratio:5.5/8;
-flex-shrink:0;
+height:min(78vh,560px);aspect-ratio:5.5/8;flex-shrink:0;
 }
 .cover-face svg.folds{position:absolute;inset:0;width:100%;height:100%;z-index:3;}
 .cover-band{
@@ -34,8 +31,8 @@ position:absolute;bottom:0;left:0;right:0;height:28%;
 background:#F5F2EB;border-top:1px solid rgba(15,15,13,0.2);
 z-index:4;display:flex;align-items:center;justify-content:space-between;padding:0 6%;
 }
-.cover-band-season{font-size:clamp(7px,1.6vw,10px);letter-spacing:0.14em;text-transform:uppercase;color:rgba(15,15,13,0.6);}
-.cover-band-code{font-size:clamp(7px,1.6vw,10px);letter-spacing:0.14em;color:rgba(15,15,13,0.4);}
+.cbs{font-size:clamp(7px,1.6vw,10px);letter-spacing:0.14em;text-transform:uppercase;color:rgba(15,15,13,0.6);}
+.cbc{font-size:clamp(7px,1.6vw,10px);letter-spacing:0.14em;color:rgba(15,15,13,0.4);}
 .cover-mark{position:absolute;top:40%;left:24%;transform:translateY(-50%);font-weight:700;font-size:clamp(20px,4.5vh,34px);color:#F5F2EB;line-height:1;z-index:10;letter-spacing:-0.02em;}
 .cover-mark .p{color:#D4500A;}
 .cover-vol{position:absolute;top:4%;right:5%;font-size:clamp(7px,1.2vh,9px);letter-spacing:0.16em;color:rgba(245,242,235,0.22);z-index:10;text-transform:uppercase;}
@@ -46,34 +43,80 @@ z-index:4;display:flex;align-items:center;justify-content:space-between;padding:
 .tap-hint{position:absolute;bottom:31%;width:100%;text-align:center;font-size:clamp(7px,1.4vw,9px);letter-spacing:0.22em;color:rgba(15,15,13,0.25);text-transform:uppercase;z-index:30;animation:hint-out 3s ease 2s forwards;}
 @keyframes hint-out{to{opacity:0;}}
 
-/* ══ THRESHOLD ══ */
+/* ── THRESHOLD ── */
 #screen-threshold{background:#D4500A;}
 .threshold-mark{font-weight:700;color:#F5F2EB;animation:t-exp 0.4s cubic-bezier(0.16,1,0.3,1) forwards;}
 @keyframes t-exp{0%{font-size:clamp(28px,6vh,48px);opacity:0.4;}100%{font-size:clamp(90px,24vh,180px);opacity:1;}}
 
-/* ══ NAV BAR ══ */
-#bottom-nav{position:fixed;bottom:0;left:0;right:0;height:48px;background:rgba(10,10,9,0.97);border-top:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:500;}
+/* ── DOT GRID ── */
+.dot-grid{
+background-color:#F5F2EB;
+background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);
+background-size:11.34px 11.34px;
+}
+
+/* ── NAV BAR ── */
+#bottom-nav{
+position:fixed;bottom:0;left:0;right:0;height:48px;
+background:rgba(10,10,9,0.97);border-top:1px solid #222;
+display:flex;align-items:center;justify-content:space-between;
+padding:0 20px;z-index:500;
+}
 #bottom-nav.hidden{display:none;}
 .nav-left{display:flex;align-items:center;gap:16px;}
 .nav-mark{font-weight:700;font-size:12px;color:#D4500A;letter-spacing:0.12em;}
 .nbtn{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#888;background:none;border:none;padding:10px 4px;cursor:pointer;font-family:‘Courier New’,monospace;-webkit-appearance:none;}
-.nav-right{display:flex;align-items:center;gap:14px;}
-.nav-pg{font-size:10px;color:#666;letter-spacing:0.1em;}
+.nav-right{display:flex;align-items:center;gap:6px;}
+.nav-pg{font-size:10px;color:#666;letter-spacing:0.1em;min-width:80px;text-align:center;}
+.nav-arrow{font-size:18px;color:#666;background:none;border:none;padding:8px 10px;cursor:pointer;-webkit-appearance:none;line-height:1;}
+.nav-arrow:active{color:#D4500A;}
 
-/* ══ TOC ══ */
+/* ── TOC ── */
 #screen-toc{padding-bottom:48px;}
-.toc-hdr{flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:16px 20px 12px;border-bottom:1.5px solid #0F0F0D;background:#F5F2EB;}
+.toc-hdr{
+flex-shrink:0;display:flex;justify-content:space-between;align-items:center;
+padding:14px 20px 10px;border-bottom:1.5px solid #0F0F0D;
+background:#F5F2EB;
+}
 .toc-hdr-t{font-weight:700;font-size:clamp(10px,2vw,13px);letter-spacing:0.18em;text-transform:uppercase;color:#0F0F0D;}
 .toc-hdr-s{font-size:clamp(8px,1.5vw,10px);letter-spacing:0.12em;color:rgba(15,15,13,0.5);}
-.toc-body{flex:1;display:grid;overflow:hidden;min-height:0;background-color:#F5F2EB;background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);background-size:11.34px 11.34px;}
-@media(orientation:landscape){.toc-body{grid-template-columns:1fr 1fr;}}
-@media(orientation:portrait){.toc-body{grid-template-rows:1fr 1fr;}}
 
-.toc-list{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 18px;border-right:1px solid rgba(15,15,13,0.1);background-color:#F5F2EB;background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);background-size:11.34px 11.34px;}
+/* Landscape: side by side. Portrait: single panel with toggle */
+.toc-body{flex:1;display:flex;overflow:hidden;min-height:0;}
+
+/* List panel — left page [-2] */
+.toc-list{
+flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+padding:12px 18px;
+background-color:#F5F2EB;
+background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);
+background-size:11.34px 11.34px;
+}
+
+/* In portrait, grid panel is hidden by default */
+.toc-grid-panel{
+display:flex;
+background-color:#F5F2EB;
+background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);
+background-size:11.34px 11.34px;
+}
+
+@media(orientation:landscape){
+.toc-list{border-right:1px solid rgba(15,15,13,0.15);}
+.toc-grid-panel{flex:1;align-items:center;justify-content:center;padding:16px;}
+}
+@media(orientation:portrait){
+.toc-grid-panel{display:none;}
+.toc-grid-panel.visible{display:flex;flex:1;align-items:center;justify-content:center;padding:16px;}
+.toc-list.hidden{display:none;}
+}
+
+/* TOC list internals */
 .toc-col-hds{display:grid;grid-template-columns:40px 16px 16px 1fr 22px;gap:0 10px;padding-bottom:6px;border-bottom:1px solid rgba(15,15,13,0.2);margin-bottom:6px;}
 .toc-ch{font-size:8px;letter-spacing:0.12em;color:rgba(15,15,13,0.5);text-transform:uppercase;}
 .toc-row{display:grid;grid-template-columns:40px 16px 16px 1fr 22px;gap:0 10px;padding:6px 0;border-bottom:1px solid rgba(15,15,13,0.1);align-items:center;cursor:pointer;}
-.tc{font-size:clamp(9px,1.6vw,11px);color:#0F0F0D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.toc-row:active{background:rgba(212,80,10,0.06);}
+.tc{font-size:clamp(9px,1.8vw,11px);color:#0F0F0D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .tc-pg{font-size:9px;color:rgba(15,15,13,0.6);}
 .tag-a{display:inline-block;width:9px;height:9px;background:#D4500A;}
 .tag-h{display:inline-block;width:9px;height:9px;background:#1A3A5C;opacity:0.5;}
@@ -81,18 +124,13 @@ z-index:4;display:flex;align-items:center;justify-content:space-between;padding:
 .ch-tags{margin-top:16px;padding-top:12px;border-top:1px solid rgba(15,15,13,0.1);}
 .ch-tags-lbl{font-size:8px;letter-spacing:0.14em;color:#D4500A;text-transform:uppercase;margin-bottom:8px;}
 .ctag{display:inline-block;font-size:8px;padding:3px 8px;border:1px solid #D4500A;color:#D4500A;margin:2px 3px 2px 0;letter-spacing:0.08em;}
+.toc-grid-toggle{margin-top:16px;padding-top:12px;border-top:1px solid rgba(15,15,13,0.1);}
+.grid-toggle-btn{font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#D4500A;background:none;border:1px solid #D4500A;padding:4px 10px;cursor:pointer;font-family:‘Courier New’,monospace;-webkit-appearance:none;}
 
-/* ══ TOC GRID — 1:1 cells, equal gap x=y ══ */
-.toc-grid-wrap{
-display:flex;align-items:center;justify-content:center;
-padding:16px;overflow:hidden;
-background-color:#F5F2EB;
-background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);
-background-size:11.34px 11.34px;
-}
+/* Grid — 1:1 cells, equal gap */
 .toc-grid{
 display:grid;
-grid-template-columns:1fr 1fr;
+grid-template-columns:repeat(2,1fr);
 grid-template-rows:repeat(4,1fr);
 }
 .gcell{
@@ -101,7 +139,7 @@ border:1px solid rgba(15,15,13,0.15);
 display:flex;flex-direction:column;
 padding:10px;position:relative;overflow:hidden;cursor:pointer;
 }
-.gcell:active{background:rgba(15,15,13,0.06);}
+.gcell:active{background:rgba(15,15,13,0.04);}
 .gcell-num{font-size:7px;letter-spacing:0.1em;color:rgba(15,15,13,0.45);margin-bottom:4px;text-transform:uppercase;}
 .gcell-name{font-size:clamp(8px,1.3vw,10px);color:#0F0F0D;line-height:1.4;}
 .gcell-new{border-color:#D4500A;align-items:center;justify-content:center;}
@@ -111,22 +149,61 @@ padding:10px;position:relative;overflow:hidden;cursor:pointer;
 .postit{position:absolute;bottom:6px;right:6px;width:48px;height:44px;background:#f9f0c8;box-shadow:1px 1px 4px rgba(0,0,0,0.18);transform:rotate(-3deg);padding:5px 4px;font-size:6px;color:#333;line-height:1.4;}
 .postit-from{font-size:5.5px;color:#D4500A;font-weight:700;margin-bottom:2px;letter-spacing:0.08em;}
 
-/* ══ INTERIOR ══ */
+/* ── INTERIOR — FACING PAGES ── */
 #screen-interior{padding-bottom:48px;}
-.interior-wrap{
-position:relative;flex:1;overflow:hidden;min-height:0;
-/* DOT GRID — real background, not pseudo-element */
+
+.spread-wrap{
+flex:1;display:flex;min-height:0;overflow:hidden;
+position:relative;
+}
+
+/* Gutter line */
+.gutter-line{
+position:absolute;
+top:0;bottom:0;
+left:50%;
+width:1px;
+background:rgba(15,15,13,0.15);
+z-index:10;
+pointer-events:none;
+}
+
+.page-face{
+flex:1;position:relative;overflow:hidden;
 background-color:#F5F2EB;
 background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);
 background-size:11.34px 11.34px;
 }
-#ink-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:5;touch-action:none;background:transparent;}
-.page-num{position:absolute;bottom:14px;font-size:11px;letter-spacing:0.1em;color:rgba(15,15,13,0.6);z-index:20;font-family:‘Courier New’,monospace;font-weight:700;}
-.page-num.r{right:20px;}.page-num.l{left:20px;}
-.sync-dot{position:absolute;bottom:17px;right:80px;width:7px;height:7px;border-radius:50%;background:#aaa;z-index:20;animation:breathe 2s ease-in-out infinite;}
+
+/* Portrait: single page, full width */
+@media(orientation:portrait){
+.page-face.page-right{display:none;}
+.gutter-line{display:none;}
+}
+
+.page-canvas{
+position:absolute;inset:0;width:100%;height:100%;
+z-index:5;touch-action:none;background:transparent;
+}
+
+.page-num{
+position:absolute;bottom:14px;
+font-size:11px;letter-spacing:0.1em;
+color:rgba(15,15,13,0.6);z-index:20;
+font-family:‘Courier New’,monospace;font-weight:700;
+}
+.page-num.outside-left{left:16px;}
+.page-num.outside-right{right:16px;}
+
+.sync-dot{
+position:absolute;bottom:17px;right:80px;
+width:7px;height:7px;border-radius:50%;
+background:#aaa;z-index:20;
+animation:breathe 2s ease-in-out infinite;
+}
 @keyframes breathe{0%,100%{opacity:0.35;}50%{opacity:1;}}
 
-/* ══ SCRAP (moveable, deleteable) ══ */
+/* Scrap */
 .scrap{position:absolute;z-index:8;touch-action:none;}
 .scrap-inner{position:relative;}
 .scrap-tape{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:36px;height:14px;background:rgba(200,190,160,0.58);border:0.5px solid rgba(15,15,13,0.1);z-index:2;}
@@ -134,19 +211,24 @@ background-size:11.34px 11.34px;
 .scrap-lineage{position:absolute;bottom:-14px;right:0;font-size:6.5px;color:rgba(15,15,13,0.5);letter-spacing:0.04em;white-space:nowrap;}
 .handle{position:absolute;width:10px;height:10px;border:2px solid #D4500A;z-index:12;background:#F5F2EB;}
 .hnw{top:-5px;left:-5px;}.hne{top:-5px;right:-5px;}.hsw{bottom:-5px;left:-5px;}.hse{bottom:-5px;right:-5px;}
-.scrap-delete{position:absolute;top:-18px;right:-10px;width:22px;height:22px;background:#D4500A;color:#F5F2EB;border-radius:50%;font-size:14px;line-height:22px;text-align:center;z-index:15;cursor:pointer;display:none;}
+.scrap-delete{position:absolute;top:-20px;right:-10px;width:24px;height:24px;background:#D4500A;color:#F5F2EB;border-radius:50%;font-size:14px;line-height:24px;text-align:center;z-index:15;cursor:pointer;display:none;}
 .scrap.selected .scrap-delete{display:block;}
-.scrap.selected{outline:1px solid rgba(212,80,10,0.3);}
 
-/* ══ TYPE LABEL ══ */
+/* Type label */
 .type-label{position:absolute;font-family:‘Courier New’,monospace;font-size:11px;color:#0F0F0D;line-height:1.6;letter-spacing:0.04em;z-index:8;border-bottom:1px solid rgba(15,15,13,0.25);padding-bottom:2px;}
 
-/* ══ INDEX ══ */
-#screen-index{padding-bottom:48px;background-color:#F5F2EB;background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);background-size:11.34px 11.34px;}
+/* ── INDEX ── */
+#screen-index{
+padding-bottom:48px;
+background-color:#F5F2EB;
+background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);
+background-size:11.34px 11.34px;
+}
 .index-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .index-wrap{padding:18px 20px 40px;}
 .index-hdr{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:12px;border-bottom:1.5px solid #0F0F0D;margin-bottom:22px;}
 .index-hdr-t{font-weight:700;font-size:clamp(10px,2vw,13px);letter-spacing:0.18em;text-transform:uppercase;color:#0F0F0D;}
+.index-hdr-s{font-size:clamp(8px,1.5vw,10px);letter-spacing:0.12em;color:rgba(15,15,13,0.5);}
 .index-sec{margin-bottom:22px;}
 .index-sec-h{font-size:9px;letter-spacing:0.16em;color:#D4500A;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
 .index-sec-h::after{content:’’;flex:1;height:1px;background:rgba(212,80,10,0.25);}
@@ -156,7 +238,7 @@ background-size:11.34px 11.34px;
 .gps-lbl{font-size:9px;letter-spacing:0.16em;color:#1A3A5C;text-transform:uppercase;margin-bottom:10px;}
 .gps-body{font-size:clamp(9px,1.8vw,11px);color:rgba(15,15,13,0.6);line-height:1.9;font-style:italic;}
 
-/* ══ MENU ══ */
+/* ── MENU ── */
 #menu-overlay{position:fixed;inset:0;background:rgba(10,10,9,0.95);z-index:600;display:none;flex-direction:column;align-items:flex-end;padding:60px 32px 32px;}
 #menu-overlay.open{display:flex;}
 .mitem{font-size:clamp(22px,5vw,32px);letter-spacing:0.08em;text-transform:uppercase;color:rgba(245,242,235,0.7);padding:12px 0;border-bottom:1px solid rgba(245,242,235,0.08);width:100%;text-align:right;cursor:pointer;}
@@ -164,7 +246,7 @@ background-size:11.34px 11.34px;
 .mitem-dim{color:rgba(245,242,235,0.25);font-size:clamp(14px,3vw,20px);}
 .mclose{font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#444;cursor:pointer;margin-top:24px;padding:8px 0;}
 
-/* ══ TYPEWRITER ══ */
+/* ── TYPEWRITER ── */
 #tw-overlay{position:fixed;inset:0;background:rgba(10,10,9,0.8);z-index:700;display:none;align-items:center;justify-content:center;padding:32px;}
 #tw-overlay.open{display:flex;}
 #tw-form{display:flex;flex-direction:column;width:100%;max-width:520px;gap:10px;}
@@ -196,8 +278,8 @@ background-size:11.34px 11.34px;
     <div class="cover-mark">DRAF<span class="p">.</span></div>
     <div class="cover-vol">Vol. 01</div>
     <div class="cover-band">
-      <span class="cover-band-season">Winter · MMXXVI</span>
-      <span class="cover-band-code">WI · 001/100</span>
+      <span class="cbs">Winter · MMXXVI</span>
+      <span class="cbc">WI · 001/100</span>
     </div>
     <div class="wear-coffee"></div>
     <div class="wear-scratch" style="width:7%;top:52%;left:54%;transform:rotate(-11deg);"></div>
@@ -217,71 +299,96 @@ background-size:11.34px 11.34px;
 <div id="screen-toc" class="screen">
   <div class="toc-hdr">
     <div class="toc-hdr-t">DRAF. · Contents</div>
-    <div class="toc-hdr-s">Vol. 01 · Winter MMXXVI</div>
+    <div class="toc-hdr-s">Vol. 01 · Winter MMXXVI · [-2]/[-1]</div>
   </div>
   <div class="toc-body">
-    <div class="toc-list">
-      <div class="toc-col-hds">
-        <div class="toc-ch">pg</div><div class="toc-ch">tag</div>
-        <div class="toc-ch">⬤</div><div class="toc-ch">project</div><div class="toc-ch">↗</div>
-      </div>
-      <div class="toc-row" id="tr1"><div class="tc tc-pg">[001]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">STRADE_B · active</div><div class="arr">↗</div></div>
-      <div class="toc-row" id="tr2"><div class="tc tc-pg">[002]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">STRADE_B · active</div><div class="arr">↗</div></div>
-      <div class="toc-row" id="tr3"><div class="tc tc-pg">[003]</div><div class="tc"><span class="tag-h"></span></div><div class="tc" style="opacity:0.5">◐</div><div class="tc">LUM_FIELD · research</div><div class="arr" style="color:#1A3A5C;opacity:0.5">↗</div></div>
-      <div class="toc-row" id="tr4"><div class="tc tc-pg">[004]</div><div class="tc"><span class="tag-a"></span></div><div class="tc" style="opacity:0.28">○</div><div class="tc">AT_COST · active</div><div class="arr">↗</div></div>
-      <div class="toc-row" id="tr5"><div class="tc tc-pg">[005]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">PERSONAL · personal</div><div class="arr" style="opacity:0.25">—</div></div>
-      <div class="ch-tags">
-        <div class="ch-tags-lbl">Dynamic Folio</div>
-        <span class="ctag">STRADE_B · 001–002</span>
-        <span class="ctag" style="border-color:#1A3A5C;color:#1A3A5C;opacity:0.6">LUM_FIELD · 003</span>
-        <span class="ctag">AT_COST · 004</span>
-      </div>
-    </div>
-    <!-- GRID: 1:1 cells, gap set by JS -->
-    <div class="toc-grid-wrap" id="grid-wrap">
-      <div class="toc-grid" id="toc-grid">
-        <div class="gcell gcell-new" id="gc-new"><div class="new-mark">//|</div></div>
-        <div class="gcell" id="gc1"><div class="gcell-num">01 · STRADE_B</div><div class="gcell-name">pg 001–002</div></div>
-        <div class="gcell" id="gc2"><div class="gcell-num">02 · LUM_FIELD</div><div class="gcell-name">pg 003</div></div>
-        <div class="gcell" id="gc3"><div class="gcell-num">03 · AT_COST</div><div class="gcell-name">pg 004</div></div>
-        <div class="gcell" id="gc4"><div class="gcell-num">04 · PERSONAL</div><div class="gcell-name">pg 005 · ●</div></div>
-        <div class="gcell" style="opacity:0.3"><div class="gcell-num">05 · —</div><div class="gcell-name">unassigned</div></div>
-        <div class="gcell" style="opacity:0.3"><div class="gcell-num">06 · —</div><div class="gcell-name">unassigned</div></div>
-        <div class="gcell gcell-inbox" id="gc-inbox">
-          <div class="inbox-lbl">08 · Inbox ↗</div>
-          <div class="gcell-name" style="font-size:8px;opacity:0.55;">notifications</div>
-          <div class="postit"><div class="postit-from">MARGOT</div>STRADE_B — door hinge pg 001</div>
-        </div>
-      </div>
-    </div>
+
+```
+<!-- LIST — page [-2] -->
+<div class="toc-list" id="toc-list-panel">
+  <div class="toc-col-hds">
+    <div class="toc-ch">pg</div><div class="toc-ch">tag</div>
+    <div class="toc-ch">⬤</div><div class="toc-ch">project</div><div class="toc-ch">↗</div>
+  </div>
+  <div class="toc-row" id="tr1"><div class="tc tc-pg">[001]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">STRADE_B · active</div><div class="arr">↗</div></div>
+  <div class="toc-row" id="tr2"><div class="tc tc-pg">[002]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">STRADE_B · active</div><div class="arr">↗</div></div>
+  <div class="toc-row" id="tr3"><div class="tc tc-pg">[003]</div><div class="tc"><span class="tag-h"></span></div><div class="tc" style="opacity:0.5">◐</div><div class="tc">LUM_FIELD · research</div><div class="arr" style="color:#1A3A5C;opacity:0.5">↗</div></div>
+  <div class="toc-row" id="tr4"><div class="tc tc-pg">[004]</div><div class="tc"><span class="tag-a"></span></div><div class="tc" style="opacity:0.28">○</div><div class="tc">AT_COST · active</div><div class="arr">↗</div></div>
+  <div class="toc-row" id="tr5"><div class="tc tc-pg">[005]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">PERSONAL · personal</div><div class="arr" style="opacity:0.25">—</div></div>
+
+  <div class="ch-tags">
+    <div class="ch-tags-lbl">Dynamic Folio</div>
+    <span class="ctag">STRADE_B · 001–002</span>
+    <span class="ctag" style="border-color:#1A3A5C;color:#1A3A5C;opacity:0.6">LUM_FIELD · 003</span>
+    <span class="ctag">AT_COST · 004</span>
+  </div>
+
+  <!-- Portrait only: toggle to grid -->
+  <div class="toc-grid-toggle" id="grid-toggle-wrap">
+    <button class="grid-toggle-btn" id="grid-toggle-btn">Grid view ↗</button>
   </div>
 </div>
 
-<!-- INTERIOR -->
+<!-- GRID — page [-1] -->
+<div class="toc-grid-panel" id="toc-grid-panel">
+  <div class="toc-grid" id="toc-grid">
+    <div class="gcell gcell-new" id="gc-new"><div class="new-mark">//|</div></div>
+    <div class="gcell" id="gc1"><div class="gcell-num">01 · STRADE_B</div><div class="gcell-name">pg 001–002</div></div>
+    <div class="gcell" id="gc2"><div class="gcell-num">02 · LUM_FIELD</div><div class="gcell-name">pg 003</div></div>
+    <div class="gcell" id="gc3"><div class="gcell-num">03 · AT_COST</div><div class="gcell-name">pg 004</div></div>
+    <div class="gcell" id="gc4"><div class="gcell-num">04 · PERSONAL</div><div class="gcell-name">pg 005 · ●</div></div>
+    <div class="gcell" style="opacity:0.3"><div class="gcell-num">05 · —</div><div class="gcell-name">unassigned</div></div>
+    <div class="gcell" style="opacity:0.3"><div class="gcell-num">06 · —</div><div class="gcell-name">unassigned</div></div>
+    <div class="gcell gcell-inbox" id="gc-inbox">
+      <div class="inbox-lbl">08 · Inbox ↗</div>
+      <div class="gcell-name" style="font-size:8px;opacity:0.55;">notifications</div>
+      <div class="postit"><div class="postit-from">MARGOT</div>STRADE_B — door hinge pg 001</div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- INTERIOR — FACING PAGES -->
 
 <div id="screen-interior" class="screen">
-  <div class="interior-wrap" id="interior-wrap">
-    <canvas id="ink-canvas"></canvas>
-    <!-- Sample scrap — page 1 only -->
-    <div class="scrap" id="sample-scrap" style="top:14%;left:8%;transform:rotate(-3deg);">
-      <div class="scrap-inner">
-        <div class="scrap-tape"></div>
-        <svg width="140" height="100" viewBox="0 0 140 100">
-          <rect width="140" height="100" fill="#c4bdb4"/>
-          <path d="M12,72 Q42,48 75,62 Q108,76 122,52" stroke="#3a3530" stroke-width="2.2" fill="none" opacity="0.6"/>
-          <path d="M22,36 L40,30 L65,40 L90,33 L112,38" stroke="#4a4540" stroke-width="1" fill="none" opacity="0.45"/>
-          <text x="6" y="93" fill="#444" font-size="6.5" font-family="monospace" opacity="0.7">site sketch · 14.03.26</text>
-        </svg>
-        <div class="handle hnw"></div><div class="handle hne"></div>
-        <div class="handle hsw"></div><div class="handle hse"></div>
-        <div class="scrap-delete" id="scrap-del">✕</div>
-        <div class="scrap-lineage">iPhone · 14.03.26 · STRADE_B</div>
-      </div>
+  <div class="spread-wrap" id="spread-wrap">
+    <div class="gutter-line"></div>
+
+```
+<!-- LEFT PAGE — even numbers -->
+<div class="page-face page-left" id="page-left">
+  <canvas class="page-canvas" id="canvas-left"></canvas>
+  <div class="page-num outside-left" id="pg-left">—</div>
+</div>
+
+<!-- RIGHT PAGE — odd numbers -->
+<div class="page-face page-right" id="page-right">
+  <!-- Sample scrap on [002] right page -->
+  <div class="scrap" id="sample-scrap" style="top:14%;left:8%;transform:rotate(-3deg);">
+    <div class="scrap-inner">
+      <div class="scrap-tape"></div>
+      <svg width="140" height="100" viewBox="0 0 140 100">
+        <rect width="140" height="100" fill="#c4bdb4"/>
+        <path d="M12,72 Q42,48 75,62 Q108,76 122,52" stroke="#3a3530" stroke-width="2.2" fill="none" opacity="0.6"/>
+        <path d="M22,36 L40,30 L65,40 L90,33 L112,38" stroke="#4a4540" stroke-width="1" fill="none" opacity="0.45"/>
+        <text x="6" y="93" fill="#444" font-size="6.5" font-family="monospace" opacity="0.7">site sketch · 14.03.26</text>
+      </svg>
+      <div class="handle hnw"></div><div class="handle hne"></div>
+      <div class="handle hsw"></div><div class="handle hse"></div>
+      <div class="scrap-delete" id="scrap-del">✕</div>
+      <div class="scrap-lineage">iPhone · 14.03.26 · STRADE_B</div>
     </div>
-    <!-- Sample typewriter label -->
-    <div class="type-label" style="top:48%;left:8%;">door hinge detail — section A<br>clearance: 12mm min.</div>
-    <div class="page-num r" id="page-display">[001]</div>
-    <div class="sync-dot" id="sync-dot"></div>
+  </div>
+  <div class="type-label" style="top:48%;left:8%;">door hinge detail — section A<br>clearance: 12mm min.</div>
+  <canvas class="page-canvas" id="canvas-right"></canvas>
+  <div class="page-num outside-right" id="pg-right">—</div>
+  <div class="sync-dot" id="sync-dot"></div>
+</div>
+```
+
   </div>
 </div>
 
@@ -292,7 +399,7 @@ background-size:11.34px 11.34px;
     <div class="index-wrap">
       <div class="index-hdr">
         <div class="index-hdr-t">Index · Vol. 01</div>
-        <div class="toc-hdr-s">Winter MMXXVI</div>
+        <div class="index-hdr-s">Winter MMXXVI</div>
       </div>
       <div class="index-sec">
         <div class="index-sec-h">Project Slugs</div>
@@ -309,7 +416,7 @@ background-size:11.34px 11.34px;
       </div>
       <div class="index-sec">
         <div class="index-sec-h">Taped-In Scraps</div>
-        <div class="index-entry"><span>Site sketch · iPhone · 14.03.26 · STRADE_B</span><span class="index-pg">001</span></div>
+        <div class="index-entry"><span>Site sketch · iPhone · 14.03.26 · STRADE_B</span><span class="index-pg">002</span></div>
       </div>
       <div class="gps-block">
         <div class="gps-lbl">GPS Anchor · Darius Okafor · Winter MMXXVI</div>
@@ -329,7 +436,9 @@ background-size:11.34px 11.34px;
     <button class="nbtn" id="btn-work">Work</button>
   </div>
   <div class="nav-right">
-    <div class="nav-pg" id="nav-pg">001/100</div>
+    <button class="nav-arrow" id="btn-prev">‹</button>
+    <div class="nav-pg" id="nav-pg">[002]/[003]</div>
+    <button class="nav-arrow" id="btn-next">›</button>
     <button class="nbtn" id="btn-menu">≡</button>
   </div>
 </div>
@@ -358,258 +467,293 @@ background-size:11.34px 11.34px;
 </div>
 
 <script>
-// ══ STATE ══
-const S={
-  page:parseInt(localStorage.getItem('draf-pg')||'1'),
-  screen:'cover',
-  tapTime:0,twX:0,twY:0
-};
-const TOTAL=100;
+// ══ PAGE LOGIC ══
+// Book opens to spread [002]/[003]. [001] is the ghost — exists in index, never shown as a facing page.
+// Even pages = left, Odd pages = right.
+// Spreads: [002]/[003], [004]/[005], [006]/[007] ... [098]/[099], then [100] alone on left.
+// leftPage is always even: 2,4,6...100
+const TOTAL = 100;
 
-// ══ GRID GEOMETRY — 1:1 cells, equal gap ══
-function fixGrid(){
-  const wrap=document.getElementById('grid-wrap');
-  const grid=document.getElementById('toc-grid');
-  if(!wrap||!grid)return;
-  const pad=16;
-  const W=wrap.clientWidth-pad*2;
-  const H=wrap.clientHeight-pad*2;
-  // 2 cols × 4 rows, gap g (equal x and y)
-  // cellSize = (H - 3g)/4 must equal (W - g)/2
-  // (H-3g)/4 = (W-g)/2 → H-3g = 2W-2g → H-2W = g
-  let g=Math.round(H-2*W);
-  g=Math.max(4,Math.min(g,20));
-  const cell=Math.floor((H-3*g)/4);
-  const gridW=cell*2+g;
-  const gridH=cell*4+g*3;
-  grid.style.gap=g+'px';
-  grid.style.width=gridW+'px';
-  grid.style.height=gridH+'px';
-  grid.style.gridTemplateRows='repeat(4,'+cell+'px)';
-  grid.style.gridTemplateColumns='repeat(2,'+cell+'px)';
+const S = {
+  leftPage: parseInt(localStorage.getItem('draf-left') || '2'),
+  screen: 'cover',
+  twX: 0, twY: 0, twTarget: 'right'
+};
+
+function getSpreadLabel(){
+  const l = S.leftPage;
+  const r = l + 1;
+  if(r > TOTAL) return '[' + pad(l) + ']';
+  return '[' + pad(l) + ']/[' + pad(r) + ']';
 }
-window.addEventListener('resize',()=>{fixGrid();if(S.screen==='interior')initCanvas();});
-window.addEventListener('orientationchange',()=>setTimeout(fixGrid,350));
+function pad(n){ return String(n).padStart(3,'0'); }
+
+function updateSpread(){
+  const l = S.leftPage;
+  const r = l + 1;
+  document.getElementById('pg-left').textContent = '[' + pad(l) + ']';
+  document.getElementById('pg-right').textContent = r <= TOTAL ? '[' + pad(r) + ']' : '';
+  document.getElementById('nav-pg').textContent = getSpreadLabel();
+  localStorage.setItem('draf-left', l);
+  // Show scrap only on spread containing page 002
+  const scrap = document.getElementById('sample-scrap');
+  if(scrap) scrap.style.display = (l === 2) ? 'block' : 'none';
+}
+
+function prevSpread(){
+  if(S.leftPage <= 2) return;
+  S.leftPage -= 2;
+  updateSpread();
+  initCanvases();
+}
+function nextSpread(){
+  if(S.leftPage >= TOTAL) return;
+  S.leftPage += 2;
+  updateSpread();
+  initCanvases();
+}
+
+// ══ GRID GEOMETRY ══
+function fixGrid(){
+  const wrap = document.getElementById('toc-grid-panel');
+  const grid = document.getElementById('toc-grid');
+  if(!wrap || !grid) return;
+  const pad = 16;
+  const W = wrap.clientWidth - pad*2;
+  const H = wrap.clientHeight - pad*2;
+  if(W <= 0 || H <= 0) return;
+  // 2 cols, 4 rows. Cell must be 1:1. Equal gap g.
+  // (H - 3g)/4 = (W - g)/2 → g = H - 2W
+  let g = Math.round(H - 2*W);
+  g = Math.max(4, Math.min(g, 24));
+  const cell = Math.floor((H - 3*g) / 4);
+  if(cell <= 0) return;
+  grid.style.gap = g + 'px';
+  grid.style.gridTemplateColumns = 'repeat(2,' + cell + 'px)';
+  grid.style.gridTemplateRows = 'repeat(4,' + cell + 'px)';
+  grid.style.width = (cell*2 + g) + 'px';
+  grid.style.height = (cell*4 + g*3) + 'px';
+}
+
+window.addEventListener('resize', ()=>{ fixGrid(); initCanvases(); });
+window.addEventListener('orientationchange', ()=>setTimeout(()=>{ fixGrid(); initCanvases(); }, 350));
 
 // ══ SHOW ══
 function show(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+name).classList.add('active');
-  S.screen=name;
-  const nav=document.getElementById('bottom-nav');
-  (name==='cover'||name==='threshold')?nav.classList.add('hidden'):nav.classList.remove('hidden');
-  if(name==='interior'){initCanvas();updatePg();}
-  if(name==='toc'){requestAnimationFrame(fixGrid);}
-  // Show/hide sample scrap based on page
-  const scrap=document.getElementById('sample-scrap');
-  if(scrap)scrap.style.display=(name==='interior'&&S.page===1)?'block':'none';
+  document.getElementById('screen-' + name).classList.add('active');
+  S.screen = name;
+  const nav = document.getElementById('bottom-nav');
+  (name==='cover'||name==='threshold') ? nav.classList.add('hidden') : nav.classList.remove('hidden');
+  if(name==='interior'){ initCanvases(); updateSpread(); }
+  if(name==='toc'){ requestAnimationFrame(fixGrid); }
 }
 
 // ══ TAP HELPER ══
-function on(id,fn){
-  const el=typeof id==='string'?document.getElementById(id):id;
-  if(!el)return;
-  let ts=0;
-  el.addEventListener('touchstart',()=>{ts=Date.now();},{passive:true});
-  el.addEventListener('touchend',e=>{if(Date.now()-ts<300){e.preventDefault();fn(e);}},{passive:false});
-  el.addEventListener('click',fn);
+function on(id, fn){
+  const el = typeof id==='string' ? document.getElementById(id) : id;
+  if(!el) return;
+  let ts = 0;
+  el.addEventListener('touchstart', ()=>{ ts=Date.now(); }, {passive:true});
+  el.addEventListener('touchend', e=>{
+    if(Date.now()-ts < 300){ e.preventDefault(); fn(e); }
+  }, {passive:false});
+  el.addEventListener('click', fn);
 }
 
 // ══ WIRING ══
-on('cover-face',()=>{show('threshold');setTimeout(()=>show('toc'),420);});
-on('btn-toc',()=>show('toc'));
-on('btn-index',()=>show('index'));
-on('btn-work',()=>show('interior'));
-on('btn-menu',toggleMenu);
-on('m-toc',()=>{show('toc');closeMenu();});
-on('m-index',()=>{show('index');closeMenu();});
-on('m-work',()=>{show('interior');closeMenu();});
-on('m-close',()=>{show('cover');closeMenu();});
-on('m-dismiss',closeMenu);
-['tr1','tr2','tr3','tr4','tr5'].forEach((id,i)=>on(id,()=>goPage(i+1)));
-on('gc-new',()=>{goPage(S.page);});
-on('gc1',()=>goPage(1));on('gc2',()=>goPage(3));
-on('gc3',()=>goPage(4));on('gc4',()=>goPage(5));
+on('cover-face', ()=>{ show('threshold'); setTimeout(()=>show('toc'), 420); });
+on('btn-toc', ()=>show('toc'));
+on('btn-index', ()=>show('index'));
+on('btn-work', ()=>show('interior'));
+on('btn-prev', prevSpread);
+on('btn-next', nextSpread);
+on('btn-menu', toggleMenu);
+on('m-toc', ()=>{ show('toc'); closeMenu(); });
+on('m-index', ()=>{ show('index'); closeMenu(); });
+on('m-work', ()=>{ show('interior'); closeMenu(); });
+on('m-close', ()=>{ show('cover'); closeMenu(); });
+on('m-dismiss', closeMenu);
 
-// ══ SCRAP DELETE ══
-on('scrap-del',()=>{
-  const s=document.getElementById('sample-scrap');
-  if(s)s.remove();
+// TOC rows — go to spread containing that page
+['tr1','tr2','tr3','tr4','tr5'].forEach((id,i)=>{
+  on(id, ()=>{ goToPage(i+1); });
 });
+on('gc-new', ()=>show('interior'));
+on('gc1', ()=>goToPage(2));
+on('gc2', ()=>goToPage(3));
+on('gc3', ()=>goToPage(4));
+on('gc4', ()=>goToPage(5));
 
-// Tap scrap to select/deselect
-const scrap=document.getElementById('sample-scrap');
-if(scrap){
-  let scrapTs=0;
-  scrap.addEventListener('touchstart',()=>{scrapTs=Date.now();},{passive:true});
-  scrap.addEventListener('touchend',e=>{
-    if(Date.now()-scrapTs<300){
-      e.stopPropagation();
-      scrap.classList.toggle('selected');
-    }
-  },{passive:false});
-}
-
-// Tap interior to deselect scraps
-document.getElementById('interior-wrap').addEventListener('touchend',e=>{
-  if(!e.target.closest('.scrap')){
-    document.querySelectorAll('.scrap.selected').forEach(s=>s.classList.remove('selected'));
-  }
-},{passive:true});
-
-function toggleMenu(){document.getElementById('menu-overlay').classList.toggle('open');}
-function closeMenu(){document.getElementById('menu-overlay').classList.remove('open');}
-
-function goPage(n){
-  n=Math.max(1,Math.min(n,TOTAL));
-  S.page=n;
-  localStorage.setItem('draf-pg',n);
+function goToPage(pg){
+  // Find the spread (even left page) containing this page
+  // [001] ghost — goes to first spread
+  if(pg <= 1){ S.leftPage = 2; }
+  else if(pg % 2 === 0){ S.leftPage = pg; }
+  else { S.leftPage = pg - 1; }
+  S.leftPage = Math.max(2, Math.min(S.leftPage, TOTAL));
   show('interior');
 }
 
-function updatePg(){
-  const p=String(S.page).padStart(3,'0');
-  const el=document.getElementById('page-display');
-  if(el)el.textContent='['+p+']';
-  const np=document.getElementById('nav-pg');
-  if(np)np.textContent=p+'/'+TOTAL;
-}
-
-// ══ SWIPE — LEFT/RIGHT to change page ══
-(function(){
-  const el=document.getElementById('screen-interior');
-  let sx=0,sy=0,moved=false;
-  el.addEventListener('touchstart',e=>{
-    sx=e.touches[0].clientX;sy=e.touches[0].clientY;moved=false;
-  },{passive:true});
-  el.addEventListener('touchmove',e=>{moved=true;},{passive:true});
-  el.addEventListener('touchend',e=>{
-    if(!moved)return;
-    const dx=e.changedTouches[0].clientX-sx;
-    const dy=e.changedTouches[0].clientY-sy;
-    if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>60){
-      // Ignore if touch started on ink canvas (pencil will handle it)
-      if(e.target.closest('#ink-canvas'))return;
-      if(dx<0)goPage(S.page+1);
-      else goPage(S.page-1);
-    }
-  },{passive:true});
-})();
-
-// ══ MOVEABLE SCRAP ══
-(function(){
-  const el=document.getElementById('sample-scrap');
-  if(!el)return;
-  const wrap=document.getElementById('interior-wrap');
-  let dragging=false,ox=0,oy=0,startX=0,startY=0;
-  let px=parseFloat(el.style.left)||el.offsetLeft;
-  let py=parseFloat(el.style.top)||el.offsetTop;
-
-  el.addEventListener('touchstart',e=>{
-    if(e.target.closest('.scrap-delete'))return;
-    const t=e.touches[0];
-    const r=wrap.getBoundingClientRect();
-    startX=t.clientX;startY=t.clientY;
-    ox=t.clientX-r.left-px;
-    oy=t.clientY-r.top-py;
-    dragging=true;
-    el.classList.add('selected');
-  },{passive:true});
-
-  el.addEventListener('touchmove',e=>{
-    if(!dragging)return;
-    e.preventDefault();
-    const t=e.touches[0];
-    const r=wrap.getBoundingClientRect();
-    px=t.clientX-r.left-ox;
-    py=t.clientY-r.top-oy;
-    el.style.left=px+'px';
-    el.style.top=py+'px';
-    el.style.transform='none';
-  },{passive:false});
-
-  el.addEventListener('touchend',()=>{dragging=false;},{passive:true});
-})();
-
-// ══ CANVAS ══
-function initCanvas(){
-  const wrap=document.getElementById('interior-wrap');
-  const old=document.getElementById('ink-canvas');
-  if(!wrap||!old)return;
-  const nc=document.createElement('canvas');
-  nc.id='ink-canvas';
-  nc.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:5;touch-action:none;background:transparent;';
-  old.parentNode.replaceChild(nc,old);
-  nc.width=wrap.offsetWidth;
-  nc.height=wrap.offsetHeight;
-  const ctx=nc.getContext('2d');
-  ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#0F0F0D';
-  let drawing=false,lx=0,ly=0;
-
-  nc.addEventListener('pointerdown',e=>{
-    if(e.pointerType!=='pen')return;
-    e.preventDefault();drawing=true;nc.setPointerCapture(e.pointerId);
-    const r=nc.getBoundingClientRect();lx=e.clientX-r.left;ly=e.clientY-r.top;
-    ctx.beginPath();ctx.moveTo(lx,ly);
-  },{passive:false});
-
-  nc.addEventListener('pointermove',e=>{
-    if(!drawing||e.pointerType!=='pen')return;
-    e.preventDefault();
-    const r=nc.getBoundingClientRect();
-    const x=e.clientX-r.left,y=e.clientY-r.top;
-    ctx.lineWidth=Math.max(0.5,(e.pressure||0.5)*2.8);
-    ctx.lineTo(x,y);ctx.stroke();ctx.beginPath();ctx.moveTo(x,y);
-    lx=x;ly=y;
-  },{passive:false});
-
-  nc.addEventListener('pointerup',e=>{if(e.pointerType!=='pen')return;drawing=false;});
-  nc.addEventListener('pointercancel',()=>{drawing=false;});
-}
-
-// ══ DOUBLE TAP → TYPEWRITER ══
-document.getElementById('screen-interior').addEventListener('touchend',e=>{
-  const now=Date.now();
-  const t=e.changedTouches[0];
-  if(now-S.tapTime<280){
-    S.twX=t.clientX;S.twY=t.clientY;
-    document.getElementById('tw-overlay').classList.add('open');
-    setTimeout(()=>document.getElementById('tw-box').focus(),80);
+// Portrait grid toggle
+on('grid-toggle-btn', ()=>{
+  const list = document.getElementById('toc-list-panel');
+  const grid = document.getElementById('toc-grid-panel');
+  const isGrid = grid.classList.contains('visible');
+  if(isGrid){
+    grid.classList.remove('visible');
+    list.classList.remove('hidden');
+    document.getElementById('grid-toggle-btn').textContent = 'Grid view ↗';
+  } else {
+    list.classList.add('hidden');
+    grid.classList.add('visible');
+    document.getElementById('grid-toggle-btn').textContent = '← List view';
+    requestAnimationFrame(fixGrid);
   }
-  S.tapTime=now;
-},{passive:true});
+});
 
+function toggleMenu(){ document.getElementById('menu-overlay').classList.toggle('open'); }
+function closeMenu(){ document.getElementById('menu-overlay').classList.remove('open'); }
+
+// ══ SCRAP ══
+const scrap = document.getElementById('sample-scrap');
+if(scrap){
+  const wrap = document.getElementById('page-right');
+  let dragging=false, ox=0, oy=0, px=0, py=0, ts=0;
+
+  scrap.addEventListener('touchstart', e=>{
+    if(e.target.closest('.scrap-delete')) return;
+    ts = Date.now();
+    const t = e.touches[0];
+    const r = wrap.getBoundingClientRect();
+    const sr = scrap.getBoundingClientRect();
+    ox = t.clientX - sr.left;
+    oy = t.clientY - sr.top;
+    px = sr.left - r.left;
+    py = sr.top - r.top;
+    dragging = true;
+  }, {passive:true});
+
+  scrap.addEventListener('touchmove', e=>{
+    if(!dragging) return;
+    e.preventDefault();
+    const t = e.touches[0];
+    const r = wrap.getBoundingClientRect();
+    px = t.clientX - r.left - ox;
+    py = t.clientY - r.top - oy;
+    scrap.style.left = px + 'px';
+    scrap.style.top = py + 'px';
+    scrap.style.transform = 'none';
+  }, {passive:false});
+
+  scrap.addEventListener('touchend', e=>{
+    dragging = false;
+    if(Date.now()-ts < 250) scrap.classList.toggle('selected');
+  }, {passive:true});
+}
+
+on('scrap-del', ()=>{ const s=document.getElementById('sample-scrap'); if(s)s.remove(); });
+
+document.getElementById('page-right').addEventListener('touchend', e=>{
+  if(!e.target.closest('.scrap')) document.querySelectorAll('.scrap.selected').forEach(s=>s.classList.remove('selected'));
+}, {passive:true});
+
+// ══ CANVASES ══
+const canvasStore = {}; // store ImageData per page
+
+function initCanvases(){
+  initCanvas('canvas-left', 'page-left');
+  initCanvas('canvas-right', 'page-right');
+}
+
+function initCanvas(canvasId, wrapId){
+  const wrap = document.getElementById(wrapId);
+  const old = document.getElementById(canvasId);
+  if(!wrap || !old) return;
+  const nc = document.createElement('canvas');
+  nc.id = canvasId;
+  nc.className = 'page-canvas';
+  nc.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;z-index:5;touch-action:none;background:transparent;';
+  old.parentNode.replaceChild(nc, old);
+  nc.width = wrap.offsetWidth;
+  nc.height = wrap.offsetHeight;
+  const ctx = nc.getContext('2d');
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = '#0F0F0D';
+  let drawing = false, lx=0, ly=0;
+
+  // Determine which page number this canvas is for
+  const isLeft = wrapId === 'page-left';
+
+  nc.addEventListener('pointerdown', e=>{
+    if(e.pointerType !== 'pen') return;
+    e.preventDefault();
+    drawing = true;
+    nc.setPointerCapture(e.pointerId);
+    const r = nc.getBoundingClientRect();
+    lx = e.clientX - r.left;
+    ly = e.clientY - r.top;
+    ctx.beginPath(); ctx.moveTo(lx, ly);
+  }, {passive:false});
+
+  nc.addEventListener('pointermove', e=>{
+    if(!drawing || e.pointerType !== 'pen') return;
+    e.preventDefault();
+    const r = nc.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    ctx.lineWidth = Math.max(0.5, (e.pressure||0.5) * 2.8);
+    ctx.lineTo(x, y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x, y);
+    lx=x; ly=y;
+  }, {passive:false});
+
+  nc.addEventListener('pointerup', e=>{ if(e.pointerType==='pen') drawing=false; });
+  nc.addEventListener('pointercancel', ()=>{ drawing=false; });
+
+  // Double tap on canvas = typewriter
+  let tapT = 0;
+  nc.addEventListener('touchend', e=>{
+    const now = Date.now();
+    if(now - tapT < 280){
+      const t = e.changedTouches[0];
+      S.twX = t.clientX;
+      S.twY = t.clientY;
+      S.twTarget = wrapId;
+      document.getElementById('tw-overlay').classList.add('open');
+      setTimeout(()=>document.getElementById('tw-box').focus(), 80);
+    }
+    tapT = now;
+  }, {passive:true});
+}
+
+// ══ TYPEWRITER ══
 function closeTW(){
-  document.getElementById('tw-box').value='';
+  document.getElementById('tw-box').value = '';
   document.getElementById('tw-overlay').classList.remove('open');
 }
-on('tw-cancel',closeTW);
-on('tw-confirm',()=>{
-  const text=document.getElementById('tw-box').value.trim();
+on('tw-cancel', closeTW);
+on('tw-confirm', ()=>{
+  const text = document.getElementById('tw-box').value.trim();
   if(text){
-    const wrap=document.getElementById('interior-wrap');
-    const r=wrap.getBoundingClientRect();
-    const lbl=document.createElement('div');
-    lbl.className='type-label';
-    lbl.textContent=text;
-    lbl.style.left=Math.max(8,S.twX-r.left-20)+'px';
-    lbl.style.top=Math.max(8,S.twY-r.top-20)+'px';
+    const wrap = document.getElementById(S.twTarget);
+    const r = wrap.getBoundingClientRect();
+    const lbl = document.createElement('div');
+    lbl.className = 'type-label';
+    lbl.textContent = text;
+    lbl.style.left = Math.max(8, S.twX - r.left - 20) + 'px';
+    lbl.style.top = Math.max(8, S.twY - r.top - 20) + 'px';
     wrap.appendChild(lbl);
   }
   closeTW();
 });
-
-// Tap backdrop to cancel typewriter
-document.getElementById('tw-overlay').addEventListener('touchend',e=>{
-  if(e.target===document.getElementById('tw-overlay'))closeTW();
-},{passive:true});
+document.getElementById('tw-overlay').addEventListener('touchend', e=>{
+  if(e.target === document.getElementById('tw-overlay')) closeTW();
+}, {passive:true});
 
 // ══ INIT ══
-updatePg();
-// Show/hide scrap correctly on load
-const initScrap=document.getElementById('sample-scrap');
-if(initScrap)initScrap.style.display=S.page===1?'block':'none';
-setTimeout(fixGrid,150);
+updateSpread();
+setTimeout(fixGrid, 150);
 </script>
 
 </body>
