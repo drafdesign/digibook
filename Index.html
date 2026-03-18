@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Digibook">
+<title>DRAF. Digibook · Vol. 01</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { width:100%; height:100%; overflow:hidden; position:fixed; }
+body {
+  width:100%; height:100%; overflow:hidden;
+  background:#0a0a09;
+  font-family:'Courier New', Courier, monospace;
+  position:fixed; top:0; left:0; right:0; bottom:0;
+  touch-action:none;
+  -webkit-user-select:none; user-select:none;
+}
+.screen {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  display:none; overflow:hidden;
+}
+.screen.active { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+
+/* COVER */
+#screen-cover { background:#0a0a09; }
+.cover-face {
+  background-color:#1A3A5C;
+  position:relative; overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,0.9);
+  width:min(420px, 78vw, 72vh);
+  aspect-ratio:5.5/8; flex-shrink:0;
+}
+.cover-face svg { position:absolute; inset:0; width:100%; height:100%; z-index:3; }
+.cover-band {
+  position:absolute; bottom:0; left:0; right:0; height:28%;
+  background-color:#F5F2EB;
+  border-top:1px solid rgba(15,15,13,0.15);
+  z-index:4; display:flex; align-items:center;
+  justify-content:space-between; padding:0 6%;
+}
+.cover-band span { font-size:clamp(7px,1.8vw,10px); letter-spacing:0.14em; text-transform:uppercase; }
+.season { color:rgba(15,15,13,0.45); }
+.code   { color:rgba(15,15,13,0.3); }
+.cover-mark {
+  position:absolute; top:40%; left:24%;
+  transform:translateY(-50%);
+  font-weight:700; font-size:clamp(20px,5vw,32px);
+  color:#F5F2EB; line-height:1; z-index:10; letter-spacing:-0.02em;
+}
+.cover-mark .p { color:#D4500A; }
+.cover-vol {
+  position:absolute; top:4%; right:5%;
+  font-size:clamp(7px,1.4vw,9px); letter-spacing:0.16em;
+  color:rgba(245,242,235,0.2); z-index:10; text-transform:uppercase;
+}
+.cover-ribbon { position:absolute; top:0; left:0; width:8px; height:100%; background:rgba(26,58,92,0.70); z-index:20; }
+.cover-ribbon-tail {
+  position:absolute; bottom:-20px; left:0; width:8px; height:28px;
+  background:rgba(26,58,92,0.70);
+  clip-path:polygon(0 0,100% 0,100% 65%,50% 100%,0 65%); z-index:20;
+}
+.wear-coffee {
+  position:absolute; top:36%; left:32%; width:10%; aspect-ratio:1;
+  border-radius:50%; border:1.5px solid rgba(110,72,24,0.10); z-index:15; pointer-events:none;
+}
+.wear-scratch { position:absolute; height:1px; background:rgba(245,242,235,0.07); z-index:15; pointer-events:none; }
+.tap-hint {
+  position:absolute; bottom:31%; width:100%; text-align:center;
+  font-size:clamp(7px,1.5vw,9px); letter-spacing:0.22em;
+  color:rgba(15,15,13,0.22); text-transform:uppercase; z-index:30;
+  animation:hint-out 3s ease 2s forwards;
+}
+@keyframes hint-out { to { opacity:0; } }
+
+/* THRESHOLD */
+#screen-threshold { background:#D4500A; }
+.threshold-mark {
+  font-weight:700; color:#F5F2EB;
+  animation:t-exp 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+@keyframes t-exp {
+  0%   { font-size:clamp(28px,7vw,48px); opacity:0.5; }
+  100% { font-size:clamp(88px,22vw,160px); opacity:1; }
+}
+
+/* DOT GRID */
+.dot-grid {
+  background-color:#F5F2EB;
+  background-image:radial-gradient(rgba(15,15,13,0.18) 0.6px, transparent 0.6px);
+  background-size:11.34px 11.34px;
+}
+
+/* TOC */
+#screen-toc { justify-content:flex-start; align-items:stretch; }
+.toc-hdr {
+  flex-shrink:0; display:flex; justify-content:space-between; align-items:center;
+  padding:14px 18px 10px; border-bottom:1.5px solid #0F0F0D; background:#F5F2EB;
+}
+.toc-hdr-t { font-weight:700; font-size:clamp(9px,2vw,12px); letter-spacing:0.16em; text-transform:uppercase; }
+.toc-hdr-s { font-size:clamp(7px,1.5vw,9px); letter-spacing:0.1em; color:rgba(15,15,13,0.4); }
+.toc-body { flex:1; display:grid; overflow:hidden; }
+@media (orientation:landscape) { .toc-body { grid-template-columns:1fr 1fr; } }
+@media (orientation:portrait)  { .toc-body { grid-template-rows:1fr 1fr; } }
+.toc-list {
+  overflow-y:auto; -webkit-overflow-scrolling:touch;
+  padding:10px 14px; border-right:1px solid rgba(15,15,13,0.1);
+}
+.toc-col-hds { display:grid; grid-template-columns:36px 14px 14px 1fr 20px; gap:0 8px; padding-bottom:5px; border-bottom:1px solid rgba(15,15,13,0.15); margin-bottom:4px; }
+.toc-ch { font-size:7px; letter-spacing:0.1em; color:rgba(15,15,13,0.35); text-transform:uppercase; }
+.toc-row { display:grid; grid-template-columns:36px 14px 14px 1fr 20px; gap:0 8px; padding:5px 0; border-bottom:1px solid rgba(15,15,13,0.06); align-items:center; }
+.tc { font-size:clamp(7px,1.6vw,9px); color:#0F0F0D; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tc-pg { font-size:8px; color:rgba(15,15,13,0.45); }
+.tag-a { display:inline-block; width:8px; height:8px; background:#D4500A; }
+.tag-h { display:inline-block; width:8px; height:8px; background:#1A3A5C; opacity:0.5; }
+.arr { color:#D4500A; font-size:11px; }
+.ch-tags { margin-top:14px; padding-top:10px; border-top:1px solid rgba(15,15,13,0.1); }
+.ch-tags-lbl { font-size:7px; letter-spacing:0.14em; color:#D4500A; text-transform:uppercase; margin-bottom:6px; }
+.ctag { display:inline-block; font-size:7px; padding:2px 6px; border:1px solid #D4500A; color:#D4500A; margin:2px 2px 2px 0; }
+.toc-grid { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:repeat(4,1fr); gap:5px; padding:10px 14px; overflow:hidden; }
+.gcell { border:1px solid rgba(15,15,13,0.12); padding:8px; display:flex; flex-direction:column; position:relative; overflow:hidden; }
+.gcell-num { font-size:6px; letter-spacing:0.1em; color:rgba(15,15,13,0.3); margin-bottom:3px; }
+.gcell-name { font-size:clamp(7px,1.4vw,9px); color:#0F0F0D; line-height:1.4; }
+.gcell-new { border-color:#D4500A; align-items:center; justify-content:center; }
+.new-mark { font-weight:700; font-size:clamp(16px,4vw,26px); color:#D4500A; line-height:1; }
+.gcell-inbox { border:1.5px solid #D4500A; }
+.inbox-lbl { font-size:6px; letter-spacing:0.1em; color:#D4500A; margin-bottom:3px; }
+.postit { position:absolute; bottom:5px; right:5px; width:44px; height:40px; background:#f9f0c8; box-shadow:1px 1px 4px rgba(0,0,0,0.18); transform:rotate(-3deg); padding:4px; font-size:5.5px; color:#333; line-height:1.4; }
+.postit-from { font-size:5px; color:#D4500A; font-weight:700; margin-bottom:2px; }
+
+/* INTERIOR */
+#screen-interior { justify-content:flex-start; align-items:stretch; }
+.interior-wrap { position:relative; flex:1; overflow:hidden; }
+.interior-wrap::before { content:''; position:absolute; inset:0; background-color:#F5F2EB; background-image:radial-gradient(rgba(15,15,13,0.18) 0.6px,transparent 0.6px); background-size:11.34px 11.34px; z-index:0; }
+#ink-canvas { position:absolute; inset:0; width:100%; height:100%; z-index:5; touch-action:none; }
+.page-num { position:absolute; bottom:14px; font-size:9px; letter-spacing:0.08em; color:rgba(15,15,13,0.3); z-index:20; }
+.page-num.r { right:18px; } .page-num.l { left:18px; }
+.sync-dot { position:absolute; bottom:16px; right:72px; width:7px; height:7px; border-radius:50%; background:#888; z-index:20; animation:breathe 2s ease-in-out infinite; }
+.sync-dot.hot { background:#D4500A; }
+@keyframes breathe { 0%,100%{opacity:0.3;} 50%{opacity:1;} }
+.scrap { position:absolute; z-index:8; transform:rotate(-3deg); }
+.scrap-tape { position:absolute; top:-8px; left:50%; transform:translateX(-50%); width:34px; height:13px; background:rgba(200,190,160,0.55); border:0.5px solid rgba(15,15,13,0.08); z-index:2; }
+.scrap svg { display:block; box-shadow:2px 2px 8px rgba(0,0,0,0.18); }
+.scrap-lineage { position:absolute; bottom:-13px; right:0; font-size:6px; color:rgba(15,15,13,0.3); letter-spacing:0.04em; white-space:nowrap; }
+.handle { position:absolute; width:9px; height:9px; border:1.5px solid #D4500A; z-index:12; }
+.hnw{top:-5px;left:-5px;} .hne{top:-5px;right:-5px;} .hsw{bottom:-5px;left:-5px;} .hse{bottom:-5px;right:-5px;}
+.type-label { position:absolute; font-size:10px; color:#0F0F0D; line-height:1.6; letter-spacing:0.03em; z-index:8; border-bottom:1px solid rgba(15,15,13,0.15); padding-bottom:2px; }
+
+/* INDEX */
+#screen-index { justify-content:flex-start; align-items:stretch; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.index-wrap { padding:16px 18px 80px; min-height:100%; }
+.index-hdr { display:flex; justify-content:space-between; align-items:baseline; padding-bottom:10px; border-bottom:1.5px solid #0F0F0D; margin-bottom:20px; }
+.index-hdr-t { font-weight:700; font-size:clamp(9px,2vw,12px); letter-spacing:0.16em; text-transform:uppercase; }
+.index-sec { margin-bottom:20px; }
+.index-sec-h { font-size:8px; letter-spacing:0.14em; color:#D4500A; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+.index-sec-h::after { content:''; flex:1; height:1px; background:rgba(212,80,10,0.2); }
+.index-entry { display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px dotted rgba(15,15,13,0.1); font-size:clamp(8px,1.8vw,10px); color:#0F0F0D; }
+.index-pg { font-size:8px; color:rgba(15,15,13,0.4); white-space:nowrap; margin-left:10px; }
+.gps-block { margin-top:24px; padding:14px; border:1px solid rgba(26,58,92,0.25); background:rgba(26,58,92,0.03); }
+.gps-lbl { font-size:8px; letter-spacing:0.14em; color:#1A3A5C; text-transform:uppercase; margin-bottom:8px; }
+.gps-body { font-size:clamp(8px,1.8vw,10px); color:rgba(15,15,13,0.5); line-height:1.8; font-style:italic; }
+
+/* BOTTOM NAV */
+#bottom-nav { position:fixed; bottom:0; left:0; right:0; height:44px; background:rgba(10,10,9,0.96); border-top:1px solid #1e1e1c; display:flex; align-items:center; justify-content:space-between; padding:0 18px; z-index:200; flex-shrink:0; }
+#bottom-nav.hidden { display:none; }
+.nbtn { font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:#555; background:none; border:none; padding:8px 4px; cursor:pointer; font-family:'Courier New',monospace; }
+.nav-mark { font-weight:700; font-size:11px; color:#D4500A; letter-spacing:0.1em; }
+.nav-right { display:flex; align-items:center; gap:10px; }
+.nav-pg { font-size:9px; color:#444; letter-spacing:0.08em; }
+
+/* MENU */
+#menu-overlay { position:fixed; inset:0; background:rgba(10,10,9,0.94); z-index:300; display:none; flex-direction:column; align-items:flex-end; padding:52px 28px 28px; }
+#menu-overlay.open { display:flex; }
+.mitem { font-size:clamp(20px,5vw,30px); letter-spacing:0.08em; text-transform:uppercase; color:rgba(245,242,235,0.65); padding:10px 0; border-bottom:1px solid rgba(245,242,235,0.06); width:100%; text-align:right; cursor:pointer; }
+.mitem:active { color:#D4500A; }
+.mclose { font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#444; cursor:pointer; margin-top:20px; }
+
+/* TYPEWRITER */
+#tw-overlay { position:fixed; inset:0; background:rgba(10,10,9,0.7); z-index:400; display:none; align-items:center; justify-content:center; padding:32px; }
+#tw-overlay.open { display:flex; }
+#tw-form { display:flex; flex-direction:column; width:100%; max-width:480px; }
+#tw-box { background:#F5F2EB; border:1.5px solid #0F0F0D; padding:20px; width:100%; font-family:'Courier New',monospace; font-size:14px; color:#0F0F0D; line-height:1.6; letter-spacing:0.04em; resize:none; outline:none; min-height:80px; border-radius:0; -webkit-appearance:none; }
+#tw-confirm { margin-top:10px; background:#D4500A; color:#F5F2EB; border:none; padding:10px 24px; font-family:'Courier New',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; cursor:pointer; -webkit-appearance:none; border-radius:0; align-self:flex-end; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="screen-cover" class="screen active">
+  <div class="cover-face" id="cover-face">
+    <svg viewBox="0 0 528 768" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <line x1="0" y1="338" x2="528" y2="338" stroke="rgba(245,242,235,0.13)" stroke-width="0.8"/>
+      <line x1="0" y1="180" x2="528" y2="620" stroke="rgba(245,242,235,0.08)" stroke-width="0.5"/>
+      <line x1="148" y1="0" x2="528" y2="490" stroke="rgba(245,242,235,0.06)" stroke-width="0.5"/>
+      <line x1="148" y1="0" x2="132" y2="768" stroke="rgba(245,242,235,0.07)" stroke-width="0.5"/>
+      <polygon points="0,0 148,0 132,338 0,338" fill="rgba(245,242,235,0.03)"/>
+      <polygon points="148,0 528,0 528,490 148,0" fill="rgba(0,0,0,0.05)"/>
+      <line x1="144" y1="334" x2="152" y2="342" stroke="rgba(245,242,235,0.2)" stroke-width="0.6"/>
+      <line x1="152" y1="334" x2="144" y2="342" stroke="rgba(245,242,235,0.12)" stroke-width="0.5"/>
+    </svg>
+    <div class="cover-ribbon"></div>
+    <div class="cover-ribbon-tail"></div>
+    <div class="cover-mark">DRAF<span class="p">.</span></div>
+    <div class="cover-vol">Vol. 01</div>
+    <div class="cover-band">
+      <span class="season">Winter · MMXXVI</span>
+      <span class="code">WI · 001/100</span>
+    </div>
+    <div class="wear-coffee"></div>
+    <div class="wear-scratch" style="width:7%;top:52%;left:54%;transform:rotate(-11deg);"></div>
+    <div class="wear-scratch" style="width:4%;top:53%;left:61%;transform:rotate(9deg);"></div>
+    <div class="tap-hint">tap to open</div>
+  </div>
+</div>
+
+<!-- THRESHOLD -->
+<div id="screen-threshold" class="screen">
+  <div class="threshold-mark">//|</div>
+</div>
+
+<!-- TOC -->
+<div id="screen-toc" class="screen dot-grid">
+  <div class="toc-hdr">
+    <div class="toc-hdr-t">DRAF. · Contents</div>
+    <div class="toc-hdr-s">Vol. 01 · Winter MMXXVI</div>
+  </div>
+  <div class="toc-body">
+    <div class="toc-list dot-grid">
+      <div class="toc-col-hds">
+        <div class="toc-ch">pg</div><div class="toc-ch">tag</div><div class="toc-ch">⬤</div><div class="toc-ch">project</div><div class="toc-ch">↗</div>
+      </div>
+      <div class="toc-row" id="tr1"><div class="tc tc-pg">[001]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">STRADE_B · active</div><div class="arr">↗</div></div>
+      <div class="toc-row" id="tr2"><div class="tc tc-pg">[002]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">STRADE_B · active</div><div class="arr">↗</div></div>
+      <div class="toc-row" id="tr3"><div class="tc tc-pg">[003]</div><div class="tc"><span class="tag-h"></span></div><div class="tc" style="opacity:0.5">◐</div><div class="tc">LUM_FIELD · research</div><div class="arr" style="color:#1A3A5C;opacity:0.5">↗</div></div>
+      <div class="toc-row" id="tr4"><div class="tc tc-pg">[004]</div><div class="tc"><span class="tag-a"></span></div><div class="tc" style="opacity:0.25">○</div><div class="tc">AT_COST · active</div><div class="arr">↗</div></div>
+      <div class="toc-row" id="tr5"><div class="tc tc-pg">[005]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">PERSONAL · personal</div><div class="arr" style="opacity:0.25">—</div></div>
+      <div class="ch-tags">
+        <div class="ch-tags-lbl">Dynamic Folio</div>
+        <span class="ctag">STRADE_B · 001–002</span>
+        <span class="ctag" style="border-color:#1A3A5C;color:#1A3A5C;opacity:0.6">LUM_FIELD · 003</span>
+        <span class="ctag">AT_COST · 004</span>
+      </div>
+    </div>
+    <div class="toc-grid dot-grid">
+      <div class="gcell gcell-new" id="gc-new"><div class="new-mark">//|</div></div>
+      <div class="gcell" id="gc1"><div class="gcell-num">01 · STRADE_B</div><div class="gcell-name">pg 001–002</div></div>
+      <div class="gcell" id="gc2"><div class="gcell-num">02 · LUM_FIELD</div><div class="gcell-name">pg 003</div></div>
+      <div class="gcell" id="gc3"><div class="gcell-num">03 · AT_COST</div><div class="gcell-name">pg 004</div></div>
+      <div class="gcell" id="gc4"><div class="gcell-num">04 · PERSONAL</div><div class="gcell-name">pg 005 · ●</div></div>
+      <div class="gcell" style="opacity:0.3"><div class="gcell-num">05 · —</div><div class="gcell-name">unassigned</div></div>
+      <div class="gcell" style="opacity:0.3"><div class="gcell-num">06 · —</div><div class="gcell-name">unassigned</div></div>
+      <div class="gcell gcell-inbox" id="gc-inbox">
+        <div class="inbox-lbl">08 · INBOX ↗</div>
+        <div class="gcell-name" style="font-size:8px;opacity:0.5">notifications</div>
+        <div class="postit"><div class="postit-from">MARGOT</div>STRADE_B — door hinge pg 001</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INTERIOR -->
+<div id="screen-interior" class="screen">
+  <div class="interior-wrap">
+    <canvas id="ink-canvas"></canvas>
+    <div class="scrap" style="top:16%;left:10%;">
+      <div class="scrap-tape"></div>
+      <svg width="130" height="95" viewBox="0 0 130 95">
+        <rect width="130" height="95" fill="#c4bdb4"/>
+        <path d="M12,72 Q42,48 75,62 Q108,76 122,52" stroke="#3a3530" stroke-width="2" fill="none" opacity="0.6"/>
+        <path d="M22,36 L40,30 L65,40 L90,33 L112,38" stroke="#4a4540" stroke-width="1" fill="none" opacity="0.45"/>
+        <text x="6" y="89" fill="#555" font-size="6" font-family="monospace" opacity="0.55">site sketch · 14.03.26</text>
+      </svg>
+      <div class="handle hnw"></div><div class="handle hne"></div>
+      <div class="handle hsw"></div><div class="handle hse"></div>
+      <div class="scrap-lineage">iPhone · 14.03.26 · STRADE_B</div>
+    </div>
+    <div class="type-label" style="top:50%;left:10%;">door hinge detail — section A<br>clearance: 12mm min.</div>
+    <div class="page-num r" id="page-display">[001]</div>
+    <div class="sync-dot" id="sync-dot"></div>
+  </div>
+</div>
+
+<!-- INDEX -->
+<div id="screen-index" class="screen dot-grid">
+  <div class="index-wrap">
+    <div class="index-hdr"><div class="index-hdr-t">Index · Vol. 01</div><div class="toc-hdr-s">Winter MMXXVI</div></div>
+    <div class="index-sec">
+      <div class="index-sec-h">Project Slugs</div>
+      <div class="index-entry"><span>AT_COST — Paris–Roubaix series</span><span class="index-pg">004</span></div>
+      <div class="index-entry"><span>LUM_FIELD — Luminous Field brand</span><span class="index-pg">003</span></div>
+      <div class="index-entry"><span>STRADE_B — Strade Bianche details</span><span class="index-pg">001, 002</span></div>
+      <div class="index-entry" style="opacity:0.4;font-style:italic"><span>PERSONAL — private ●</span><span class="index-pg">005</span></div>
+    </div>
+    <div class="index-sec">
+      <div class="index-sec-h">Session Types</div>
+      <div class="index-entry"><span>Active project</span><span class="index-pg">001, 002, 004</span></div>
+      <div class="index-entry"><span>Research</span><span class="index-pg">003</span></div>
+      <div class="index-entry"><span>Personal</span><span class="index-pg">005</span></div>
+    </div>
+    <div class="index-sec">
+      <div class="index-sec-h">Taped-In Scraps</div>
+      <div class="index-entry"><span>Site sketch · iPhone · 14.03.26 · STRADE_B</span><span class="index-pg">001</span></div>
+    </div>
+    <div class="gps-block">
+      <div class="gps-lbl">GPS Anchor · Darius Okafor · Winter MMXXVI</div>
+      <div class="gps-body">44.4268°N, 26.1025°E<br>Bucharest · January · age 7<br>grandmother's courtyard · linden trees in winter<br>said once aloud · never published</div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div id="bottom-nav" class="hidden">
+  <div style="display:flex;align-items:center;gap:14px;">
+    <span class="nav-mark">DRAF.</span>
+    <button class="nbtn" id="btn-toc">TOC</button>
+    <button class="nbtn" id="btn-index">Index</button>
+    <button class="nbtn" id="btn-work">Work</button>
+  </div>
+  <div class="nav-right">
+    <div class="nav-pg" id="nav-pg">001/100</div>
+    <button class="nbtn" id="btn-menu">≡</button>
+  </div>
+</div>
+
+<!-- MENU -->
+<div id="menu-overlay">
+  <div class="mitem" id="m-toc">TOC</div>
+  <div class="mitem" id="m-index">Index</div>
+  <div class="mitem" id="m-work">Work</div>
+  <div class="mitem" id="m-close">Close Book</div>
+  <div class="mclose" id="m-dismiss">✕ close</div>
+</div>
+
+<!-- TYPEWRITER -->
+<div id="tw-overlay">
+  <div id="tw-form">
+    <textarea id="tw-box" placeholder="type your note..."></textarea>
+    <button id="tw-confirm">Place on page</button>
+  </div>
+</div>
+
+<script>
+const S = {
+  page: parseInt(localStorage.getItem('draf-pg')||'1'),
+  screen:'cover', tapTime:0, twX:0, twY:0
+};
+
+function show(name) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  S.screen=name;
+  const nav=document.getElementById('bottom-nav');
+  (name==='cover'||name==='threshold')?nav.classList.add('hidden'):nav.classList.remove('hidden');
+  if(name==='interior'){initCanvas();updatePg();}
+}
+
+function on(id,fn) {
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.addEventListener('touchend',e=>{e.preventDefault();fn(e);},{passive:false});
+  el.addEventListener('click',fn);
+}
+
+on('cover-face',()=>{show('threshold');setTimeout(()=>show('toc'),420);});
+on('btn-toc',()=>show('toc'));
+on('btn-index',()=>show('index'));
+on('btn-work',()=>show('interior'));
+on('btn-menu',toggleMenu);
+on('m-toc',()=>{show('toc');closeMenu();});
+on('m-index',()=>{show('index');closeMenu();});
+on('m-work',()=>{show('interior');closeMenu();});
+on('m-close',()=>{show('cover');closeMenu();});
+on('m-dismiss',closeMenu);
+on('gc-new',()=>goPage(S.page));
+on('gc1',()=>goPage(1));on('gc2',()=>goPage(3));on('gc3',()=>goPage(4));on('gc4',()=>goPage(5));
+['tr1','tr2','tr3','tr4','tr5'].forEach((id,i)=>on(id,()=>goPage(i+1)));
+
+function toggleMenu(){document.getElementById('menu-overlay').classList.toggle('open');}
+function closeMenu(){document.getElementById('menu-overlay').classList.remove('open');}
+
+function goPage(n){S.page=n;localStorage.setItem('draf-pg',n);show('interior');}
+
+function updatePg(){
+  const p=String(S.page).padStart(3,'0');
+  document.getElementById('page-display').textContent='['+p+']';
+  document.getElementById('nav-pg').textContent=p+'/100';
+}
+
+function initCanvas(){
+  const c=document.getElementById('ink-canvas');
+  const wrap=c.parentElement;
+  c.width=wrap.offsetWidth;
+  c.height=wrap.offsetHeight;
+  const ctx=c.getContext('2d');
+  ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#0F0F0D';
+  let drawing=false,lx=0,ly=0;
+  const nc=c.cloneNode(false);
+  c.parentNode.replaceChild(nc,c);
+  const canvas=document.getElementById('ink-canvas');
+  canvas.width=wrap.offsetWidth;canvas.height=wrap.offsetHeight;
+  const cx=canvas.getContext('2d');
+  cx.lineCap='round';cx.lineJoin='round';cx.strokeStyle='#0F0F0D';
+
+  canvas.addEventListener('pointerdown',e=>{
+    if(e.pointerType!=='pen')return;
+    e.preventDefault();drawing=true;
+    canvas.setPointerCapture(e.pointerId);
+    const r=canvas.getBoundingClientRect();
+    lx=e.clientX-r.left;ly=e.clientY-r.top;
+    cx.beginPath();cx.moveTo(lx,ly);
+  },{passive:false});
+
+  canvas.addEventListener('pointermove',e=>{
+    if(!drawing||e.pointerType!=='pen')return;
+    e.preventDefault();
+    const r=canvas.getBoundingClientRect();
+    const x=e.clientX-r.left,y=e.clientY-r.top;
+    cx.lineWidth=Math.max(0.5,(e.pressure||0.5)*2.8);
+    cx.lineTo(x,y);cx.stroke();cx.beginPath();cx.moveTo(x,y);
+    lx=x;ly=y;
+  },{passive:false});
+
+  canvas.addEventListener('pointerup',e=>{if(e.pointerType!=='pen')return;drawing=false;});
+  canvas.addEventListener('pointercancel',()=>{drawing=false;});
+}
+
+// Double tap → typewriter
+document.getElementById('screen-interior').addEventListener('touchend',e=>{
+  const now=Date.now();
+  if(now-S.tapTime<280&&e.changedTouches[0]){
+    S.twX=e.changedTouches[0].clientX;
+    S.twY=e.changedTouches[0].clientY;
+    document.getElementById('tw-overlay').classList.add('open');
+    setTimeout(()=>document.getElementById('tw-box').focus(),100);
+  }
+  S.tapTime=now;
+},{passive:true});
+
+on('tw-confirm',()=>{
+  const text=document.getElementById('tw-box').value.trim();
+  if(text){
+    const lbl=document.createElement('div');
+    lbl.className='type-label';lbl.textContent=text;
+    lbl.style.left=Math.max(10,S.twX-20)+'px';
+    lbl.style.top=Math.max(10,S.twY-20)+'px';
+    document.querySelector('.interior-wrap').appendChild(lbl);
+  }
+  document.getElementById('tw-box').value='';
+  document.getElementById('tw-overlay').classList.remove('open');
+});
+
+window.addEventListener('resize',()=>{if(S.screen==='interior')initCanvas();});
+updatePg();
+</script>
+</body>
+</html>
