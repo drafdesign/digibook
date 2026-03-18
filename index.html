@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+</html><!DOCTYPE html>
 
 <html lang="en">
 <head>
@@ -473,7 +473,7 @@ function updateSpread(){
     makeLabelSelectable(lbl, wrap);
   }
 
-  initCanvases();
+  // initCanvases called separately after updateSpread
 }
 
 function buildSampleScrap(){
@@ -569,8 +569,16 @@ function fixGrid(){
   grid.style.width=(cell*2+g)+'px';
   grid.style.height=(cell*4+g*3)+'px';
 }
-window.addEventListener('resize',()=>{fixGrid();initCanvases();});
-window.addEventListener('orientationchange',()=>setTimeout(()=>{fixGrid();initCanvases();},350));
+let _resizeTimer=null;
+window.addEventListener('resize',()=>{
+  fixGrid();
+  clearTimeout(_resizeTimer);
+  _resizeTimer=setTimeout(()=>{ if(S.screen==='interior') initCanvases(); },400);
+});
+window.addEventListener('orientationchange',()=>{
+  clearTimeout(_resizeTimer);
+  _resizeTimer=setTimeout(()=>{ fixGrid(); if(S.screen==='interior') initCanvases(); },500);
+});
 
 // ══ SHOW ══
 function show(name){
@@ -581,7 +589,7 @@ function show(name){
   S.screen=name;
   const nav=document.getElementById('bottom-nav');
   (name==='cover'||name==='threshold')?nav.classList.add('hidden'):nav.classList.remove('hidden');
-  if(name==='interior'){ updateSpread(); }
+  if(name==='interior'){ updateSpread(); initCanvases(); }
   if(name==='toc'){ requestAnimationFrame(fixGrid); }
   closePalette();
 }
@@ -608,8 +616,24 @@ on('cover-face',()=>{show('threshold');setTimeout(()=>show('toc'),420);});
 on('btn-toc',()=>show('toc'));
 on('btn-index',()=>show('index'));
 on('btn-work',()=>show('interior'));
-on('btn-prev',()=>{saveAllCanvases();if(S.leftPage>2){S.leftPage-=2;updateSpread();}});
-on('btn-next',()=>{saveAllCanvases();if(S.leftPage<TOTAL){S.leftPage+=2;updateSpread();}});
+on('btn-prev',()=>{
+  if(S.leftPage<=2) return;
+  saveAllCanvases();
+  S.leftPage=Math.max(2,S.leftPage-2);
+  localStorage.setItem('draf-left',S.leftPage);
+  updateSpread();
+  initCanvases();
+});
+on('btn-next',()=>{
+  if(S.leftPage>=TOTAL) return;
+  saveAllCanvases();
+  S.leftPage=Math.min(S.leftPage+2,TOTAL%2===0?TOTAL-1:TOTAL);
+  if(S.leftPage%2!==0) S.leftPage--;
+  S.leftPage=Math.max(2,Math.min(S.leftPage,TOTAL));
+  localStorage.setItem('draf-left',S.leftPage);
+  updateSpread();
+  initCanvases();
+});
 on('btn-menu',toggleMenu);
 on('m-toc',()=>{show('toc');closeMenu();});
 on('m-index',()=>{show('index');closeMenu();});
