@@ -42,7 +42,7 @@ body{background:#0a0a09;font-family:'Courier New',Courier,monospace;-webkit-user
 #bottom-nav{position:fixed;bottom:0;left:0;right:0;height:52px;background:rgba(10,10,9,0.97);border-top:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:500;}
 #bottom-nav.hidden{display:none;}
 .nav-left{display:flex;align-items:center;gap:10px;}
-.nav-mark{font-weight:700;font-size:12px;color:#D4500A;letter-spacing:0.12em;padding:10px 6px;cursor:pointer;-webkit-user-select:none;}
+.nav-mark{font-weight:700;font-size:12px;color:#D4500A;letter-spacing:0.12em;padding:10px 6px;cursor:pointer;}
 .nav-privacy{font-size:14px;color:#555;background:none;border:none;padding:10px 4px;cursor:pointer;-webkit-appearance:none;}
 .nav-privacy.on{color:#D4500A;}
 .nav-center{display:flex;align-items:center;}
@@ -52,58 +52,66 @@ body{background:#0a0a09;font-family:'Courier New',Courier,monospace;-webkit-user
 .nav-right{display:flex;align-items:center;}
 .nav-menu{font-size:20px;color:#666;background:none;border:none;padding:10px 6px;cursor:pointer;-webkit-appearance:none;}
 
-/* PALETTE — fixed above nav, toggled by DRAF. hold */
+/* ══ TOOL PALETTE ══ */
 #tool-palette{
 position:fixed;bottom:52px;left:0;right:0;
-background:rgba(10,10,9,0.99);
-border-top:1px solid #333;
-display:none;flex-direction:column;
-z-index:501;/* above nav */
-padding:12px 16px;
+background:rgba(10,10,9,0.99);border-top:1px solid #333;
+display:none;flex-direction:column;z-index:502;padding:10px 16px 12px;
 }
 #tool-palette.open{display:flex;}
-.pal-row{display:flex;align-items:center;gap:8px;padding:5px 0;}
-.pal-lbl{font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#555;min-width:64px;}
-.pb{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#888;background:none;border:1px solid #333;padding:7px 14px;cursor:pointer;font-family:‘Courier New’,monospace;-webkit-appearance:none;border-radius:0;}
-.pb.on{color:#F5F2EB;border-color:#D4500A;background:rgba(212,80,10,0.15);}
-.pc{width:30px;height:30px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex-shrink:0;}
-.pc.on{border-color:#F5F2EB;}
-.pdiv{height:1px;background:#222;margin:3px 0;}
 
-/* IMPORT PANEL */
-#import-panel{
+/* Nib quick-swap strip */
+.pal-nib-strip{
+display:flex;align-items:center;gap:0;
+padding:4px 0 8px;border-bottom:1px solid #222;
+margin-bottom:8px;
+}
+.pal-nib-slot{
+flex:1;display:flex;flex-direction:column;align-items:center;
+padding:8px 4px;cursor:pointer;border:1px solid transparent;
+position:relative;
+}
+.pal-nib-slot.on{border-color:#D4500A;background:rgba(212,80,10,0.1);}
+.pal-nib-label{font-size:11px;letter-spacing:0.06em;color:#F5F2EB;font-family:‘Courier New’,monospace;font-weight:700;}
+.pal-nib-mm{font-size:7px;color:#555;letter-spacing:0.08em;margin-top:2px;}
+.pal-nib-slot.on .pal-nib-mm{color:#D4500A;}
+.pal-nib-open{
+width:36px;display:flex;flex-direction:column;align-items:center;
+justify-content:center;cursor:pointer;padding:8px 4px;
+border-left:1px solid #222;flex-shrink:0;
+}
+.pal-nib-open-arrow{font-size:14px;color:#555;}
+.pal-nib-open-lbl{font-size:6px;letter-spacing:0.08em;color:#444;text-transform:uppercase;margin-top:2px;}
+
+/* Nib drawer — slides up */
+#nib-drawer{
 position:fixed;bottom:52px;left:0;right:0;
-background:rgba(10,10,9,0.99);
-border-top:1px solid #333;
-display:none;flex-direction:column;
-z-index:502;
-padding:0;
+background:rgba(10,10,9,0.99);border-top:1px solid #D4500A;
+display:none;z-index:503;padding:12px 16px 16px;
 }
-#import-panel.open{display:flex;}
-.import-header{
-padding:14px 20px 10px;
-font-family:‘Courier New’,monospace;
-font-size:9px;letter-spacing:0.18em;text-transform:uppercase;
-color:#555;border-bottom:1px solid #222;
-display:flex;justify-content:space-between;align-items:center;
+#nib-drawer.open{display:block;}
+.nib-drawer-hdr{font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:#555;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.nib-drawer-close{font-size:16px;color:#444;cursor:pointer;padding:0 4px;}
+.nib-drawer-row{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
+.nib-opt{
+flex-shrink:0;display:flex;flex-direction:column;align-items:center;
+padding:10px 14px;border:1px solid #333;cursor:pointer;min-width:54px;
 }
-.import-close{font-size:18px;color:#444;cursor:pointer;padding:0 4px;}
-.import-options{display:flex;flex-direction:column;}
-.import-btn{
-display:flex;align-items:center;gap:16px;
-padding:16px 20px;
-border-bottom:1px solid #1a1a18;
-cursor:pointer;
-background:none;
--webkit-appearance:none;
-font-family:‘Courier New’,monospace;
-text-align:left;
-}
-.import-btn:active{background:rgba(212,80,10,0.08);}
-.import-icon{font-size:20px;width:28px;text-align:center;}
-.import-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#888;}
-/* Hidden file inputs */
-#input-camera,#input-photos,#input-file{display:none;}
+.nib-opt:active{border-color:#D4500A;background:rgba(212,80,10,0.1);}
+.nib-opt-lbl{font-size:12px;letter-spacing:0.06em;color:#F5F2EB;font-family:‘Courier New’,monospace;font-weight:700;}
+.nib-opt-mm{font-size:7px;color:#555;margin-top:3px;letter-spacing:0.06em;}
+
+/* Rest of palette rows */
+.pal-row{display:flex;align-items:center;gap:8px;padding:4px 0;}
+.pal-lbl{font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#555;min-width:64px;}
+.pb{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#888;background:none;border:1px solid #333;padding:6px 12px;cursor:pointer;font-family:‘Courier New’,monospace;-webkit-appearance:none;border-radius:0;}
+.pb.on{color:#F5F2EB;border-color:#D4500A;background:rgba(212,80,10,0.15);}
+.pc{width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex-shrink:0;}
+.pc.on{border-color:#F5F2EB;}
+.pdiv{height:1px;background:#222;margin:4px 0;}
+
+/* Zoom indicator in palette */
+.pal-zoom{font-size:9px;letter-spacing:0.1em;color:#D4500A;font-family:‘Courier New’,monospace;margin-left:auto;}
 
 /* TOC */
 #screen-toc{padding-bottom:52px;}
@@ -148,11 +156,32 @@ text-align:left;
 #screen-interior{padding-bottom:52px;}
 .spread-wrap{flex:1;display:flex;min-height:0;overflow:hidden;position:relative;}
 .gutter-line{position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(15,15,13,0.15);z-index:10;pointer-events:none;}
-.page-face{flex:1;position:relative;overflow:hidden;background-color:#F5F2EB;background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);background-size:11.34px 11.34px;}
+
+/* Page face — clips the zoom viewport */
+.page-face{
+flex:1;position:relative;overflow:hidden;
+background:#0a0a09; /* behind zoom container */
+}
 @media(orientation:portrait){.page-face.page-right,.gutter-line{display:none;}}
-.page-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:5;touch-action:none;background:transparent;}
-.page-num{position:absolute;bottom:14px;font-size:11px;letter-spacing:0.1em;color:rgba(15,15,13,0.85);z-index:20;font-family:‘Courier New’,monospace;font-weight:700;}
+
+/* Zoom container — CSS transform handles zoom, canvas stays in page space */
+.page-zoom{
+position:absolute;
+top:0;left:0;
+width:100%;height:100%;
+transform-origin:0 0;
+/* dot grid on zoom container so it scales with zoom */
+background-color:#F5F2EB;
+background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);
+background-size:11.34px 11.34px;
+}
+.page-canvas{
+position:absolute;inset:0;width:100%;height:100%;
+z-index:5;touch-action:none;background:transparent;
+}
+.page-num{position:absolute;bottom:14px;font-size:11px;letter-spacing:0.1em;color:rgba(15,15,13,0.85);z-index:20;font-family:‘Courier New’,monospace;font-weight:700;pointer-events:none;}
 .page-num.ol{left:16px;}.page-num.or{right:16px;}
+/* Page numbers are outside zoom container so they don’t scale */
 .sync-dot{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:#aaa;z-index:20;transition:background 0.15s;}
 .sync-dot.hot{background:#D4500A;}
 
@@ -166,8 +195,6 @@ text-align:left;
 .scrap.sel .scrap-delete{display:block;}
 .scrap-scale{position:absolute;bottom:-10px;right:-10px;width:36px;height:36px;background:#F5F2EB;border:1.5px solid rgba(15,15,13,0.2);border-radius:50%;z-index:15;display:none;align-items:center;justify-content:center;font-size:16px;color:rgba(15,15,13,0.4);cursor:se-resize;}
 .scrap.sel .scrap-scale{display:flex;}
-
-/* Lineage popup */
 .lin-pop{position:fixed;background:#0F0F0D;color:#F5F2EB;padding:12px 16px;font-size:9px;letter-spacing:0.08em;line-height:1.9;z-index:800;border:1px solid #333;max-width:240px;font-family:‘Courier New’,monospace;display:none;}
 
 /* TYPE LABEL */
@@ -199,6 +226,17 @@ text-align:left;
 .mitem:active{color:#D4500A;}
 .mitem-dim{color:rgba(245,242,235,0.28);font-size:clamp(13px,2.8vw,18px);}
 .mclose{font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#444;cursor:pointer;margin-top:20px;}
+
+/* IMPORT PANEL */
+#import-panel{position:fixed;bottom:52px;left:0;right:0;background:rgba(10,10,9,0.99);border-top:1px solid #333;display:none;flex-direction:column;z-index:504;padding:0;}
+#import-panel.open{display:flex;}
+.import-header{padding:14px 20px 10px;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:#555;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;}
+.import-close{font-size:18px;color:#444;cursor:pointer;padding:0 4px;}
+.import-btn{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid #1a1a18;cursor:pointer;background:none;-webkit-appearance:none;font-family:‘Courier New’,monospace;text-align:left;width:100%;}
+.import-btn:active{background:rgba(212,80,10,0.08);}
+.import-icon{font-size:20px;width:28px;text-align:center;}
+.import-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#888;}
+#input-camera,#input-photos,#input-file{display:none;}
 
 /* TYPEWRITER */
 #tw-overlay{position:fixed;inset:0;background:rgba(10,10,9,0.8);z-index:700;display:none;align-items:flex-start;justify-content:center;padding:20px;}
@@ -293,11 +331,15 @@ text-align:left;
   <div class="spread-wrap">
     <div class="gutter-line"></div>
     <div class="page-face page-left" id="page-left">
-      <canvas class="page-canvas" id="canvas-left"></canvas>
+      <div class="page-zoom" id="zoom-left">
+        <canvas class="page-canvas" id="canvas-left"></canvas>
+      </div>
       <div class="page-num ol" id="pg-left">—</div>
     </div>
     <div class="page-face page-right" id="page-right">
-      <canvas class="page-canvas" id="canvas-right"></canvas>
+      <div class="page-zoom" id="zoom-right">
+        <canvas class="page-canvas" id="canvas-right"></canvas>
+      </div>
       <div class="page-num or" id="pg-right">—</div>
       <div class="sync-dot" id="sync-dot"></div>
     </div>
@@ -342,16 +384,30 @@ text-align:left;
 <!-- PALETTE -->
 
 <div id="tool-palette">
-  <div class="pal-row">
-    <span class="pal-lbl">Pen</span>
-    <button class="pb on" id="pen-thin">Thin</button>
-    <button class="pb" id="pen-med">Medium</button>
-    <button class="pb" id="pen-thick">Thick</button>
+  <!-- Nib quick-swap: 3 slots + down arrow -->
+  <div class="pal-nib-strip" id="nib-strip">
+    <div class="pal-nib-slot on" id="slot-0" data-slot="0">
+      <div class="pal-nib-label" id="slot-0-lbl">02</div>
+      <div class="pal-nib-mm" id="slot-0-mm">0.30mm</div>
+    </div>
+    <div class="pal-nib-slot" id="slot-1" data-slot="1">
+      <div class="pal-nib-label" id="slot-1-lbl">05</div>
+      <div class="pal-nib-mm" id="slot-1-mm">0.45mm</div>
+    </div>
+    <div class="pal-nib-slot" id="slot-2" data-slot="2">
+      <div class="pal-nib-label" id="slot-2-lbl">08</div>
+      <div class="pal-nib-mm" id="slot-2-mm">0.50mm</div>
+    </div>
+    <div class="pal-nib-open" id="nib-drawer-btn">
+      <div class="pal-nib-open-arrow">↓</div>
+      <div class="pal-nib-open-lbl">All</div>
+    </div>
+    <div class="pal-zoom" id="pal-zoom-lbl">1.0×</div>
   </div>
   <div class="pdiv"></div>
   <div class="pal-row">
     <span class="pal-lbl">Eraser</span>
-    <button class="pb" id="er-med">Medium</button>
+    <button class="pb on" id="er-med">Medium</button>
     <button class="pb" id="er-large">Large</button>
     <button class="pb" id="er-xl">X-Large</button>
   </div>
@@ -372,6 +428,16 @@ text-align:left;
   </div>
 </div>
 
+<!-- NIB DRAWER -->
+
+<div id="nib-drawer">
+  <div class="nib-drawer-hdr">
+    <span>Select nib — replaces active slot</span>
+    <span class="nib-drawer-close" id="nib-drawer-close">✕</span>
+  </div>
+  <div class="nib-drawer-row" id="nib-drawer-row"></div>
+</div>
+
 <!-- IMPORT PANEL -->
 
 <div id="import-panel">
@@ -380,30 +446,15 @@ text-align:left;
     <span class="import-close" id="import-close">✕</span>
   </div>
   <div class="import-options">
-    <button class="import-btn" id="imp-camera">
-      <span class="import-icon">📷</span>
-      <span class="import-label">Camera</span>
-    </button>
-    <button class="import-btn" id="imp-photos">
-      <span class="import-icon">🖼</span>
-      <span class="import-label">Photos Library</span>
-    </button>
-    <button class="import-btn" id="imp-file">
-      <span class="import-icon">📄</span>
-      <span class="import-label">Select File</span>
-    </button>
-    <button class="import-btn" id="imp-paste">
-      <span class="import-icon">📋</span>
-      <span class="import-label">Paste from Clipboard</span>
-    </button>
+    <button class="import-btn" id="imp-camera"><span class="import-icon">📷</span><span class="import-label">Camera</span></button>
+    <button class="import-btn" id="imp-photos"><span class="import-icon">🖼</span><span class="import-label">Photos Library</span></button>
+    <button class="import-btn" id="imp-file"><span class="import-icon">📄</span><span class="import-label">Select File</span></button>
+    <button class="import-btn" id="imp-paste"><span class="import-icon">📋</span><span class="import-label">Paste from Clipboard</span></button>
   </div>
 </div>
-
-<!-- Hidden file inputs -->
-
 <input type="file" id="input-camera" accept="image/*" capture="environment">
 <input type="file" id="input-photos" accept="image/*">
-<input type="file" id="input-file" accept="image/*,application/pdf,.jpg,.jpeg,.png,.gif,.webp">
+<input type="file" id="input-file" accept="image/*">
 
 <!-- MENU -->
 
@@ -434,28 +485,54 @@ text-align:left;
 <script>
 'use strict';
 
+// ══ MICRON NIB TABLE ══
+const NIBS=[
+  {label:'005',mm:0.20},
+  {label:'01', mm:0.25},
+  {label:'02', mm:0.30},
+  {label:'03', mm:0.35},
+  {label:'05', mm:0.45},
+  {label:'08', mm:0.50},
+  {label:'1',  mm:0.65}
+];
+// px per mm at 96dpi
+const PX_PER_MM=3.78;
+
 // ══ TOOL STATE ══
 const T={
-  color:'#0F0F0D',
-  penSize:'thin',
+  // Three quick-swap slots, default 02/05/08
+  slots:[2,4,6], // indices into NIBS
+  activeSlot:0,
   eraserSize:'medium',
-  mode:'draw',
+  mode:'draw', // draw|erase
   tip:'coil',
+  color:'#0F0F0D',
   paletteOpen:false
 };
 
-function penW(pressure){
-  const p=Math.max(0.1,Math.min(1,pressure||0.5));
-  const base={thin:1,medium:2.8,thick:5.5}[T.penSize]||1;
-  switch(T.tip){
-    case'coil':return Math.max(0.3,base*(0.3+p*1.4));
-    case'flat':return base*1.5;
-    default:return base;
-  }
-}
-function eraserW(){return{medium:20,large:40,xl:72}[T.eraserSize]||20;}
+function activeNib(){return NIBS[T.slots[T.activeSlot]];}
 
-// ══ STATE ══
+// Stroke width in canvas pixels, accounting for zoom
+// At zoom level Z, we divide by Z so the mark on the page stays consistent
+function strokeW(pressure,zoomScale){
+  const nib=activeNib();
+  const p=Math.max(0.1,Math.min(1,pressure||0.5));
+  const basePx=nib.mm*PX_PER_MM;
+  let w;
+  switch(T.tip){
+    case'coil': w=basePx*(0.4+p*1.2); break;
+    case'flat':  w=basePx*1.6; break;
+    default:     w=basePx; break;
+  }
+  // Divide by zoom so the physical line weight on the page is consistent
+  return Math.max(0.3,w/zoomScale);
+}
+function eraserW(zoomScale){
+  const base={medium:20,large:40,xl:72}[T.eraserSize]||20;
+  return base/zoomScale;
+}
+
+// ══ PAGE STATE ══
 const TOTAL=100;
 const LS=()=>window.innerWidth>window.innerHeight;
 const S={
@@ -465,17 +542,21 @@ const S={
   privacy:false,
   twX:0,twY:0,twWrap:'page-left',
   hasInk:false,
-  importTargetWrap:'page-left'
+  importTarget:'page-left',
+  // Zoom state per page face
+  zoom:{left:1,right:1},
+  panOffset:{left:{x:0,y:0},right:{x:0,y:0}}
 };
+
 function clamp(p){return Math.max(2,Math.min(TOTAL,p));}
 function pad(n){return String(n).padStart(3,'0');}
 function leftPg(){return LS()?S.page%2===0?S.page:S.page-1:S.page;}
 function rightPg(){return leftPg()+1;}
 function navLabel(){
   if(S.screen==='toc')return S.tocView==='list'?'[-2]':'[-1]';
-  if(S.screen==='index')return 'Index';
+  if(S.screen==='index')return'Index';
   if(LS()){const r=rightPg();return r<=TOTAL?'['+pad(leftPg())+']/['+pad(r)+']':'['+pad(leftPg())+']';}
-  return '['+pad(S.page)+']';
+  return'['+pad(S.page)+']';
 }
 function setNavLabel(){document.getElementById('nav-pg').textContent=navLabel();}
 
@@ -483,7 +564,9 @@ function setNavLabel(){document.getElementById('nav-pg').textContent=navLabel();
 function saveC(pg,canvas){try{localStorage.setItem('dc'+pg,canvas.toDataURL('image/png'));}catch(e){}}
 function loadC(pg,canvas){
   const d=localStorage.getItem('dc'+pg);if(!d)return;
-  const img=new Image();img.onload=()=>canvas.getContext('2d').drawImage(img,0,0);img.src=d;
+  const img=new Image();
+  img.onload=()=>canvas.getContext('2d').drawImage(img,0,0);
+  img.src=d;
 }
 function saveAll(){
   const cl=document.getElementById('canvas-left');
@@ -496,6 +579,82 @@ function pulseDot(){
   d.classList.add('hot');setTimeout(()=>d.classList.remove('hot'),700);
 }
 
+// ══ ZOOM ══
+const ZOOM_MIN=1,ZOOM_MAX=8;
+
+function applyZoom(side,scale,originX,originY){
+  const key=side; // 'left'|'right'
+  S.zoom[key]=Math.max(ZOOM_MIN,Math.min(ZOOM_MAX,scale));
+  const z=S.zoom[key];
+  const zc=document.getElementById('zoom-'+key);
+  if(!zc)return;
+  // Apply CSS transform — zoom around pinch origin
+  zc.style.transformOrigin=`${originX}px ${originY}px`;
+  zc.style.transform=`scale(${z})`;
+  // Update zoom indicator in palette
+  document.getElementById('pal-zoom-lbl').textContent=z.toFixed(1)+'×';
+}
+
+function resetZoom(side){
+  S.zoom[side]=1;
+  S.panOffset[side]={x:0,y:0};
+  const zc=document.getElementById('zoom-'+side);
+  if(!zc)return;
+  zc.style.transform='scale(1)';
+  zc.style.transformOrigin='0 0';
+  document.getElementById('pal-zoom-lbl').textContent='1.0×';
+}
+
+// ══ PINCH GESTURE HANDLING ══
+function initPinch(faceEl,side){
+  let touches={},pinching=false,startDist=0,startZoom=1;
+  let pinchMidX=0,pinchMidY=0;
+  let recentTwoFinger=0;
+  let doubleTapTimer=0,doubleTapCount=0;
+
+  faceEl.addEventListener('touchstart',e=>{
+    Array.from(e.changedTouches).forEach(t=>{touches[t.identifier]=t;});
+    const tArr=Object.values(touches);
+
+    if(tArr.length===2){
+      pinching=true;
+      recentTwoFinger=Date.now();
+      const r=faceEl.getBoundingClientRect();
+      const t0=tArr[0],t1=tArr[1];
+      startDist=Math.hypot(t1.clientX-t0.clientX,t1.clientY-t0.clientY);
+      startZoom=S.zoom[side];
+      pinchMidX=((t0.clientX+t1.clientX)/2)-r.left;
+      pinchMidY=((t0.clientY+t1.clientY)/2)-r.top;
+
+      // Two-finger double tap = reset zoom
+      doubleTapCount++;
+      clearTimeout(doubleTapTimer);
+      doubleTapTimer=setTimeout(()=>{doubleTapCount=0;},400);
+      if(doubleTapCount>=2){resetZoom(side);doubleTapCount=0;}
+    }
+  },{passive:true});
+
+  faceEl.addEventListener('touchmove',e=>{
+    Array.from(e.changedTouches).forEach(t=>{touches[t.identifier]=t;});
+    const tArr=Object.values(touches);
+    if(tArr.length<2||!pinching)return;
+    e.preventDefault();
+    const t0=tArr[0],t1=tArr[1];
+    const dist=Math.hypot(t1.clientX-t0.clientX,t1.clientY-t0.clientY);
+    const newZoom=startZoom*(dist/Math.max(startDist,1));
+    applyZoom(side,newZoom,pinchMidX,pinchMidY);
+  },{passive:false});
+
+  faceEl.addEventListener('touchend',e=>{
+    Array.from(e.changedTouches).forEach(t=>{delete touches[t.identifier];});
+    if(Object.keys(touches).length<2)pinching=false;
+  },{passive:true});
+
+  faceEl.addEventListener('touchcancel',()=>{touches={};pinching=false;},{passive:true});
+
+  return ()=>Date.now()-recentTwoFinger<300; // returns fn to check if recently pinched
+}
+
 // ══ NAVIGATION ══
 function handlePrev(){
   if(S.screen==='toc'){if(!LS()&&S.tocView==='grid'){setTocView('list');}return;}
@@ -504,7 +663,9 @@ function handlePrev(){
     saveAll();
     if(LS()){const next=leftPg()-2;if(next<2){show('toc');return;}S.page=clamp(next%2===0?next:next-1);}
     else{if(S.page<=2){show('toc');return;}S.page=clamp(S.page-1);}
-    localStorage.setItem('dp',S.page);renderSpread();
+    localStorage.setItem('dp',S.page);
+    resetZoom('left');resetZoom('right');
+    renderSpread();
   }
 }
 function handleNext(){
@@ -517,7 +678,9 @@ function handleNext(){
     saveAll();
     if(LS()){const next=leftPg()+2;S.page=clamp(next%2===0?next:next-1);}
     else{S.page=clamp(S.page+1);}
-    localStorage.setItem('dp',S.page);renderSpread();
+    localStorage.setItem('dp',S.page);
+    resetZoom('left');resetZoom('right');
+    renderSpread();
   }
 }
 
@@ -526,8 +689,14 @@ function setTocView(v){
   S.tocView=v;
   const list=document.getElementById('toc-list');
   const grid=document.getElementById('toc-grid-panel');
-  if(LS()){list.classList.add('on');grid.classList.add('on');document.getElementById('toc-sub').textContent='Vol. 01 · Winter MMXXVI · [-2]/[-1]';}
-  else{list.classList.toggle('on',v==='list');grid.classList.toggle('on',v==='grid');document.getElementById('toc-sub').textContent=v==='list'?'Vol. 01 · Winter MMXXVI · [-2]':'Vol. 01 · Winter MMXXVI · [-1]';}
+  if(LS()){
+    list.classList.add('on');grid.classList.add('on');
+    document.getElementById('toc-sub').textContent='Vol. 01 · Winter MMXXVI · [-2]/[-1]';
+  } else {
+    list.classList.toggle('on',v==='list');
+    grid.classList.toggle('on',v==='grid');
+    document.getElementById('toc-sub').textContent=v==='list'?'Vol. 01 · Winter MMXXVI · [-2]':'Vol. 01 · Winter MMXXVI · [-1]';
+  }
   setNavLabel();
   if(v==='grid'||LS())requestAnimationFrame(fixGrid);
 }
@@ -543,32 +712,40 @@ function show(name){
   if(name==='interior'){S.hasInk=false;renderSpread();}
   if(name==='toc')setTocView(LS()?'list':S.tocView);
   setNavLabel();
-  closePalette();
-  closeImport();
+  closePalette();closeImport();
 }
 
 // ══ RENDER ══
 const canvasFor={};
+let wasPinchedLeft=()=>false,wasPinchedRight=()=>false;
+
 function renderSpread(){
   setNavLabel();
+  // Remove scraps/labels first
+  document.getElementById('page-left').querySelectorAll('.scrap,.type-label').forEach(e=>e.remove());
+  document.getElementById('page-right').querySelectorAll('.scrap,.type-label').forEach(e=>e.remove());
+
   if(LS()){
     const l=leftPg(),r=rightPg();
     document.getElementById('pg-left').textContent='['+pad(l)+']';
     document.getElementById('pg-right').textContent=r<=TOTAL?'['+pad(r)+']':'';
-    initCanvas('canvas-left','page-left',l);
-    if(r<=TOTAL)initCanvas('canvas-right','page-right',r);
+    wasPinchedLeft=initPinch(document.getElementById('page-left'),'left');
+    wasPinchedRight=initPinch(document.getElementById('page-right'),'right');
+    setupCanvas('canvas-left','zoom-left','page-left',l,'left');
+    if(r<=TOTAL)setupCanvas('canvas-right','zoom-right','page-right',r,'right');
     putContent('page-left',l);putContent('page-right',r);
   } else {
-    document.getElementById('pg-left').textContent='['+pad(S.page)+']';
-    initCanvas('canvas-left','page-left',S.page);
-    putContent('page-left',S.page);
+    const p=S.page;
+    document.getElementById('pg-left').textContent='['+pad(p)+']';
+    wasPinchedLeft=initPinch(document.getElementById('page-left'),'left');
+    setupCanvas('canvas-left','zoom-left','page-left',p,'left');
+    putContent('page-left',p);
   }
 }
 
 // ══ PAGE CONTENT ══
 function putContent(wid,pg){
   const w=document.getElementById(wid);
-  w.querySelectorAll('.scrap,.type-label').forEach(e=>e.remove());
   if(pg===2){
     const sc=makeSampleScrap();w.appendChild(sc);attachScrap(sc,w);
     const lb=makeLbl('door hinge detail — section A\nclearance: 12mm min.','48%','8%');
@@ -576,14 +753,95 @@ function putContent(wid,pg){
   }
 }
 
-// ══ SCRAP BUILDERS ══
+// ══ CANVAS SETUP ══
+function setupCanvas(cid,zid,wid,pg,side){
+  const wrap=document.getElementById(wid);
+  const zoom=document.getElementById(zid);
+  const old=document.getElementById(cid);
+  if(!wrap||!zoom||!old)return;
+  if(canvasFor[cid]===pg&&old.width===wrap.offsetWidth&&old.height===wrap.offsetHeight)return;
+
+  const nc=document.createElement('canvas');
+  nc.id=cid;nc.className='page-canvas';
+  nc.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:5;touch-action:none;background:transparent;';
+  old.parentNode.replaceChild(nc,old);
+  nc.width=wrap.offsetWidth;nc.height=wrap.offsetHeight;
+  canvasFor[cid]=pg;
+  loadC(pg,nc);
+
+  const ctx=nc.getContext('2d');
+  ctx.lineCap='round';ctx.lineJoin='round';
+  let drawing=false,lx=0,ly=0,isEr=false,lastPenUp=0;
+
+  nc.addEventListener('pointerdown',e=>{
+    if(e.pointerType!=='pen')return;
+    e.preventDefault();drawing=true;nc.setPointerCapture(e.pointerId);
+    isEr=T.mode==='erase'||(e.buttons&32)>0;
+    const z=S.zoom[side]||1;
+    ctx.globalCompositeOperation=isEr?'destination-out':'source-over';
+    if(!isEr){ctx.strokeStyle=T.color;}
+    // Convert screen coords to canvas (page) coords by dividing by zoom
+    const r=nc.getBoundingClientRect();
+    // nc.getBoundingClientRect() gives the CSS-rendered size, not canvas size
+    // We need to map from screen pixels to canvas pixels accounting for zoom
+    const zc=document.getElementById(zid);
+    const zr=zc.getBoundingClientRect();
+    lx=(e.clientX-zr.left)/z;
+    ly=(e.clientY-zr.top)/z;
+    ctx.beginPath();ctx.moveTo(lx,ly);
+    S.hasInk=true;
+  },{passive:false});
+
+  nc.addEventListener('pointermove',e=>{
+    if(!drawing||e.pointerType!=='pen')return;
+    e.preventDefault();
+    const z=S.zoom[side]||1;
+    const zc=document.getElementById(zid);
+    const zr=zc.getBoundingClientRect();
+    const x=(e.clientX-zr.left)/z;
+    const y=(e.clientY-zr.top)/z;
+    ctx.lineWidth=isEr?eraserW(z):strokeW(e.pressure,z);
+    ctx.lineTo(x,y);ctx.stroke();ctx.beginPath();ctx.moveTo(x,y);
+    lx=x;ly=y;
+  },{passive:false});
+
+  nc.addEventListener('pointerup',e=>{
+    if(e.pointerType!=='pen')return;
+    drawing=false;lastPenUp=Date.now();
+    ctx.globalCompositeOperation='source-over';
+    saveC(pg,nc);pulseDot();
+  });
+  nc.addEventListener('pointercancel',()=>{drawing=false;});
+
+  // Double-tap typewriter (finger, pen-gap guard, pinch guard)
+  let tapT=0,tapX=0,tapY=0;
+  nc.addEventListener('touchend',e=>{
+    const now=Date.now();
+    if(now-lastPenUp<400)return;
+    // Pinch guard
+    const wasPinched=side==='left'?wasPinchedLeft():wasPinchedRight();
+    if(wasPinched)return;
+    const t=e.changedTouches[0];
+    if(now-tapT>180&&now-tapT<500&&Math.hypot(t.clientX-tapX,t.clientY-tapY)<40){
+      const vv=window.visualViewport;
+      S.twX=t.clientX-(vv?vv.offsetLeft:0);
+      S.twY=t.clientY-(vv?vv.offsetTop:0);
+      S.twWrap=wid;
+      document.getElementById('tw-overlay').classList.add('open');
+      setTimeout(()=>document.getElementById('tw-box').focus(),80);
+    }
+    tapT=now;tapX=t.clientX;tapY=t.clientY;
+  },{passive:true});
+}
+
+// ══ SCRAP ══
 function makeSampleScrap(){
   const el=document.createElement('div');
   el.className='scrap';el.style.cssText='top:12%;left:6%;';
   el.innerHTML=`
-    <div class="scrap-tape" id="sc-tape-sample"></div>
+    <div class="scrap-tape"></div>
     <div class="scrap-content">
-      <svg id="sc-svg-sample" width="140" height="100" viewBox="0 0 140 100" style="transform:rotate(-3deg)">
+      <svg width="140" height="100" viewBox="0 0 140 100" style="transform:rotate(-3deg)">
         <rect width="140" height="100" fill="#c4bdb4"/>
         <path d="M12,72 Q42,48 75,62 Q108,76 122,52" stroke="#3a3530" stroke-width="2.2" fill="none" opacity="0.6"/>
         <path d="M22,36 L40,30 L65,40 L90,33 L112,38" stroke="#4a4540" stroke-width="1" fill="none" opacity="0.45"/>
@@ -592,19 +850,15 @@ function makeSampleScrap(){
       <div class="scrap-delete">✕</div>
       <div class="scrap-scale">↘</div>
     </div>
-    <div class="scrap-lineage">iPhone · 14.03.26 · STRADE_B</div>`;
+    <div class="scrap-lineage" data-source="iPhone" data-created="14.03.26" data-taped="18.03.26">iPhone · 14.03.26 · STRADE_B</div>`;
   return el;
 }
 
-// Build a scrap from an image URL (for imports)
 function makeImgScrap(url,source,dateStr){
-  const el=document.createElement('div');
-  el.className='scrap';
-  // Random slight rotation
   const rot=(Math.random()*8-4).toFixed(1);
-  el.style.cssText='top:15%;left:10%;';
-  const now=new Date();
-  const tapedDate=now.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'}).replace(/\//g,'.');
+  const now=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'}).replace(/\//g,'.');
+  const el=document.createElement('div');
+  el.className='scrap';el.style.cssText='top:15%;left:10%;';
   el.innerHTML=`
     <div class="scrap-tape"></div>
     <div class="scrap-content">
@@ -612,44 +866,35 @@ function makeImgScrap(url,source,dateStr){
       <div class="scrap-delete">✕</div>
       <div class="scrap-scale">↘</div>
     </div>
-    <div class="scrap-lineage" data-source="${source}" data-created="${dateStr||''}" data-taped="${tapedDate}">${source} · ${tapedDate}</div>`;
+    <div class="scrap-lineage" data-source="${source}" data-created="${dateStr||'—'}" data-taped="${now}">${source} · ${now}</div>`;
   return el;
 }
 
-// ══ SCRAP INTERACTION ══
 function attachScrap(el,wrap){
-  const svg=el.querySelector('svg')||el.querySelector('img');
+  const imgEl=el.querySelector('svg')||el.querySelector('img');
   const del=el.querySelector('.scrap-delete');
   const scaleH=el.querySelector('.scrap-scale');
   const tape=el.querySelector('.scrap-tape');
+  const lin=el.querySelector('.scrap-lineage');
   let dragging=false,scaling=false;
   let ox=0,oy=0,tapT=0,tapX=0,tapY=0;
   let scW=0,scH=0,scCX=0,scCY=0,scDist=0;
 
   del.addEventListener('touchend',e=>{e.stopPropagation();e.preventDefault();el.remove();},{passive:false});
 
-  // Tape hold → lineage
   let tapeTimer=null;
-  const linData=el.querySelector('.scrap-lineage');
   tape.addEventListener('touchstart',()=>{
     tapeTimer=setTimeout(()=>{
-      if(linData){
-        const src=linData.dataset.source||'Unknown';
-        const created=linData.dataset.created||'—';
-        const taped=linData.dataset.taped||'—';
-        showLin(tape,src,created,taped);
-      }
+      showLin(tape,lin?.dataset.source||'Unknown',lin?.dataset.created||'—',lin?.dataset.taped||'—');
     },500);
   },{passive:true});
   tape.addEventListener('touchend',()=>clearTimeout(tapeTimer),{passive:true});
   tape.addEventListener('touchmove',()=>clearTimeout(tapeTimer),{passive:true});
 
-  // Scale — scales the svg or img directly
   scaleH.addEventListener('touchstart',e=>{
-    e.stopPropagation();e.preventDefault();
-    scaling=true;
+    e.stopPropagation();e.preventDefault();scaling=true;
     const t=e.touches[0];
-    const sr=svg.getBoundingClientRect();
+    const sr=imgEl.getBoundingClientRect();
     scCX=sr.left+sr.width/2;scCY=sr.top+sr.height/2;
     scDist=Math.max(10,Math.hypot(t.clientX-scCX,t.clientY-scCY));
     scW=sr.width;scH=sr.height;
@@ -659,33 +904,28 @@ function attachScrap(el,wrap){
     if(!scaling)return;
     const t=e.touches[0];
     const d=Math.hypot(t.clientX-scCX,t.clientY-scCY);
-    const r=d/scDist;
-    const nw=Math.max(60,Math.round(scW*r));
-    const nh=Math.max(44,Math.round(scH*r));
-    if(svg.tagName==='svg'){svg.setAttribute('width',nw);svg.setAttribute('height',nh);}
-    else{svg.style.width=nw+'px';svg.style.height=nh+'px';}
+    const ratio=d/scDist;
+    const nw=Math.max(60,Math.round(scW*ratio));
+    const nh=Math.max(44,Math.round(scH*ratio));
+    if(imgEl.tagName==='svg'){imgEl.setAttribute('width',nw);imgEl.setAttribute('height',nh);}
+    else{imgEl.style.width=nw+'px';imgEl.style.height=nh+'px';}
   };
   document.addEventListener('touchmove',onSM,{passive:true});
   document.addEventListener('touchend',()=>{scaling=false;},{passive:true});
 
-  // Move
   el.addEventListener('touchstart',e=>{
     if(e.target===del||e.target===scaleH||e.target===tape)return;
-    const t=e.touches[0];
-    tapX=t.clientX;tapY=t.clientY;tapT=Date.now();
+    const t=e.touches[0];tapX=t.clientX;tapY=t.clientY;tapT=Date.now();
     const wr=wrap.getBoundingClientRect(),er=el.getBoundingClientRect();
-    ox=t.clientX-er.left;oy=t.clientY-er.top;
-    dragging=true;el.style.transform='none';
+    ox=t.clientX-er.left;oy=t.clientY-er.top;dragging=true;el.style.transform='none';
   },{passive:true});
   el.addEventListener('touchmove',e=>{
     if(!dragging||scaling)return;e.preventDefault();
     const t=e.touches[0],wr=wrap.getBoundingClientRect();
-    el.style.left=(t.clientX-wr.left-ox)+'px';
-    el.style.top=(t.clientY-wr.top-oy)+'px';
+    el.style.left=(t.clientX-wr.left-ox)+'px';el.style.top=(t.clientY-wr.top-oy)+'px';
   },{passive:false});
   el.addEventListener('touchend',e=>{
-    dragging=false;
-    const t=e.changedTouches[0],now=Date.now();
+    dragging=false;const t=e.changedTouches[0],now=Date.now();
     if(now-tapT>180&&now-tapT<500&&Math.hypot(t.clientX-tapX,t.clientY-tapY)<40)el.classList.toggle('sel');
     tapT=now;
   },{passive:true});
@@ -693,15 +933,13 @@ function attachScrap(el,wrap){
 
 function showLin(near,src,created,taped){
   const pop=document.getElementById('lin-pop');
-  pop.innerHTML=`<div style="font-size:8px;letter-spacing:0.12em;color:#D4500A;margin-bottom:8px;text-transform:uppercase;">Lineage</div>SOURCE: ${src}<br>CREATED: ${created||'—'}<br>TAPED: ${taped}<br><br><span style="color:#555;font-size:7px;cursor:pointer" id="lin-close">tap to dismiss</span>`;
+  pop.innerHTML=`<div style="font-size:8px;letter-spacing:0.12em;color:#D4500A;margin-bottom:8px;text-transform:uppercase;">Lineage</div>SOURCE: ${src}<br>CREATED: ${created}<br>TAPED: ${taped}<br><br><span style="color:#555;font-size:7px;cursor:pointer" id="lin-close">tap to dismiss</span>`;
   const r=near.getBoundingClientRect();
   pop.style.left=Math.min(r.left,window.innerWidth-250)+'px';
-  pop.style.top=(r.bottom+6)+'px';
-  pop.style.display='block';
+  pop.style.top=(r.bottom+6)+'px';pop.style.display='block';
   document.getElementById('lin-close').addEventListener('touchend',()=>{pop.style.display='none';},{once:true,passive:true});
 }
 
-// Deselect on background tap
 ['page-left','page-right'].forEach(id=>{
   const el=document.getElementById(id);
   if(el)el.addEventListener('touchend',e=>{
@@ -711,101 +949,6 @@ function showLin(near,src,created,taped){
     }
   },{passive:true});
 });
-
-// ══ IMPORT SYSTEM ══
-function openImport(){
-  // Determine which page face to drop on
-  S.importTargetWrap='page-left';
-  document.getElementById('import-panel').classList.add('open');
-  closeMenu();
-}
-function closeImport(){document.getElementById('import-panel').classList.remove('open');}
-
-function handleImageFile(file,source){
-  if(!file||!file.type.startsWith('image/'))return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const url=e.target.result;
-    const dateStr=file.lastModified?new Date(file.lastModified).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'}).replace(/\//g,'.'):null;
-    dropImageOnPage(url,source||file.name,dateStr);
-  };
-  reader.readAsDataURL(file);
-}
-
-function dropImageOnPage(url,source,dateStr){
-  const wrap=document.getElementById(S.importTargetWrap)||document.getElementById('page-left');
-  const sc=makeImgScrap(url,source,dateStr);
-  wrap.appendChild(sc);
-  attachScrap(sc,wrap);
-  closeImport();
-}
-
-// Camera
-on('imp-camera',()=>{document.getElementById('input-camera').click();closeImport();});
-document.getElementById('input-camera').addEventListener('change',e=>{
-  const f=e.target.files[0];if(f)handleImageFile(f,'Camera');
-  e.target.value='';
-});
-
-// Photos
-on('imp-photos',()=>{document.getElementById('input-photos').click();closeImport();});
-document.getElementById('input-photos').addEventListener('change',e=>{
-  const f=e.target.files[0];if(f)handleImageFile(f,'Photos Library');
-  e.target.value='';
-});
-
-// File
-on('imp-file',()=>{document.getElementById('input-file').click();closeImport();});
-document.getElementById('input-file').addEventListener('change',e=>{
-  const f=e.target.files[0];if(f)handleImageFile(f,f.name);
-  e.target.value='';
-});
-
-// Paste from clipboard
-on('imp-paste',async()=>{
-  closeImport();
-  try{
-    const items=await navigator.clipboard.read();
-    for(const item of items){
-      const imgType=item.types.find(t=>t.startsWith('image/'));
-      if(imgType){
-        const blob=await item.getType(imgType);
-        const url=URL.createObjectURL(blob);
-        dropImageOnPage(url,'Clipboard',null);
-        return;
-      }
-    }
-    // Try text as fallback
-    const text=await navigator.clipboard.readText();
-    if(text){
-      const wrap=document.getElementById(S.importTargetWrap)||document.getElementById('page-left');
-      const lb=makeLbl(text,'30%','10%');
-      wrap.appendChild(lb);attachLbl(lb,wrap);
-    }
-  }catch(err){
-    // iOS may require user gesture — show notice
-    alert('Paste: tap the page first, then use long-press → Paste if clipboard access is blocked.');
-  }
-});
-
-// Also handle native paste event on the page faces
-document.addEventListener('paste',e=>{
-  if(S.screen!=='interior')return;
-  const items=e.clipboardData?.items;
-  if(!items)return;
-  for(const item of items){
-    if(item.type.startsWith('image/')){
-      const blob=item.getAsFile();
-      if(blob){
-        const url=URL.createObjectURL(blob);
-        dropImageOnPage(url,'Clipboard',null);
-        return;
-      }
-    }
-  }
-});
-
-on('import-close',closeImport);
 
 // ══ TYPE LABEL ══
 function makeLbl(text,top,left){
@@ -837,63 +980,154 @@ function attachLbl(el,wrap){
   },{passive:true});
 }
 
-// ══ CANVAS ══
-function initCanvas(cid,wid,pg){
-  const wrap=document.getElementById(wid),old=document.getElementById(cid);
-  if(!wrap||!old)return;
-  if(canvasFor[cid]===pg&&old.width===wrap.offsetWidth&&old.height===wrap.offsetHeight)return;
-  const nc=document.createElement('canvas');
-  nc.id=cid;nc.className='page-canvas';
-  nc.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:5;touch-action:none;background:transparent;';
-  old.parentNode.replaceChild(nc,old);
-  nc.width=wrap.offsetWidth;nc.height=wrap.offsetHeight;
-  canvasFor[cid]=pg;
-  loadC(pg,nc);
-  const ctx=nc.getContext('2d');
-  ctx.lineCap='round';ctx.lineJoin='round';
-  let drawing=false,lx=0,ly=0,isEr=false,lastPenUp=0;
-
-  nc.addEventListener('pointerdown',e=>{
-    if(e.pointerType!=='pen')return;
-    e.preventDefault();drawing=true;nc.setPointerCapture(e.pointerId);
-    isEr=T.mode==='erase'||(e.buttons&32)>0;
-    ctx.globalCompositeOperation=isEr?'destination-out':'source-over';
-    if(!isEr){ctx.strokeStyle=T.color;}
-    const r=nc.getBoundingClientRect();lx=e.clientX-r.left;ly=e.clientY-r.top;
-    ctx.beginPath();ctx.moveTo(lx,ly);S.hasInk=true;
-  },{passive:false});
-
-  nc.addEventListener('pointermove',e=>{
-    if(!drawing||e.pointerType!=='pen')return;
-    e.preventDefault();
-    const r=nc.getBoundingClientRect();
-    const x=e.clientX-r.left,y=e.clientY-r.top;
-    ctx.lineWidth=isEr?eraserW():penW(e.pressure);
-    ctx.lineTo(x,y);ctx.stroke();ctx.beginPath();ctx.moveTo(x,y);lx=x;ly=y;
-  },{passive:false});
-
-  nc.addEventListener('pointerup',e=>{
-    if(e.pointerType!=='pen')return;
-    drawing=false;lastPenUp=Date.now();
-    ctx.globalCompositeOperation='source-over';
-    saveC(pg,nc);pulseDot();
+// ══ NIB SYSTEM ══
+function buildNibDrawer(){
+  const row=document.getElementById('nib-drawer-row');
+  row.innerHTML='';
+  NIBS.forEach((nib,i)=>{
+    const opt=document.createElement('div');
+    opt.className='nib-opt';
+    opt.innerHTML=`<div class="nib-opt-lbl">${nib.label}</div><div class="nib-opt-mm">${nib.mm.toFixed(2)}mm</div>`;
+    opt.addEventListener('touchend',e=>{
+      e.preventDefault();
+      // Replace active slot
+      T.slots[T.activeSlot]=i;
+      updateNibStrip();
+      closeNibDrawer();
+    },{passive:false});
+    row.appendChild(opt);
   });
-  nc.addEventListener('pointercancel',()=>{drawing=false;});
-
-  // Double-tap typewriter
-  let tapT=0,tapX=0,tapY=0;
-  nc.addEventListener('touchend',e=>{
-    const now=Date.now();if(now-lastPenUp<400)return;
-    const t=e.changedTouches[0];
-    if(now-tapT>180&&now-tapT<500&&Math.hypot(t.clientX-tapX,t.clientY-tapY)<40){
-      const vv=window.visualViewport;
-      S.twX=t.clientX-(vv?vv.offsetLeft:0);S.twY=t.clientY-(vv?vv.offsetTop:0);S.twWrap=wid;
-      document.getElementById('tw-overlay').classList.add('open');
-      setTimeout(()=>document.getElementById('tw-box').focus(),80);
-    }
-    tapT=now;tapX=t.clientX;tapY=t.clientY;
-  },{passive:true});
 }
+
+function updateNibStrip(){
+  for(let s=0;s<3;s++){
+    const nib=NIBS[T.slots[s]];
+    document.getElementById(`slot-${s}-lbl`).textContent=nib.label;
+    document.getElementById(`slot-${s}-mm`).textContent=nib.mm.toFixed(2)+'mm';
+    document.getElementById(`slot-${s}`).classList.toggle('on',s===T.activeSlot);
+  }
+}
+
+function openNibDrawer(){document.getElementById('nib-drawer').classList.add('open');}
+function closeNibDrawer(){document.getElementById('nib-drawer').classList.remove('open');}
+
+// Slot taps
+for(let s=0;s<3;s++){
+  on('slot-'+s,()=>{
+    T.activeSlot=s;T.mode='draw';
+    updateNibStrip();
+  });
+}
+on('nib-drawer-btn',()=>{openNibDrawer();});
+on('nib-drawer-close',closeNibDrawer);
+
+// ══ PALETTE — 400ms hold on DRAF. ══
+let drafTimer=null;
+const drafEl=document.getElementById('nav-draf');
+drafEl.addEventListener('touchstart',e=>{
+  e.preventDefault();
+  drafTimer=setTimeout(()=>{
+    if(S.screen==='interior'){
+      T.paletteOpen=!T.paletteOpen;
+      document.getElementById('tool-palette').classList.toggle('open',T.paletteOpen);
+      if(!T.paletteOpen)closeNibDrawer();
+    }
+  },400);
+},{passive:false});
+drafEl.addEventListener('touchend',()=>clearTimeout(drafTimer),{passive:true});
+drafEl.addEventListener('touchmove',()=>clearTimeout(drafTimer),{passive:true});
+
+function closePalette(){
+  T.paletteOpen=false;
+  document.getElementById('tool-palette').classList.remove('open');
+  closeNibDrawer();
+}
+
+// Eraser
+function setEr(size){
+  T.eraserSize=size;T.mode='erase';
+  document.querySelectorAll('#er-med,#er-large,#er-xl').forEach(b=>b.classList.remove('on'));
+  document.getElementById({medium:'er-med',large:'er-large',xl:'er-xl'}[size]).classList.add('on');
+}
+on('er-med',()=>setEr('medium'));on('er-large',()=>setEr('large'));on('er-xl',()=>setEr('xl'));
+
+// Color
+['col-ink','col-fired','col-blue','col-paper'].forEach(id=>{
+  on(id,()=>{
+    T.color=document.getElementById(id).dataset.c;T.mode='draw';
+    document.querySelectorAll('.pc').forEach(b=>b.classList.remove('on'));
+    document.getElementById(id).classList.add('on');
+  });
+});
+
+// Tip
+function setTip(t){
+  T.tip=t;
+  document.querySelectorAll('#tip-coil,#tip-flat,#tip-round').forEach(b=>b.classList.remove('on'));
+  document.getElementById('tip-'+t).classList.add('on');
+}
+on('tip-coil',()=>setTip('coil'));on('tip-flat',()=>setTip('flat'));on('tip-round',()=>setTip('round'));
+
+// ══ IMPORT ══
+function openImport(){
+  S.importTarget=LS()?'page-left':'page-left';
+  document.getElementById('import-panel').classList.add('open');
+  closeMenu();
+}
+function closeImport(){document.getElementById('import-panel').classList.remove('open');}
+
+function dropImg(url,source,dateStr){
+  const wrap=document.getElementById(S.importTarget)||document.getElementById('page-left');
+  const sc=makeImgScrap(url,source,dateStr);
+  wrap.appendChild(sc);attachScrap(sc,wrap);
+  closeImport();
+}
+
+function handleFile(file,source){
+  if(!file||!file.type.startsWith('image/'))return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const date=file.lastModified?new Date(file.lastModified).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'}).replace(/\//g,'.'):null;
+    dropImg(e.target.result,source,date);
+  };
+  reader.readAsDataURL(file);
+}
+
+on('imp-camera',()=>{document.getElementById('input-camera').click();closeImport();});
+on('imp-photos',()=>{document.getElementById('input-photos').click();closeImport();});
+on('imp-file',()=>{document.getElementById('input-file').click();closeImport();});
+document.getElementById('input-camera').addEventListener('change',e=>{const f=e.target.files[0];if(f)handleFile(f,'Camera');e.target.value='';});
+document.getElementById('input-photos').addEventListener('change',e=>{const f=e.target.files[0];if(f)handleFile(f,'Photos');e.target.value='';});
+document.getElementById('input-file').addEventListener('change',e=>{const f=e.target.files[0];if(f)handleFile(f,f.name);e.target.value='';});
+
+on('imp-paste',async()=>{
+  closeImport();
+  try{
+    const items=await navigator.clipboard.read();
+    for(const item of items){
+      const t=item.types.find(t=>t.startsWith('image/'));
+      if(t){const blob=await item.getType(t);dropImg(URL.createObjectURL(blob),'Clipboard',null);return;}
+    }
+    const text=await navigator.clipboard.readText();
+    if(text){
+      const wrap=document.getElementById(S.importTarget)||document.getElementById('page-left');
+      const lb=makeLbl(text,'30%','10%');wrap.appendChild(lb);attachLbl(lb,wrap);
+    }
+  }catch(err){alert('Paste: use long-press → Paste on the page if clipboard access is blocked.');}
+});
+
+document.addEventListener('paste',e=>{
+  if(S.screen!=='interior')return;
+  const items=e.clipboardData?.items;if(!items)return;
+  for(const item of items){
+    if(item.type.startsWith('image/')){
+      const blob=item.getAsFile();
+      if(blob){dropImg(URL.createObjectURL(blob),'Clipboard',null);return;}
+    }
+  }
+});
+
+on('import-close',closeImport);
 
 // ══ GRID ══
 function fixGrid(){
@@ -928,63 +1162,20 @@ function on(id,fn){
   el.addEventListener('click',fn);
 }
 
-// ══ PALETTE — fixed with hold, z-index above nav ══
-// DRAF. hold 400ms = toggle palette
-let drafTimer=null;
-const drafEl=document.getElementById('nav-draf');
-drafEl.addEventListener('touchstart',e=>{
-  e.preventDefault(); // prevent click
-  drafTimer=setTimeout(()=>{
-    if(S.screen==='interior'){
-      T.paletteOpen=!T.paletteOpen;
-      document.getElementById('tool-palette').classList.toggle('open',T.paletteOpen);
-    }
-  },400);
-},{passive:false});
-drafEl.addEventListener('touchend',()=>clearTimeout(drafTimer),{passive:true});
-drafEl.addEventListener('touchmove',()=>clearTimeout(drafTimer),{passive:true});
-
-function closePalette(){T.paletteOpen=false;document.getElementById('tool-palette').classList.remove('open');}
-
-// Pen
-function setPen(size){
-  T.penSize=size;T.mode='draw';
-  document.querySelectorAll('#pen-thin,#pen-med,#pen-thick,#er-med,#er-large,#er-xl').forEach(b=>b.classList.remove('on'));
-  document.getElementById({thin:'pen-thin',medium:'pen-med',thick:'pen-thick'}[size]).classList.add('on');
-}
-// Eraser
-function setEr(size){
-  T.eraserSize=size;T.mode='erase';
-  document.querySelectorAll('#pen-thin,#pen-med,#pen-thick,#er-med,#er-large,#er-xl').forEach(b=>b.classList.remove('on'));
-  document.getElementById({medium:'er-med',large:'er-large',xl:'er-xl'}[size]).classList.add('on');
-}
-on('pen-thin',()=>setPen('thin'));on('pen-med',()=>setPen('medium'));on('pen-thick',()=>setPen('thick'));
-on('er-med',()=>setEr('medium'));on('er-large',()=>setEr('large'));on('er-xl',()=>setEr('xl'));
-['col-ink','col-fired','col-blue','col-paper'].forEach(id=>{
-  on(id,()=>{
-    T.color=document.getElementById(id).dataset.c;T.mode='draw';
-    document.querySelectorAll('.pc').forEach(b=>b.classList.remove('on'));
-    document.getElementById(id).classList.add('on');
-    setPen(T.penSize);
-  });
-});
-function setTip(t){
-  T.tip=t;
-  document.querySelectorAll('#tip-coil,#tip-flat,#tip-round').forEach(b=>b.classList.remove('on'));
-  document.getElementById('tip-'+t).classList.add('on');
-}
-on('tip-coil',()=>setTip('coil'));on('tip-flat',()=>setTip('flat'));on('tip-round',()=>setTip('round'));
-
 // ══ WIRING ══
 on('cover-face',()=>{show('threshold');setTimeout(()=>show('toc'),420);});
 on('btn-prev',handlePrev);on('btn-next',handleNext);
 on('btn-menu',()=>document.getElementById('menu-overlay').classList.toggle('open'));
-on('nav-priv',()=>{S.privacy=!S.privacy;const b=document.getElementById('nav-priv');b.textContent=S.privacy?'🔓':'🔒';b.classList.toggle('on',S.privacy);});
+on('nav-priv',()=>{
+  S.privacy=!S.privacy;
+  const b=document.getElementById('nav-priv');
+  b.textContent=S.privacy?'🔓':'🔒';b.classList.toggle('on',S.privacy);
+});
 on('tr2',()=>goPage(2));on('tr3',()=>goPage(3));on('tr4',()=>goPage(4));on('tr5',()=>goPage(5));
 on('gc-new',()=>newPage());on('gc1',()=>goPage(2));on('gc2',()=>goPage(4));on('gc3',()=>goPage(5));
 on('m-toc',()=>{show('toc');closeMenu();});on('m-index',()=>{show('index');closeMenu();});
 on('m-work',()=>{show('interior');closeMenu();});
-on('m-import',()=>{if(S.screen==='interior'){openImport();}else{show('interior');setTimeout(openImport,300);}});
+on('m-import',()=>{if(S.screen==='interior')openImport();else{show('interior');setTimeout(openImport,300);}});
 on('m-sync',()=>{pulseDot();closeMenu();});on('m-close',()=>{show('cover');closeMenu();});
 on('m-dismiss',closeMenu);
 
@@ -999,7 +1190,10 @@ if(window.visualViewport){
     const vv=window.visualViewport;tw.style.height=vv.height+'px';tw.style.top=vv.offsetTop+'px';
   });
 }
-function closeTW(){document.getElementById('tw-box').value='';const tw=document.getElementById('tw-overlay');tw.classList.remove('open');tw.style.height='';tw.style.top='';}
+function closeTW(){
+  document.getElementById('tw-box').value='';
+  const tw=document.getElementById('tw-overlay');tw.classList.remove('open');tw.style.height='';tw.style.top='';
+}
 on('tw-cancel',closeTW);
 on('tw-confirm',()=>{
   const text=document.getElementById('tw-box').value.trim();
@@ -1011,9 +1205,13 @@ on('tw-confirm',()=>{
   }
   closeTW();
 });
-document.getElementById('tw-overlay').addEventListener('touchend',e=>{if(e.target===document.getElementById('tw-overlay'))closeTW();},{passive:true});
+document.getElementById('tw-overlay').addEventListener('touchend',e=>{
+  if(e.target===document.getElementById('tw-overlay'))closeTW();
+},{passive:true});
 
 // ══ INIT ══
+buildNibDrawer();
+updateNibStrip();
 setTimeout(fixGrid,150);
 </script>
 
