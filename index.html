@@ -12,20 +12,13 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{width:100%;height:100%;overflow:hidden;position:fixed;top:0;left:0;}
 body{background:#0a0a09;font-family:'Courier New',Courier,monospace;-webkit-user-select:none;user-select:none;}
-
 .screen{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden;}
 .screen.active{display:flex;}
 #screen-cover,#screen-threshold{align-items:center;justify-content:center;}
 
-/* ── COVER ── */
+/* COVER */
 #screen-cover{background:#171717;}
-.cover-face{
-background-color:#1A3A5C;position:relative;overflow:visible;
-box-shadow:0 24px 80px rgba(0,0,0,0.88);
-width:min(100vw, calc(100vh * 5.5 / 8));
-height:min(100vh, calc(100vw * 8 / 5.5));
-aspect-ratio:5.5/8;flex-shrink:0;
-}
+.cover-face{background-color:#1A3A5C;position:relative;overflow:visible;box-shadow:0 24px 80px rgba(0,0,0,0.88);width:min(100vw,calc(100vh * 5.5 / 8));height:min(100vh,calc(100vw * 8 / 5.5));aspect-ratio:5.5/8;flex-shrink:0;}
 .cover-face svg.folds{position:absolute;inset:0;width:100%;height:100%;z-index:3;}
 .cover-band{position:absolute;bottom:0;left:0;right:0;height:28%;background:#F5F2EB;border-top:1px solid rgba(15,15,13,0.2);z-index:4;display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
 .cbs{font-size:clamp(7px,1.6vw,10px);letter-spacing:0.14em;text-transform:uppercase;color:rgba(15,15,13,0.6);}
@@ -33,79 +26,98 @@ aspect-ratio:5.5/8;flex-shrink:0;
 .cover-mark{position:absolute;top:40%;left:24%;transform:translateY(-50%);font-weight:700;font-size:clamp(20px,4.5vh,34px);color:#F5F2EB;line-height:1;z-index:10;letter-spacing:-0.02em;}
 .cover-mark .p{color:#D4500A;}
 .cover-vol{position:absolute;top:4%;right:5%;font-size:clamp(7px,1.2vh,9px);letter-spacing:0.16em;color:rgba(245,242,235,0.22);z-index:10;text-transform:uppercase;}
-.cover-ribbon{position:absolute;bottom:0;left:0;width:8px;height:calc(100% + 0.5in);background:rgba(26,58,92,0.72);z-index:20;}
-.cover-ribbon-tail{position:absolute;top:-8px;left:0;width:8px;height:20px;background:rgba(26,58,92,0.72);clip-path:polygon(0 100%,100% 100%,100% 30%,50% 0%,0 30%);z-index:20;}
+.cover-ribbon{position:absolute;top:0;left:0;width:8px;height:calc(100% + 0.5in);background:rgba(26,58,92,0.72);z-index:20;}
+.cover-ribbon-tail{position:absolute;bottom:-8px;left:0;width:8px;height:20px;background:rgba(26,58,92,0.72);clip-path:polygon(0 0,100% 0,100% 65%,50% 100%,0 65%);z-index:20;}
 .wear-coffee{position:absolute;top:36%;left:32%;width:10%;aspect-ratio:1;border-radius:50%;border:1.5px solid rgba(110,72,24,0.11);z-index:15;pointer-events:none;}
 .wear-scratch{position:absolute;height:1px;background:rgba(245,242,235,0.08);z-index:15;pointer-events:none;}
 .tap-hint{position:absolute;bottom:31%;width:100%;text-align:center;font-size:clamp(7px,1.4vw,9px);letter-spacing:0.22em;color:rgba(15,15,13,0.25);text-transform:uppercase;z-index:30;animation:hint-out 3s ease 2s forwards;}
 @keyframes hint-out{to{opacity:0;}}
 
-/* ── THRESHOLD ── */
+/* THRESHOLD */
 #screen-threshold{background:#D4500A;}
 .threshold-mark{font-weight:700;color:#F5F2EB;animation:t-exp 0.4s cubic-bezier(0.16,1,0.3,1) forwards;}
 @keyframes t-exp{0%{font-size:clamp(28px,6vh,48px);opacity:0.4;}100%{font-size:clamp(90px,24vh,180px);opacity:1;}}
 
-/* ── NAV BAR ──
-Left:  [DRAF.] [🔒]
-Center: [‹] [spread label] [›]
-Right: [≡]
-*/
-#bottom-nav{
-position:fixed;bottom:0;left:0;right:0;height:52px;
-background:rgba(10,10,9,0.97);border-top:1px solid #222;
-display:flex;align-items:center;justify-content:space-between;
-padding:0 16px;z-index:500;
-}
+/* NAV */
+#bottom-nav{position:fixed;bottom:0;left:0;right:0;height:52px;background:rgba(10,10,9,0.97);border-top:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:500;}
 #bottom-nav.hidden{display:none;}
 .nav-left{display:flex;align-items:center;gap:10px;}
-.nav-mark{font-weight:700;font-size:12px;color:#D4500A;letter-spacing:0.12em;cursor:pointer;padding:10px 6px;min-width:44px;text-align:center;}
-.nav-privacy{font-size:14px;color:#555;background:none;border:none;padding:10px 6px;cursor:pointer;-webkit-appearance:none;min-width:36px;text-align:center;}
-.nav-privacy.active{color:#D4500A;}
-.nav-center{display:flex;align-items:center;gap:0;}
-.nav-arrow{font-size:22px;color:#666;background:none;border:none;padding:10px 18px;cursor:pointer;-webkit-appearance:none;line-height:1;min-width:52px;text-align:center;}
+.nav-mark{font-weight:700;font-size:12px;color:#D4500A;letter-spacing:0.12em;padding:10px 6px;cursor:pointer;-webkit-user-select:none;}
+.nav-privacy{font-size:14px;color:#555;background:none;border:none;padding:10px 4px;cursor:pointer;-webkit-appearance:none;}
+.nav-privacy.on{color:#D4500A;}
+.nav-center{display:flex;align-items:center;}
+.nav-arrow{font-size:24px;color:#777;background:none;border:none;padding:10px 20px;cursor:pointer;-webkit-appearance:none;line-height:1;min-width:60px;text-align:center;}
 .nav-arrow:active{color:#D4500A;}
-.nav-pg{font-size:10px;color:#666;letter-spacing:0.08em;min-width:100px;text-align:center;white-space:nowrap;}
+.nav-pg{font-size:10px;color:#666;letter-spacing:0.08em;min-width:110px;text-align:center;white-space:nowrap;}
 .nav-right{display:flex;align-items:center;}
-.nav-menu{font-size:18px;color:#666;background:none;border:none;padding:10px 6px;cursor:pointer;-webkit-appearance:none;min-width:44px;text-align:center;}
+.nav-menu{font-size:20px;color:#666;background:none;border:none;padding:10px 6px;cursor:pointer;-webkit-appearance:none;}
 
-/* ── TOOL PALETTE ── */
-#tool-palette{position:fixed;bottom:52px;left:0;right:0;background:rgba(10,10,9,0.98);border-top:1px solid #333;display:none;flex-direction:column;z-index:499;padding:12px 16px;}
+/* PALETTE — fixed above nav, toggled by DRAF. hold */
+#tool-palette{
+position:fixed;bottom:52px;left:0;right:0;
+background:rgba(10,10,9,0.99);
+border-top:1px solid #333;
+display:none;flex-direction:column;
+z-index:501;/* above nav */
+padding:12px 16px;
+}
 #tool-palette.open{display:flex;}
-.palette-row{display:flex;align-items:center;gap:8px;padding:5px 0;}
-.palette-label{font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#555;min-width:64px;}
-.pbtn{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#888;background:none;border:1px solid #333;padding:7px 14px;cursor:pointer;font-family:‘Courier New’,monospace;-webkit-appearance:none;border-radius:0;}
-.pbtn.active{color:#F5F2EB;border-color:#D4500A;background:rgba(212,80,10,0.15);}
-.pcol{width:30px;height:30px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex-shrink:0;}
-.pcol.active{border-color:#F5F2EB;}
-.pdiv{height:1px;background:#222;margin:2px 0;}
+.pal-row{display:flex;align-items:center;gap:8px;padding:5px 0;}
+.pal-lbl{font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#555;min-width:64px;}
+.pb{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#888;background:none;border:1px solid #333;padding:7px 14px;cursor:pointer;font-family:‘Courier New’,monospace;-webkit-appearance:none;border-radius:0;}
+.pb.on{color:#F5F2EB;border-color:#D4500A;background:rgba(212,80,10,0.15);}
+.pc{width:30px;height:30px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex-shrink:0;}
+.pc.on{border-color:#F5F2EB;}
+.pdiv{height:1px;background:#222;margin:3px 0;}
 
-/* ── TOC ── */
-/* TOC has three panels: list, grid, shown via internal nav */
+/* IMPORT PANEL */
+#import-panel{
+position:fixed;bottom:52px;left:0;right:0;
+background:rgba(10,10,9,0.99);
+border-top:1px solid #333;
+display:none;flex-direction:column;
+z-index:502;
+padding:0;
+}
+#import-panel.open{display:flex;}
+.import-header{
+padding:14px 20px 10px;
+font-family:‘Courier New’,monospace;
+font-size:9px;letter-spacing:0.18em;text-transform:uppercase;
+color:#555;border-bottom:1px solid #222;
+display:flex;justify-content:space-between;align-items:center;
+}
+.import-close{font-size:18px;color:#444;cursor:pointer;padding:0 4px;}
+.import-options{display:flex;flex-direction:column;}
+.import-btn{
+display:flex;align-items:center;gap:16px;
+padding:16px 20px;
+border-bottom:1px solid #1a1a18;
+cursor:pointer;
+background:none;
+-webkit-appearance:none;
+font-family:‘Courier New’,monospace;
+text-align:left;
+}
+.import-btn:active{background:rgba(212,80,10,0.08);}
+.import-icon{font-size:20px;width:28px;text-align:center;}
+.import-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#888;}
+/* Hidden file inputs */
+#input-camera,#input-photos,#input-file{display:none;}
+
+/* TOC */
 #screen-toc{padding-bottom:52px;}
 .toc-hdr{flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:14px 20px 10px;border-bottom:1.5px solid #0F0F0D;background:#F5F2EB;}
 .toc-hdr-t{font-weight:700;font-size:clamp(10px,2vw,13px);letter-spacing:0.18em;text-transform:uppercase;color:#0F0F0D;}
 .toc-hdr-s{font-size:clamp(8px,1.5vw,10px);letter-spacing:0.12em;color:rgba(15,15,13,0.5);}
-
-/* TOC panels — list and grid side by side in landscape, toggled in portrait */
 .toc-body{flex:1;display:flex;overflow:hidden;min-height:0;position:relative;}
-.toc-panel{
-position:absolute;inset:0;
-background-color:#F5F2EB;
-background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);
-background-size:11.34px 11.34px;
-display:none;
-}
-.toc-panel.active{display:flex;flex-direction:column;}
-
-/* Landscape: both panels side by side */
+.toc-panel{position:absolute;inset:0;display:none;flex-direction:column;background-color:#F5F2EB;background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);background-size:11.34px 11.34px;}
+.toc-panel.on{display:flex;}
 @media(orientation:landscape){
 .toc-panel{position:relative;flex:1;}
-.toc-panel.active{display:flex;}
-.toc-panel#toc-list{border-right:1px solid rgba(15,15,13,0.15);}
-/* Both always shown in landscape */
-.toc-panel#toc-list,.toc-panel#toc-grid-panel{display:flex;position:relative;}
+#toc-list,#toc-grid-panel{display:flex;}
+#toc-list{border-right:1px solid rgba(15,15,13,0.15);}
 }
-
 .toc-list-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 18px;}
 .toc-col-hds{display:grid;grid-template-columns:40px 14px 14px 1fr 20px;gap:0 8px;padding-bottom:6px;border-bottom:1px solid rgba(15,15,13,0.2);margin-bottom:6px;}
 .toc-ch{font-size:8px;letter-spacing:0.1em;color:rgba(15,15,13,0.5);text-transform:uppercase;}
@@ -119,69 +131,52 @@ display:none;
 .ch-tags{margin-top:14px;padding-top:10px;border-top:1px solid rgba(15,15,13,0.1);}
 .ch-tags-lbl{font-size:8px;letter-spacing:0.14em;color:#D4500A;text-transform:uppercase;margin-bottom:8px;}
 .ctag{display:inline-block;font-size:8px;padding:3px 8px;border:1px solid #D4500A;color:#D4500A;margin:2px 3px 2px 0;}
-
-/* TOC grid panel */
 .toc-grid-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;}
 .toc-grid{display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(4,1fr);}
 .gcell{aspect-ratio:1/1;border:1px solid rgba(15,15,13,0.15);display:flex;flex-direction:column;padding:10px;position:relative;overflow:hidden;cursor:pointer;}
-.gcell:active{background:rgba(15,15,13,0.04);}
 .gcell-num{font-size:7px;letter-spacing:0.1em;color:rgba(15,15,13,0.45);margin-bottom:4px;text-transform:uppercase;}
 .gcell-name{font-size:clamp(8px,1.3vw,10px);color:#0F0F0D;line-height:1.4;}
 .gcell-new{border-color:#D4500A;align-items:center;justify-content:center;}
 .new-mark{font-weight:700;font-size:clamp(18px,3.5vh,28px);color:#D4500A;line-height:1;}
 .gcell-inbox{border:1.5px solid #D4500A;overflow:hidden;}
 .inbox-lbl{font-size:7px;letter-spacing:0.1em;color:#D4500A;margin-bottom:4px;text-transform:uppercase;}
-.postit{
-position:absolute;bottom:6px;right:-60px;
-width:52px;height:46px;
-background:#f9f0c8;box-shadow:1px 1px 4px rgba(0,0,0,0.18);
-transform:rotate(-3deg);padding:5px 4px;
-font-size:6px;color:#333;line-height:1.4;
-animation:postit-settle 0.3s ease 0.4s forwards;
-}
-@keyframes postit-settle{to{right:6px;}}
+.postit{position:absolute;bottom:6px;right:-60px;width:52px;height:46px;background:#f9f0c8;box-shadow:1px 1px 4px rgba(0,0,0,0.18);transform:rotate(-3deg);padding:5px 4px;font-size:6px;color:#333;line-height:1.4;animation:postit-in 0.3s ease 0.4s forwards;}
+@keyframes postit-in{to{right:6px;}}
 .postit-from{font-size:5.5px;color:#D4500A;font-weight:700;margin-bottom:2px;}
 
-/* ── INTERIOR ── */
+/* INTERIOR */
 #screen-interior{padding-bottom:52px;}
 .spread-wrap{flex:1;display:flex;min-height:0;overflow:hidden;position:relative;}
 .gutter-line{position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(15,15,13,0.15);z-index:10;pointer-events:none;}
-.page-face{
-flex:1;position:relative;overflow:hidden;
-background-color:#F5F2EB;
-background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);
-background-size:11.34px 11.34px;
-}
-@media(orientation:portrait){.page-face.page-right{display:none;}.gutter-line{display:none;}}
+.page-face{flex:1;position:relative;overflow:hidden;background-color:#F5F2EB;background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);background-size:11.34px 11.34px;}
+@media(orientation:portrait){.page-face.page-right,.gutter-line{display:none;}}
 .page-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:5;touch-action:none;background:transparent;}
 .page-num{position:absolute;bottom:14px;font-size:11px;letter-spacing:0.1em;color:rgba(15,15,13,0.85);z-index:20;font-family:‘Courier New’,monospace;font-weight:700;}
 .page-num.ol{left:16px;}.page-num.or{right:16px;}
-/* Sync dot */
-.sync-dot{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:#aaa;z-index:20;transition:background 0.2s;}
-.sync-dot.pulse{background:#D4500A;}
-@keyframes breathe{0%,100%{opacity:0.35;}50%{opacity:1;}}
+.sync-dot{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:#aaa;z-index:20;transition:background 0.15s;}
+.sync-dot.hot{background:#D4500A;}
 
-/* ── SCRAP ── */
-.scrap{position:absolute;z-index:8;touch-action:none;cursor:move;}
-.scrap-tape{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:36px;height:14px;background:rgba(200,190,160,0.58);border:0.5px solid rgba(15,15,13,0.1);z-index:2;cursor:default;}
-.scrap-img-wrap{position:relative;display:inline-block;}
-.scrap-img-wrap svg,.scrap-img-wrap img{display:block;box-shadow:2px 2px 8px rgba(0,0,0,0.2);}
+/* SCRAP */
+.scrap{position:absolute;z-index:8;touch-action:none;}
+.scrap-tape{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:36px;height:14px;background:rgba(200,190,160,0.58);border:0.5px solid rgba(15,15,13,0.1);z-index:2;}
+.scrap-content{display:inline-block;position:relative;}
+.scrap-content img,.scrap-content svg{display:block;box-shadow:2px 2px 8px rgba(0,0,0,0.2);}
 .scrap-lineage{position:absolute;bottom:-14px;right:0;font-size:6.5px;color:rgba(15,15,13,0.5);letter-spacing:0.04em;white-space:nowrap;}
 .scrap-delete{position:absolute;top:-14px;right:-14px;width:28px;height:28px;background:#D4500A;color:#F5F2EB;border-radius:50%;font-size:15px;line-height:28px;text-align:center;z-index:15;cursor:pointer;display:none;}
-.scrap.selected .scrap-delete{display:block;}
-.scrap-scale{position:absolute;bottom:-10px;right:-10px;width:36px;height:36px;background:#F5F2EB;border:1.5px solid rgba(15,15,13,0.25);border-radius:50%;z-index:15;cursor:se-resize;display:none;align-items:center;justify-content:center;font-size:14px;color:rgba(15,15,13,0.5);}
-.scrap.selected .scrap-scale{display:flex;}
+.scrap.sel .scrap-delete{display:block;}
+.scrap-scale{position:absolute;bottom:-10px;right:-10px;width:36px;height:36px;background:#F5F2EB;border:1.5px solid rgba(15,15,13,0.2);border-radius:50%;z-index:15;display:none;align-items:center;justify-content:center;font-size:16px;color:rgba(15,15,13,0.4);cursor:se-resize;}
+.scrap.sel .scrap-scale{display:flex;}
 
 /* Lineage popup */
-.lineage-popup{position:fixed;background:#0F0F0D;color:#F5F2EB;padding:12px 16px;font-size:9px;letter-spacing:0.08em;line-height:1.8;z-index:800;border:1px solid #333;max-width:240px;font-family:‘Courier New’,monospace;}
+.lin-pop{position:fixed;background:#0F0F0D;color:#F5F2EB;padding:12px 16px;font-size:9px;letter-spacing:0.08em;line-height:1.9;z-index:800;border:1px solid #333;max-width:240px;font-family:‘Courier New’,monospace;display:none;}
 
-/* ── TYPE LABEL ── */
-.type-label{position:absolute;font-family:‘Courier New’,monospace;font-size:11px;font-weight:700;color:#0F0F0D;line-height:1.6;letter-spacing:0.04em;z-index:8;border-bottom:1px solid rgba(15,15,13,0.25);padding-bottom:2px;touch-action:none;cursor:move;background:rgba(245,242,235,0.02);text-shadow:0 0 8px rgba(245,242,235,0.8);}
-.type-label.selected{outline:1px dashed rgba(212,80,10,0.4);}
-.type-label-delete{position:absolute;top:-14px;right:-14px;width:26px;height:26px;background:#D4500A;color:#F5F2EB;border-radius:50%;font-size:14px;line-height:26px;text-align:center;z-index:15;display:none;}
-.type-label.selected .type-label-delete{display:block;}
+/* TYPE LABEL */
+.type-label{position:absolute;font-family:‘Courier New’,monospace;font-size:11px;font-weight:700;color:#0F0F0D;line-height:1.6;letter-spacing:0.04em;z-index:8;border-bottom:1px solid rgba(15,15,13,0.25);padding-bottom:2px;touch-action:none;cursor:move;text-shadow:0 0 8px rgba(245,242,235,0.9);}
+.type-label.sel{outline:1px dashed rgba(212,80,10,0.4);}
+.type-label-del{position:absolute;top:-14px;right:-14px;width:26px;height:26px;background:#D4500A;color:#F5F2EB;border-radius:50%;font-size:14px;line-height:26px;text-align:center;z-index:15;display:none;}
+.type-label.sel .type-label-del{display:block;}
 
-/* ── INDEX ── */
+/* INDEX */
 #screen-index{padding-bottom:52px;background-color:#F5F2EB;background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);background-size:11.34px 11.34px;}
 .index-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .index-wrap{padding:18px 20px 40px;}
@@ -197,19 +192,19 @@ background-size:11.34px 11.34px;
 .gps-lbl{font-size:9px;letter-spacing:0.16em;color:#1A3A5C;text-transform:uppercase;margin-bottom:10px;}
 .gps-body{font-size:clamp(9px,1.8vw,11px);color:rgba(15,15,13,0.6);line-height:1.9;font-style:italic;}
 
-/* ── MENU ── */
+/* MENU */
 #menu-overlay{position:fixed;inset:0;background:rgba(10,10,9,0.95);z-index:600;display:none;flex-direction:column;align-items:flex-end;padding:60px 32px 32px;}
 #menu-overlay.open{display:flex;}
 .mitem{font-size:clamp(20px,4.5vw,30px);letter-spacing:0.08em;text-transform:uppercase;color:rgba(245,242,235,0.7);padding:12px 0;border-bottom:1px solid rgba(245,242,235,0.08);width:100%;text-align:right;cursor:pointer;}
 .mitem:active{color:#D4500A;}
-.mitem-dim{color:rgba(245,242,235,0.3);font-size:clamp(13px,2.8vw,18px);}
+.mitem-dim{color:rgba(245,242,235,0.28);font-size:clamp(13px,2.8vw,18px);}
 .mclose{font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#444;cursor:pointer;margin-top:20px;}
 
-/* ── TYPEWRITER ── */
+/* TYPEWRITER */
 #tw-overlay{position:fixed;inset:0;background:rgba(10,10,9,0.8);z-index:700;display:none;align-items:flex-start;justify-content:center;padding:20px;}
 #tw-overlay.open{display:flex;}
-#tw-form{display:flex;flex-direction:column;width:100%;max-width:520px;gap:10px;margin-top:60px;}
-#tw-box{background:#F5F2EB;border:1.5px solid #0F0F0D;padding:18px;width:100%;font-family:‘Courier New’,monospace;font-size:15px;color:#0F0F0D;line-height:1.6;letter-spacing:0.04em;resize:none;outline:none;min-height:80px;border-radius:0;-webkit-appearance:none;}
+#tw-form{display:flex;flex-direction:column;width:100%;max-width:520px;gap:10px;margin-top:50px;}
+#tw-box{background:#F5F2EB;border:1.5px solid #0F0F0D;padding:18px;width:100%;font-family:‘Courier New’,monospace;font-size:15px;color:#0F0F0D;line-height:1.6;resize:none;outline:none;min-height:80px;border-radius:0;-webkit-appearance:none;}
 .tw-btns{display:flex;gap:10px;justify-content:flex-end;}
 #tw-cancel{background:none;border:1.5px solid rgba(15,15,13,0.35);color:#0F0F0D;padding:12px 22px;font-family:‘Courier New’,monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;-webkit-appearance:none;border-radius:0;}
 #tw-confirm{background:#D4500A;color:#F5F2EB;border:none;padding:12px 26px;font-family:‘Courier New’,monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;-webkit-appearance:none;border-radius:0;}
@@ -230,8 +225,7 @@ background-size:11.34px 11.34px;
       <polygon points="0,0 148,0 132,338 0,338" fill="rgba(245,242,235,0.03)"/>
       <polygon points="148,0 528,0 528,490 148,0" fill="rgba(0,0,0,0.05)"/>
     </svg>
-    <div class="cover-ribbon"></div>
-    <div class="cover-ribbon-tail"></div>
+    <div class="cover-ribbon"></div><div class="cover-ribbon-tail"></div>
     <div class="cover-mark">DRAF<span class="p">.</span></div>
     <div class="cover-vol">Vol. 01</div>
     <div class="cover-band"><span class="cbs">Winter · MMXXVI</span><span class="cbc">WI · 001/100</span></div>
@@ -252,60 +246,51 @@ background-size:11.34px 11.34px;
 <div id="screen-toc" class="screen">
   <div class="toc-hdr">
     <div class="toc-hdr-t">DRAF. · Contents</div>
-    <div class="toc-hdr-s" id="toc-hdr-sub">Vol. 01 · Winter MMXXVI · [-2]</div>
+    <div class="toc-hdr-s" id="toc-sub">Vol. 01 · Winter MMXXVI</div>
   </div>
-  <div class="toc-body" id="toc-body">
-
-```
-<!-- LIST panel [-2] -->
-<div class="toc-panel active" id="toc-list">
-  <div class="toc-list-scroll">
-    <div class="toc-col-hds">
-      <div class="toc-ch">pg</div><div class="toc-ch">tag</div><div class="toc-ch">⬤</div>
-      <div class="toc-ch">project · type</div><div class="toc-ch">↗</div>
-    </div>
-    <div class="toc-row" id="tr2"><div class="tc tc-pg">[002]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">STRADE_B · active</div><div class="arr">↗</div></div>
-    <div class="toc-row" id="tr3"><div class="tc tc-pg">[003]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">STRADE_B · active</div><div class="arr">↗</div></div>
-    <div class="toc-row" id="tr4"><div class="tc tc-pg">[004]</div><div class="tc"><span class="tag-h"></span></div><div class="tc" style="opacity:0.5">◐</div><div class="tc">LUM_FIELD · research</div><div class="arr" style="color:#1A3A5C;opacity:0.5">↗</div></div>
-    <div class="toc-row" id="tr5"><div class="tc tc-pg">[005]</div><div class="tc"><span class="tag-a"></span></div><div class="tc" style="opacity:0.28">○</div><div class="tc">AT_COST · active</div><div class="arr">↗</div></div>
-    <div class="toc-row" id="tr6"><div class="tc tc-pg">[006]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">PERSONAL · personal</div><div class="arr" style="opacity:0.25">—</div></div>
-    <div class="ch-tags">
-      <div class="ch-tags-lbl">Dynamic Folio</div>
-      <span class="ctag">STRADE_B · 002–003</span>
-      <span class="ctag" style="border-color:#1A3A5C;color:#1A3A5C;opacity:0.6">LUM_FIELD · 004</span>
-      <span class="ctag">AT_COST · 005</span>
-    </div>
-  </div>
-</div>
-
-<!-- GRID panel [-1] -->
-<div class="toc-panel" id="toc-grid-panel">
-  <div class="toc-grid-wrap">
-    <div class="toc-grid" id="toc-grid">
-      <div class="gcell gcell-new" id="gc-new"><div class="new-mark">//|</div></div>
-      <div class="gcell" id="gc1"><div class="gcell-num">01 · STRADE_B</div><div class="gcell-name">pg 002–003</div></div>
-      <div class="gcell" id="gc2"><div class="gcell-num">02 · LUM_FIELD</div><div class="gcell-name">pg 004</div></div>
-      <div class="gcell" id="gc3"><div class="gcell-num">03 · AT_COST</div><div class="gcell-name">pg 005</div></div>
-      <div class="gcell" style="opacity:0.3"><div class="gcell-num">04 · —</div><div class="gcell-name">unassigned</div></div>
-      <div class="gcell" style="opacity:0.3"><div class="gcell-num">05 · —</div><div class="gcell-name">unassigned</div></div>
-      <div class="gcell" style="opacity:0.3"><div class="gcell-num">06 · —</div><div class="gcell-name">unassigned</div></div>
-      <div class="gcell gcell-inbox" id="gc-inbox">
-        <div class="inbox-lbl">08 · Inbox ↗</div>
-        <div class="gcell-name" style="font-size:8px;opacity:0.55;">notifications</div>
-        <div class="postit"><div class="postit-from">MARGOT</div>STRADE_B — door hinge pg 002</div>
+  <div class="toc-body">
+    <div class="toc-panel on" id="toc-list">
+      <div class="toc-list-scroll">
+        <div class="toc-col-hds">
+          <div class="toc-ch">pg</div><div class="toc-ch">tag</div><div class="toc-ch">⬤</div><div class="toc-ch">project</div><div class="toc-ch">↗</div>
+        </div>
+        <div class="toc-row" id="tr2"><div class="tc tc-pg">[002]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">STRADE_B · active</div><div class="arr">↗</div></div>
+        <div class="toc-row" id="tr3"><div class="tc tc-pg">[003]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">STRADE_B · active</div><div class="arr">↗</div></div>
+        <div class="toc-row" id="tr4"><div class="tc tc-pg">[004]</div><div class="tc"><span class="tag-h"></span></div><div class="tc" style="opacity:0.5">◐</div><div class="tc">LUM_FIELD · research</div><div class="arr" style="color:#1A3A5C;opacity:0.5">↗</div></div>
+        <div class="toc-row" id="tr5"><div class="tc tc-pg">[005]</div><div class="tc"><span class="tag-a"></span></div><div class="tc" style="opacity:0.28">○</div><div class="tc">AT_COST · active</div><div class="arr">↗</div></div>
+        <div class="ch-tags">
+          <div class="ch-tags-lbl">Dynamic Folio</div>
+          <span class="ctag">STRADE_B · 002–003</span>
+          <span class="ctag" style="border-color:#1A3A5C;color:#1A3A5C;opacity:0.6">LUM_FIELD · 004</span>
+          <span class="ctag">AT_COST · 005</span>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-```
-
+    <div class="toc-panel" id="toc-grid-panel">
+      <div class="toc-grid-wrap">
+        <div class="toc-grid" id="toc-grid">
+          <div class="gcell gcell-new" id="gc-new"><div class="new-mark">//|</div></div>
+          <div class="gcell" id="gc1"><div class="gcell-num">01 · STRADE_B</div><div class="gcell-name">pg 002–003</div></div>
+          <div class="gcell" id="gc2"><div class="gcell-num">02 · LUM_FIELD</div><div class="gcell-name">pg 004</div></div>
+          <div class="gcell" id="gc3"><div class="gcell-num">03 · AT_COST</div><div class="gcell-name">pg 005</div></div>
+          <div class="gcell" style="opacity:0.3"><div class="gcell-num">04 · —</div><div class="gcell-name">unassigned</div></div>
+          <div class="gcell" style="opacity:0.3"><div class="gcell-num">05 · —</div><div class="gcell-name">unassigned</div></div>
+          <div class="gcell" style="opacity:0.3"><div class="gcell-num">06 · —</div><div class="gcell-name">unassigned</div></div>
+          <div class="gcell gcell-inbox">
+            <div class="inbox-lbl">08 · Inbox ↗</div>
+            <div class="gcell-name" style="font-size:8px;opacity:0.55;">notifications</div>
+            <div class="postit"><div class="postit-from">MARGOT</div>STRADE_B — door hinge pg 002</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- INTERIOR -->
 
 <div id="screen-interior" class="screen">
-  <div class="spread-wrap" id="spread-wrap">
+  <div class="spread-wrap">
     <div class="gutter-line"></div>
     <div class="page-face page-left" id="page-left">
       <canvas class="page-canvas" id="canvas-left"></canvas>
@@ -330,16 +315,6 @@ background-size:11.34px 11.34px;
       <div class="index-entry"><span>LUM_FIELD — Luminous Field brand</span><span class="index-pg">004</span></div>
       <div class="index-entry"><span>AT_COST — Paris–Roubaix series</span><span class="index-pg">005</span></div>
     </div>
-    <div class="index-sec">
-      <div class="index-sec-h">Session Types</div>
-      <div class="index-entry"><span>Active project</span><span class="index-pg">002, 003, 005</span></div>
-      <div class="index-entry"><span>Research</span><span class="index-pg">004</span></div>
-      <div class="index-entry"><span>Personal</span><span class="index-pg">006</span></div>
-    </div>
-    <div class="index-sec">
-      <div class="index-sec-h">Taped-In Scraps</div>
-      <div class="index-entry"><span>Site sketch · iPhone · 14.03.26 · STRADE_B</span><span class="index-pg">002</span></div>
-    </div>
     <div class="gps-block">
       <div class="gps-lbl">GPS Anchor · Darius Okafor · Winter MMXXVI</div>
       <div class="gps-body">44.4268°N, 26.1025°E<br>Bucharest · January · age 7<br>grandmother's courtyard · linden trees in winter<br>said once aloud · never published</div>
@@ -347,16 +322,16 @@ background-size:11.34px 11.34px;
   </div></div>
 </div>
 
-<!-- BOTTOM NAV -->
+<!-- NAV -->
 
 <div id="bottom-nav" class="hidden">
   <div class="nav-left">
     <span class="nav-mark" id="nav-draf">DRAF.</span>
-    <button class="nav-privacy" id="nav-privacy" title="Privacy">🔒</button>
+    <button class="nav-privacy" id="nav-priv">🔒</button>
   </div>
   <div class="nav-center">
     <button class="nav-arrow" id="btn-prev">‹</button>
-    <div class="nav-pg" id="nav-pg">[002]/[003]</div>
+    <div class="nav-pg" id="nav-pg"></div>
     <button class="nav-arrow" id="btn-next">›</button>
   </div>
   <div class="nav-right">
@@ -364,38 +339,71 @@ background-size:11.34px 11.34px;
   </div>
 </div>
 
-<!-- TOOL PALETTE -->
+<!-- PALETTE -->
 
 <div id="tool-palette">
-  <div class="palette-row">
-    <span class="palette-label">Pen</span>
-    <button class="pbtn active" id="pen-thin">Thin</button>
-    <button class="pbtn" id="pen-med">Medium</button>
-    <button class="pbtn" id="pen-thick">Thick</button>
+  <div class="pal-row">
+    <span class="pal-lbl">Pen</span>
+    <button class="pb on" id="pen-thin">Thin</button>
+    <button class="pb" id="pen-med">Medium</button>
+    <button class="pb" id="pen-thick">Thick</button>
   </div>
   <div class="pdiv"></div>
-  <div class="palette-row">
-    <span class="palette-label">Eraser</span>
-    <button class="pbtn" id="er-med">Medium</button>
-    <button class="pbtn" id="er-large">Large</button>
-    <button class="pbtn" id="er-xl">X-Large</button>
+  <div class="pal-row">
+    <span class="pal-lbl">Eraser</span>
+    <button class="pb" id="er-med">Medium</button>
+    <button class="pb" id="er-large">Large</button>
+    <button class="pb" id="er-xl">X-Large</button>
   </div>
   <div class="pdiv"></div>
-  <div class="palette-row">
-    <span class="palette-label">Color</span>
-    <div class="pcol active" id="col-ink" data-color="#0F0F0D" style="background:#0F0F0D;"></div>
-    <div class="pcol" id="col-fired" data-color="#D4500A" style="background:#D4500A;"></div>
-    <div class="pcol" id="col-blue" data-color="#1A3A5C" style="background:#1A3A5C;"></div>
-    <div class="pcol" id="col-paper" data-color="#F5F2EB" style="background:#F5F2EB;border:1px solid #bbb;"></div>
+  <div class="pal-row">
+    <span class="pal-lbl">Color</span>
+    <div class="pc on" id="col-ink" data-c="#0F0F0D" style="background:#0F0F0D;"></div>
+    <div class="pc" id="col-fired" data-c="#D4500A" style="background:#D4500A;"></div>
+    <div class="pc" id="col-blue" data-c="#1A3A5C" style="background:#1A3A5C;"></div>
+    <div class="pc" id="col-paper" data-c="#F5F2EB" style="background:#F5F2EB;border-color:#bbb;"></div>
   </div>
   <div class="pdiv"></div>
-  <div class="palette-row">
-    <span class="palette-label">Tip</span>
-    <button class="pbtn active" id="tip-coil">Coil</button>
-    <button class="pbtn" id="tip-flat">Flat</button>
-    <button class="pbtn" id="tip-round">Round</button>
+  <div class="pal-row">
+    <span class="pal-lbl">Tip</span>
+    <button class="pb on" id="tip-coil">Coil</button>
+    <button class="pb" id="tip-flat">Flat</button>
+    <button class="pb" id="tip-round">Round</button>
   </div>
 </div>
+
+<!-- IMPORT PANEL -->
+
+<div id="import-panel">
+  <div class="import-header">
+    <span>Import to page</span>
+    <span class="import-close" id="import-close">✕</span>
+  </div>
+  <div class="import-options">
+    <button class="import-btn" id="imp-camera">
+      <span class="import-icon">📷</span>
+      <span class="import-label">Camera</span>
+    </button>
+    <button class="import-btn" id="imp-photos">
+      <span class="import-icon">🖼</span>
+      <span class="import-label">Photos Library</span>
+    </button>
+    <button class="import-btn" id="imp-file">
+      <span class="import-icon">📄</span>
+      <span class="import-label">Select File</span>
+    </button>
+    <button class="import-btn" id="imp-paste">
+      <span class="import-icon">📋</span>
+      <span class="import-label">Paste from Clipboard</span>
+    </button>
+  </div>
+</div>
+
+<!-- Hidden file inputs -->
+
+<input type="file" id="input-camera" accept="image/*" capture="environment">
+<input type="file" id="input-photos" accept="image/*">
+<input type="file" id="input-file" accept="image/*,application/pdf,.jpg,.jpeg,.png,.gif,.webp">
 
 <!-- MENU -->
 
@@ -403,8 +411,8 @@ background-size:11.34px 11.34px;
   <div class="mitem" id="m-toc">TOC</div>
   <div class="mitem" id="m-index">Index</div>
   <div class="mitem" id="m-work">Work</div>
+  <div class="mitem" id="m-import">Import</div>
   <div class="mitem" id="m-sync">Force Sync</div>
-  <div class="mitem mitem-dim">Import — Phase 2</div>
   <div class="mitem" id="m-close">Close Book</div>
   <div class="mclose" id="m-dismiss">✕ dismiss</div>
 </div>
@@ -421,268 +429,161 @@ background-size:11.34px 11.34px;
   </div>
 </div>
 
-<!-- LINEAGE POPUP -->
-
-<div class="lineage-popup" id="lineage-popup" style="display:none;"></div>
+<div class="lin-pop" id="lin-pop"></div>
 
 <script>
-// ══════════════════════════════
-// TOOL STATE
-// ══════════════════════════════
-const TOOL={
+'use strict';
+
+// ══ TOOL STATE ══
+const T={
   color:'#0F0F0D',
   penSize:'thin',
   eraserSize:'medium',
-  mode:'draw', // draw | erase
+  mode:'draw',
   tip:'coil',
-  paletteOpen:false,
-  erasing:false
+  paletteOpen:false
 };
 
-function getPenWidth(pressure){
-  const p=pressure||0.5;
-  // Coil tip: tapers with pressure variation
-  if(TOOL.tip==='coil'){
-    const base=TOOL.penSize==='thin'?0.8:TOOL.penSize==='medium'?2.2:4.5;
-    return Math.max(0.3, base * (0.4 + p * 1.2));
+function penW(pressure){
+  const p=Math.max(0.1,Math.min(1,pressure||0.5));
+  const base={thin:1,medium:2.8,thick:5.5}[T.penSize]||1;
+  switch(T.tip){
+    case'coil':return Math.max(0.3,base*(0.3+p*1.4));
+    case'flat':return base*1.5;
+    default:return base;
   }
-  if(TOOL.tip==='flat'){
-    const base=TOOL.penSize==='thin'?1.5:TOOL.penSize==='medium'?3:6;
-    return base;
-  }
-  // round
-  const base=TOOL.penSize==='thin'?1:TOOL.penSize==='medium'?2.5:5;
-  return base;
 }
-function getEraserWidth(){
-  return TOOL.eraserSize==='medium'?20:TOOL.eraserSize==='large'?40:70;
-}
+function eraserW(){return{medium:20,large:40,xl:72}[T.eraserSize]||20;}
 
-// ══════════════════════════════
-// PAGE STATE
-// ══════════════════════════════
+// ══ STATE ══
 const TOTAL=100;
-const isLandscape=()=>window.innerWidth>window.innerHeight;
-
-// TOC has 3 states: list, grid, work
-// portrait: list → grid → work via › / ‹
-// landscape: list+grid always shown, › goes to work
-const TOC_STATES=['list','grid','work'];
-
+const LS=()=>window.innerWidth>window.innerHeight;
 const S={
-  currentPage:parseInt(localStorage.getItem('draf-pg')||'2'),
+  page:parseInt(localStorage.getItem('dp')||'2'),
   screen:'cover',
-  tocState:'list', // list | grid
-  privacyOn:false,
-  twX:0,twY:0,twWrapId:'page-left',
-  hasInk:false // tracks if current page has pencil strokes (for orientation lock)
+  tocView:'list',
+  privacy:false,
+  twX:0,twY:0,twWrap:'page-left',
+  hasInk:false,
+  importTargetWrap:'page-left'
 };
-
-function clampPage(p){return Math.max(2,Math.min(p,TOTAL));}
+function clamp(p){return Math.max(2,Math.min(TOTAL,p));}
 function pad(n){return String(n).padStart(3,'0');}
-function isLandscapeNow(){return window.innerWidth>window.innerHeight;}
+function leftPg(){return LS()?S.page%2===0?S.page:S.page-1:S.page;}
+function rightPg(){return leftPg()+1;}
+function navLabel(){
+  if(S.screen==='toc')return S.tocView==='list'?'[-2]':'[-1]';
+  if(S.screen==='index')return 'Index';
+  if(LS()){const r=rightPg();return r<=TOTAL?'['+pad(leftPg())+']/['+pad(r)+']':'['+pad(leftPg())+']';}
+  return '['+pad(S.page)+']';
+}
+function setNavLabel(){document.getElementById('nav-pg').textContent=navLabel();}
 
-function getLeftPage(){
-  if(isLandscapeNow()){
-    const p=S.currentPage;
-    return p%2===0?p:p-1;
-  }
-  return S.currentPage;
+// ══ CANVAS SAVE/LOAD ══
+function saveC(pg,canvas){try{localStorage.setItem('dc'+pg,canvas.toDataURL('image/png'));}catch(e){}}
+function loadC(pg,canvas){
+  const d=localStorage.getItem('dc'+pg);if(!d)return;
+  const img=new Image();img.onload=()=>canvas.getContext('2d').drawImage(img,0,0);img.src=d;
 }
-function getRightPage(){return getLeftPage()+1;}
-
-function getNavLabel(){
-  if(S.screen==='toc'){
-    return S.tocState==='list'?'[-2]':'[-1]';
-  }
-  if(S.screen==='index') return 'Index';
-  if(isLandscapeNow()){
-    const l=getLeftPage(),r=getRightPage();
-    return r<=TOTAL?'['+pad(l)+']/['+pad(r)+']':'['+pad(l)+']';
-  }
-  return '['+pad(S.currentPage)+']';
-}
-
-// ══════════════════════════════
-// CANVAS PERSISTENCE
-// ══════════════════════════════
-function saveCanvas(pageNum,canvas){
-  try{
-    const data=canvas.toDataURL('image/png');
-    localStorage.setItem('draf-c'+pageNum,data);
-  }catch(e){}
-}
-function loadCanvas(pageNum,canvas){
-  const d=localStorage.getItem('draf-c'+pageNum);
-  if(!d)return;
-  const img=new Image();
-  img.onload=()=>{ canvas.getContext('2d').drawImage(img,0,0); };
-  img.src=d;
-}
-function saveCurrentCanvases(){
+function saveAll(){
   const cl=document.getElementById('canvas-left');
   const cr=document.getElementById('canvas-right');
-  if(isLandscapeNow()){
-    if(cl)saveCanvas(getLeftPage(),cl);
-    if(cr&&getRightPage()<=TOTAL)saveCanvas(getRightPage(),cr);
-  } else {
-    if(cl)saveCanvas(S.currentPage,cl);
-  }
+  if(cl)saveC(leftPg(),cl);
+  if(cr&&rightPg()<=TOTAL)saveC(rightPg(),cr);
+}
+function pulseDot(){
+  const d=document.getElementById('sync-dot');if(!d)return;
+  d.classList.add('hot');setTimeout(()=>d.classList.remove('hot'),700);
 }
 
-// Sync dot pulse on save
-function pulseSyncDot(){
-  const dot=document.getElementById('sync-dot');
-  if(!dot)return;
-  dot.classList.add('pulse');
-  setTimeout(()=>dot.classList.remove('pulse'),800);
-}
-
-// ══════════════════════════════
-// NAVIGATION — prev / next
-// ══════════════════════════════
+// ══ NAVIGATION ══
 function handlePrev(){
-  if(S.screen==='toc'){
-    // List is first, no going back from list in portrait
-    if(!isLandscapeNow()){
-      if(S.tocState==='grid'){ setTocState('list'); return; }
-    }
-    return;
-  }
+  if(S.screen==='toc'){if(!LS()&&S.tocView==='grid'){setTocView('list');}return;}
+  if(S.screen==='index'){show('toc');return;}
   if(S.screen==='interior'){
-    if(S.hasInk) return; // orientation lock while drawing — no nav? Actually this is page nav not orientation
-    saveCurrentCanvases();
-    if(isLandscapeNow()){
-      S.currentPage=clampPage(getLeftPage()-2);
-      if(S.currentPage%2!==0)S.currentPage--;
-      S.currentPage=clampPage(S.currentPage);
-    } else {
-      S.currentPage=clampPage(S.currentPage-1);
-    }
-    localStorage.setItem('draf-pg',S.currentPage);
-    renderSpread();
-    return;
-  }
-  if(S.screen==='index'){
-    showScreen('toc');return;
+    saveAll();
+    if(LS()){const next=leftPg()-2;if(next<2){show('toc');return;}S.page=clamp(next%2===0?next:next-1);}
+    else{if(S.page<=2){show('toc');return;}S.page=clamp(S.page-1);}
+    localStorage.setItem('dp',S.page);renderSpread();
   }
 }
-
 function handleNext(){
   if(S.screen==='toc'){
-    if(!isLandscapeNow()){
-      if(S.tocState==='list'){ setTocState('grid'); return; }
-      if(S.tocState==='grid'){ showScreen('interior'); return; }
-    } else {
-      // Landscape — both panels shown, › goes to work
-      showScreen('interior'); return;
-    }
-    return;
+    if(!LS()){if(S.tocView==='list'){setTocView('grid');return;}show('interior');return;}
+    show('interior');return;
   }
+  if(S.screen==='index'){show('interior');return;}
   if(S.screen==='interior'){
-    saveCurrentCanvases();
-    if(isLandscapeNow()){
-      let next=getLeftPage()+2;
-      if(next%2!==0)next--;
-      S.currentPage=clampPage(next);
-    } else {
-      S.currentPage=clampPage(S.currentPage+1);
-    }
-    localStorage.setItem('draf-pg',S.currentPage);
-    renderSpread();
-    return;
-  }
-  if(S.screen==='index'){
-    showScreen('interior');return;
+    saveAll();
+    if(LS()){const next=leftPg()+2;S.page=clamp(next%2===0?next:next-1);}
+    else{S.page=clamp(S.page+1);}
+    localStorage.setItem('dp',S.page);renderSpread();
   }
 }
 
-// ══════════════════════════════
-// TOC STATE
-// ══════════════════════════════
-function setTocState(state){
-  S.tocState=state;
+// ══ TOC VIEW ══
+function setTocView(v){
+  S.tocView=v;
   const list=document.getElementById('toc-list');
   const grid=document.getElementById('toc-grid-panel');
-  const sub=document.getElementById('toc-hdr-sub');
-
-  if(isLandscapeNow()){
-    // Both always visible in landscape
-    list.classList.add('active');
-    grid.classList.add('active');
-    sub.textContent='Vol. 01 · Winter MMXXVI · [-2]/[-1]';
-  } else {
-    list.classList.toggle('active',state==='list');
-    grid.classList.toggle('active',state==='grid');
-    sub.textContent=state==='list'?'Vol. 01 · Winter MMXXVI · [-2]':'Vol. 01 · Winter MMXXVI · [-1]';
-  }
-  document.getElementById('nav-pg').textContent=getNavLabel();
-  if(state==='grid') requestAnimationFrame(fixGrid);
+  if(LS()){list.classList.add('on');grid.classList.add('on');document.getElementById('toc-sub').textContent='Vol. 01 · Winter MMXXVI · [-2]/[-1]';}
+  else{list.classList.toggle('on',v==='list');grid.classList.toggle('on',v==='grid');document.getElementById('toc-sub').textContent=v==='list'?'Vol. 01 · Winter MMXXVI · [-2]':'Vol. 01 · Winter MMXXVI · [-1]';}
+  setNavLabel();
+  if(v==='grid'||LS())requestAnimationFrame(fixGrid);
 }
 
-// ══════════════════════════════
-// SHOW SCREEN
-// ══════════════════════════════
-function showScreen(name){
-  if(S.screen==='interior') saveCurrentCanvases();
+// ══ SHOW ══
+function show(name){
+  if(S.screen==='interior')saveAll();
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+name).classList.add('active');
   S.screen=name;
   const nav=document.getElementById('bottom-nav');
   (name==='cover'||name==='threshold')?nav.classList.add('hidden'):nav.classList.remove('hidden');
   if(name==='interior'){S.hasInk=false;renderSpread();}
-  if(name==='toc'){setTocState(isLandscapeNow()?'list':S.tocState||'list');}
-  if(name==='index'){document.getElementById('nav-pg').textContent='Index';}
+  if(name==='toc')setTocView(LS()?'list':S.tocView);
+  setNavLabel();
   closePalette();
+  closeImport();
 }
 
-// ══════════════════════════════
-// RENDER SPREAD
-// ══════════════════════════════
+// ══ RENDER ══
+const canvasFor={};
 function renderSpread(){
-  document.getElementById('nav-pg').textContent=getNavLabel();
-  if(isLandscapeNow()){
-    const l=getLeftPage(),r=getRightPage();
+  setNavLabel();
+  if(LS()){
+    const l=leftPg(),r=rightPg();
     document.getElementById('pg-left').textContent='['+pad(l)+']';
     document.getElementById('pg-right').textContent=r<=TOTAL?'['+pad(r)+']':'';
-    document.getElementById('page-right').style.display='';
-    document.getElementById('gutter-line')||null;
-    setupCanvas('canvas-left','page-left',l);
-    if(r<=TOTAL) setupCanvas('canvas-right','page-right',r);
-    renderPageContent('page-left',l);
-    renderPageContent('page-right',r);
+    initCanvas('canvas-left','page-left',l);
+    if(r<=TOTAL)initCanvas('canvas-right','page-right',r);
+    putContent('page-left',l);putContent('page-right',r);
   } else {
-    const p=S.currentPage;
-    document.getElementById('pg-left').textContent='['+pad(p)+']';
-    setupCanvas('canvas-left','page-left',p);
-    renderPageContent('page-left',p);
+    document.getElementById('pg-left').textContent='['+pad(S.page)+']';
+    initCanvas('canvas-left','page-left',S.page);
+    putContent('page-left',S.page);
   }
 }
 
-// ══════════════════════════════
-// PAGE CONTENT (sample)
-// ══════════════════════════════
-function renderPageContent(wrapId,pageNum){
-  const wrap=document.getElementById(wrapId);
-  wrap.querySelectorAll('.scrap,.type-label').forEach(e=>e.remove());
-  if(pageNum===2){
-    const sc=buildScrap();
-    wrap.appendChild(sc);
-    initScrap(sc,wrap);
-    const lb=buildLabel('door hinge detail — section A\nclearance: 12mm min.','48%','8%');
-    wrap.appendChild(lb);
-    initLabel(lb,wrap);
+// ══ PAGE CONTENT ══
+function putContent(wid,pg){
+  const w=document.getElementById(wid);
+  w.querySelectorAll('.scrap,.type-label').forEach(e=>e.remove());
+  if(pg===2){
+    const sc=makeSampleScrap();w.appendChild(sc);attachScrap(sc,w);
+    const lb=makeLbl('door hinge detail — section A\nclearance: 12mm min.','48%','8%');
+    w.appendChild(lb);attachLbl(lb,w);
   }
 }
 
-function buildScrap(){
+// ══ SCRAP BUILDERS ══
+function makeSampleScrap(){
   const el=document.createElement('div');
-  el.className='scrap';
-  el.style.cssText='top:12%;left:6%;';
+  el.className='scrap';el.style.cssText='top:12%;left:6%;';
   el.innerHTML=`
-    <div class="scrap-tape" id="scrap-tape-hold"></div>
-    <div class="scrap-img-wrap" style="transform:rotate(-3deg);">
-      <svg width="140" height="100" viewBox="0 0 140 100">
+    <div class="scrap-tape" id="sc-tape-sample"></div>
+    <div class="scrap-content">
+      <svg id="sc-svg-sample" width="140" height="100" viewBox="0 0 140 100" style="transform:rotate(-3deg)">
         <rect width="140" height="100" fill="#c4bdb4"/>
         <path d="M12,72 Q42,48 75,62 Q108,76 122,52" stroke="#3a3530" stroke-width="2.2" fill="none" opacity="0.6"/>
         <path d="M22,36 L40,30 L65,40 L90,33 L112,38" stroke="#4a4540" stroke-width="1" fill="none" opacity="0.45"/>
@@ -690,140 +591,114 @@ function buildScrap(){
       </svg>
       <div class="scrap-delete">✕</div>
       <div class="scrap-scale">↘</div>
-    </div>`;
+    </div>
+    <div class="scrap-lineage">iPhone · 14.03.26 · STRADE_B</div>`;
   return el;
 }
 
-function buildLabel(text,top,left){
+// Build a scrap from an image URL (for imports)
+function makeImgScrap(url,source,dateStr){
   const el=document.createElement('div');
-  el.className='type-label';
-  el.style.top=top; el.style.left=left;
-  el.innerHTML=text.replace('\n','<br>');
-  const del=document.createElement('div');
-  del.className='type-label-delete'; del.textContent='✕';
-  el.appendChild(del);
+  el.className='scrap';
+  // Random slight rotation
+  const rot=(Math.random()*8-4).toFixed(1);
+  el.style.cssText='top:15%;left:10%;';
+  const now=new Date();
+  const tapedDate=now.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'}).replace(/\//g,'.');
+  el.innerHTML=`
+    <div class="scrap-tape"></div>
+    <div class="scrap-content">
+      <img src="${url}" style="width:180px;height:auto;max-height:240px;object-fit:cover;transform:rotate(${rot}deg);">
+      <div class="scrap-delete">✕</div>
+      <div class="scrap-scale">↘</div>
+    </div>
+    <div class="scrap-lineage" data-source="${source}" data-created="${dateStr||''}" data-taped="${tapedDate}">${source} · ${tapedDate}</div>`;
   return el;
 }
 
-// ══════════════════════════════
-// SCRAP INTERACTION
-// ══════════════════════════════
-function initScrap(el,wrap){
+// ══ SCRAP INTERACTION ══
+function attachScrap(el,wrap){
+  const svg=el.querySelector('svg')||el.querySelector('img');
+  const del=el.querySelector('.scrap-delete');
+  const scaleH=el.querySelector('.scrap-scale');
+  const tape=el.querySelector('.scrap-tape');
   let dragging=false,scaling=false;
   let ox=0,oy=0,tapT=0,tapX=0,tapY=0;
-  let startDist=0,startW=0,startH=0,centerX=0,centerY=0;
+  let scW=0,scH=0,scCX=0,scCY=0,scDist=0;
 
-  const imgWrap=el.querySelector('.scrap-img-wrap');
-  const del=el.querySelector('.scrap-delete');
-  const scaleHandle=el.querySelector('.scrap-scale');
-  const tape=el.querySelector('.scrap-tape');
-
-  // Delete
   del.addEventListener('touchend',e=>{e.stopPropagation();e.preventDefault();el.remove();},{passive:false});
 
-  // Tape hold — show lineage popup
-  let tapeHoldTimer=null;
-  tape.addEventListener('touchstart',e=>{
-    tapeHoldTimer=setTimeout(()=>showLineage(e.touches[0],el),500);
+  // Tape hold → lineage
+  let tapeTimer=null;
+  const linData=el.querySelector('.scrap-lineage');
+  tape.addEventListener('touchstart',()=>{
+    tapeTimer=setTimeout(()=>{
+      if(linData){
+        const src=linData.dataset.source||'Unknown';
+        const created=linData.dataset.created||'—';
+        const taped=linData.dataset.taped||'—';
+        showLin(tape,src,created,taped);
+      }
+    },500);
   },{passive:true});
-  tape.addEventListener('touchend',()=>{clearTimeout(tapeHoldTimer);},{passive:true});
-  tape.addEventListener('touchmove',()=>{clearTimeout(tapeHoldTimer);},{passive:true});
+  tape.addEventListener('touchend',()=>clearTimeout(tapeTimer),{passive:true});
+  tape.addEventListener('touchmove',()=>clearTimeout(tapeTimer),{passive:true});
 
-  // Scale — bottom right corner, uniform x+y from center
-  scaleHandle.addEventListener('touchstart',e=>{
-    e.stopPropagation(); e.preventDefault();
+  // Scale — scales the svg or img directly
+  scaleH.addEventListener('touchstart',e=>{
+    e.stopPropagation();e.preventDefault();
     scaling=true;
     const t=e.touches[0];
-    const ir=imgWrap.getBoundingClientRect();
-    centerX=ir.left+ir.width/2; centerY=ir.top+ir.height/2;
-    startDist=Math.hypot(t.clientX-centerX,t.clientY-centerY);
-    startW=imgWrap.offsetWidth; startH=imgWrap.offsetHeight;
+    const sr=svg.getBoundingClientRect();
+    scCX=sr.left+sr.width/2;scCY=sr.top+sr.height/2;
+    scDist=Math.max(10,Math.hypot(t.clientX-scCX,t.clientY-scCY));
+    scW=sr.width;scH=sr.height;
   },{passive:false});
 
-  const scaleMove=e=>{
+  const onSM=e=>{
     if(!scaling)return;
     const t=e.touches[0];
-    const d=Math.hypot(t.clientX-centerX,t.clientY-centerY);
-    const ratio=d/Math.max(startDist,1);
-    const nw=Math.max(60,startW*ratio);
-    const nh=Math.max(44,startH*ratio);
-    imgWrap.style.width=nw+'px';
-    imgWrap.style.height=nh+'px';
+    const d=Math.hypot(t.clientX-scCX,t.clientY-scCY);
+    const r=d/scDist;
+    const nw=Math.max(60,Math.round(scW*r));
+    const nh=Math.max(44,Math.round(scH*r));
+    if(svg.tagName==='svg'){svg.setAttribute('width',nw);svg.setAttribute('height',nh);}
+    else{svg.style.width=nw+'px';svg.style.height=nh+'px';}
   };
-  const scaleEnd=()=>{scaling=false;};
-  document.addEventListener('touchmove',scaleMove,{passive:true});
-  document.addEventListener('touchend',scaleEnd,{passive:true});
+  document.addEventListener('touchmove',onSM,{passive:true});
+  document.addEventListener('touchend',()=>{scaling=false;},{passive:true});
 
   // Move
   el.addEventListener('touchstart',e=>{
-    if(e.target===del||e.target===scaleHandle||e.target===tape)return;
+    if(e.target===del||e.target===scaleH||e.target===tape)return;
     const t=e.touches[0];
-    tapX=t.clientX; tapY=t.clientY; tapT=Date.now();
-    const wr=wrap.getBoundingClientRect();
-    const er=el.getBoundingClientRect();
-    ox=t.clientX-er.left; oy=t.clientY-er.top;
-    dragging=true; el.style.transform='none';
-  },{passive:true});
-
-  el.addEventListener('touchmove',e=>{
-    if(!dragging||scaling)return;
-    e.preventDefault();
-    const t=e.touches[0];
-    const wr=wrap.getBoundingClientRect();
-    el.style.left=(t.clientX-wr.left-ox)+'px';
-    el.style.top=(t.clientY-wr.top-oy)+'px';
-  },{passive:false});
-
-  el.addEventListener('touchend',e=>{
-    dragging=false;
-    const t=e.changedTouches[0];
-    const now=Date.now();
-    if(now-tapT>180&&now-tapT<500&&Math.hypot(t.clientX-tapX,t.clientY-tapY)<40){
-      el.classList.toggle('selected');
-    }
-    tapT=now;
-  },{passive:true});
-}
-
-function showLineage(touch,scrap){
-  const pop=document.getElementById('lineage-popup');
-  pop.innerHTML='<div style="font-size:8px;letter-spacing:0.12em;color:#D4500A;text-transform:uppercase;margin-bottom:8px;">Lineage</div>SOURCE: iPhone 15 Pro<br>CREATED: 14.03.26 · 09:42<br>TAPED: 18.03.26 · 14:12<br>PROJECT: STRADE_B<br><br><span style="color:#555;font-size:7px;cursor:pointer" id="pop-close">Tap to dismiss</span>';
-  pop.style.display='block';
-  pop.style.left=Math.min(touch.clientX+10,window.innerWidth-250)+'px';
-  pop.style.top=Math.min(touch.clientY-20,window.innerHeight-180)+'px';
-  document.getElementById('pop-close').addEventListener('touchend',()=>{pop.style.display='none';},{passive:true,once:true});
-}
-
-// ══════════════════════════════
-// LABEL INTERACTION
-// ══════════════════════════════
-function initLabel(el,wrap){
-  let dragging=false,ox=0,oy=0,tapT=0,tapX=0,tapY=0;
-  const del=el.querySelector('.type-label-delete');
-  del.addEventListener('touchend',e=>{e.stopPropagation();e.preventDefault();el.remove();},{passive:false});
-  el.addEventListener('touchstart',e=>{
-    if(e.target===del)return;
-    const t=e.touches[0];
-    tapX=t.clientX; tapY=t.clientY; tapT=Date.now();
-    const wr=wrap.getBoundingClientRect();
-    const er=el.getBoundingClientRect();
-    ox=t.clientX-er.left; oy=t.clientY-er.top; dragging=true;
+    tapX=t.clientX;tapY=t.clientY;tapT=Date.now();
+    const wr=wrap.getBoundingClientRect(),er=el.getBoundingClientRect();
+    ox=t.clientX-er.left;oy=t.clientY-er.top;
+    dragging=true;el.style.transform='none';
   },{passive:true});
   el.addEventListener('touchmove',e=>{
-    if(!dragging)return; e.preventDefault();
-    const t=e.touches[0];
-    const wr=wrap.getBoundingClientRect();
+    if(!dragging||scaling)return;e.preventDefault();
+    const t=e.touches[0],wr=wrap.getBoundingClientRect();
     el.style.left=(t.clientX-wr.left-ox)+'px';
     el.style.top=(t.clientY-wr.top-oy)+'px';
   },{passive:false});
   el.addEventListener('touchend',e=>{
     dragging=false;
     const t=e.changedTouches[0],now=Date.now();
-    if(now-tapT>180&&now-tapT<500&&Math.hypot(t.clientX-tapX,t.clientY-tapY)<40){
-      el.classList.toggle('selected');
-    }
+    if(now-tapT>180&&now-tapT<500&&Math.hypot(t.clientX-tapX,t.clientY-tapY)<40)el.classList.toggle('sel');
     tapT=now;
   },{passive:true});
+}
+
+function showLin(near,src,created,taped){
+  const pop=document.getElementById('lin-pop');
+  pop.innerHTML=`<div style="font-size:8px;letter-spacing:0.12em;color:#D4500A;margin-bottom:8px;text-transform:uppercase;">Lineage</div>SOURCE: ${src}<br>CREATED: ${created||'—'}<br>TAPED: ${taped}<br><br><span style="color:#555;font-size:7px;cursor:pointer" id="lin-close">tap to dismiss</span>`;
+  const r=near.getBoundingClientRect();
+  pop.style.left=Math.min(r.left,window.innerWidth-250)+'px';
+  pop.style.top=(r.bottom+6)+'px';
+  pop.style.display='block';
+  document.getElementById('lin-close').addEventListener('touchend',()=>{pop.style.display='none';},{once:true,passive:true});
 }
 
 // Deselect on background tap
@@ -831,51 +706,161 @@ function initLabel(el,wrap){
   const el=document.getElementById(id);
   if(el)el.addEventListener('touchend',e=>{
     if(!e.target.closest('.scrap,.type-label')){
-      document.querySelectorAll('.scrap.selected,.type-label.selected').forEach(x=>x.classList.remove('selected'));
-      document.getElementById('lineage-popup').style.display='none';
+      document.querySelectorAll('.scrap.sel,.type-label.sel').forEach(x=>x.classList.remove('sel'));
+      document.getElementById('lin-pop').style.display='none';
     }
   },{passive:true});
 });
 
-// ══════════════════════════════
-// CANVAS SETUP
-// ══════════════════════════════
-const canvasPageMap={};
+// ══ IMPORT SYSTEM ══
+function openImport(){
+  // Determine which page face to drop on
+  S.importTargetWrap='page-left';
+  document.getElementById('import-panel').classList.add('open');
+  closeMenu();
+}
+function closeImport(){document.getElementById('import-panel').classList.remove('open');}
 
-function setupCanvas(canvasId,wrapId,pageNum){
-  const wrap=document.getElementById(wrapId);
-  const old=document.getElementById(canvasId);
+function handleImageFile(file,source){
+  if(!file||!file.type.startsWith('image/'))return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const url=e.target.result;
+    const dateStr=file.lastModified?new Date(file.lastModified).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'}).replace(/\//g,'.'):null;
+    dropImageOnPage(url,source||file.name,dateStr);
+  };
+  reader.readAsDataURL(file);
+}
+
+function dropImageOnPage(url,source,dateStr){
+  const wrap=document.getElementById(S.importTargetWrap)||document.getElementById('page-left');
+  const sc=makeImgScrap(url,source,dateStr);
+  wrap.appendChild(sc);
+  attachScrap(sc,wrap);
+  closeImport();
+}
+
+// Camera
+on('imp-camera',()=>{document.getElementById('input-camera').click();closeImport();});
+document.getElementById('input-camera').addEventListener('change',e=>{
+  const f=e.target.files[0];if(f)handleImageFile(f,'Camera');
+  e.target.value='';
+});
+
+// Photos
+on('imp-photos',()=>{document.getElementById('input-photos').click();closeImport();});
+document.getElementById('input-photos').addEventListener('change',e=>{
+  const f=e.target.files[0];if(f)handleImageFile(f,'Photos Library');
+  e.target.value='';
+});
+
+// File
+on('imp-file',()=>{document.getElementById('input-file').click();closeImport();});
+document.getElementById('input-file').addEventListener('change',e=>{
+  const f=e.target.files[0];if(f)handleImageFile(f,f.name);
+  e.target.value='';
+});
+
+// Paste from clipboard
+on('imp-paste',async()=>{
+  closeImport();
+  try{
+    const items=await navigator.clipboard.read();
+    for(const item of items){
+      const imgType=item.types.find(t=>t.startsWith('image/'));
+      if(imgType){
+        const blob=await item.getType(imgType);
+        const url=URL.createObjectURL(blob);
+        dropImageOnPage(url,'Clipboard',null);
+        return;
+      }
+    }
+    // Try text as fallback
+    const text=await navigator.clipboard.readText();
+    if(text){
+      const wrap=document.getElementById(S.importTargetWrap)||document.getElementById('page-left');
+      const lb=makeLbl(text,'30%','10%');
+      wrap.appendChild(lb);attachLbl(lb,wrap);
+    }
+  }catch(err){
+    // iOS may require user gesture — show notice
+    alert('Paste: tap the page first, then use long-press → Paste if clipboard access is blocked.');
+  }
+});
+
+// Also handle native paste event on the page faces
+document.addEventListener('paste',e=>{
+  if(S.screen!=='interior')return;
+  const items=e.clipboardData?.items;
+  if(!items)return;
+  for(const item of items){
+    if(item.type.startsWith('image/')){
+      const blob=item.getAsFile();
+      if(blob){
+        const url=URL.createObjectURL(blob);
+        dropImageOnPage(url,'Clipboard',null);
+        return;
+      }
+    }
+  }
+});
+
+on('import-close',closeImport);
+
+// ══ TYPE LABEL ══
+function makeLbl(text,top,left){
+  const el=document.createElement('div');
+  el.className='type-label';el.style.top=top;el.style.left=left;
+  el.innerHTML=text.replace(/\n/g,'<br>');
+  const del=document.createElement('div');del.className='type-label-del';del.textContent='✕';
+  el.appendChild(del);return el;
+}
+function attachLbl(el,wrap){
+  const del=el.querySelector('.type-label-del');
+  let dragging=false,ox=0,oy=0,tapT=0,tapX=0,tapY=0;
+  del.addEventListener('touchend',e=>{e.stopPropagation();e.preventDefault();el.remove();},{passive:false});
+  el.addEventListener('touchstart',e=>{
+    if(e.target===del)return;
+    const t=e.touches[0];tapX=t.clientX;tapY=t.clientY;tapT=Date.now();
+    const wr=wrap.getBoundingClientRect(),er=el.getBoundingClientRect();
+    ox=t.clientX-er.left;oy=t.clientY-er.top;dragging=true;
+  },{passive:true});
+  el.addEventListener('touchmove',e=>{
+    if(!dragging)return;e.preventDefault();
+    const t=e.touches[0],wr=wrap.getBoundingClientRect();
+    el.style.left=(t.clientX-wr.left-ox)+'px';el.style.top=(t.clientY-wr.top-oy)+'px';
+  },{passive:false});
+  el.addEventListener('touchend',e=>{
+    dragging=false;const t=e.changedTouches[0],now=Date.now();
+    if(now-tapT>180&&now-tapT<500&&Math.hypot(t.clientX-tapX,t.clientY-tapY)<40)el.classList.toggle('sel');
+    tapT=now;
+  },{passive:true});
+}
+
+// ══ CANVAS ══
+function initCanvas(cid,wid,pg){
+  const wrap=document.getElementById(wid),old=document.getElementById(cid);
   if(!wrap||!old)return;
-  if(canvasPageMap[canvasId]===pageNum&&old.width===wrap.offsetWidth&&old.height===wrap.offsetHeight)return;
-
+  if(canvasFor[cid]===pg&&old.width===wrap.offsetWidth&&old.height===wrap.offsetHeight)return;
   const nc=document.createElement('canvas');
-  nc.id=canvasId; nc.className='page-canvas';
+  nc.id=cid;nc.className='page-canvas';
   nc.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:5;touch-action:none;background:transparent;';
   old.parentNode.replaceChild(nc,old);
-  nc.width=wrap.offsetWidth; nc.height=wrap.offsetHeight;
-  canvasPageMap[canvasId]=pageNum;
-  loadCanvas(pageNum,nc);
-
+  nc.width=wrap.offsetWidth;nc.height=wrap.offsetHeight;
+  canvasFor[cid]=pg;
+  loadC(pg,nc);
   const ctx=nc.getContext('2d');
-  ctx.lineCap='round'; ctx.lineJoin='round';
-  let drawing=false,lx=0,ly=0,penErasing=false;
-  let lastPenUp=0;
+  ctx.lineCap='round';ctx.lineJoin='round';
+  let drawing=false,lx=0,ly=0,isEr=false,lastPenUp=0;
 
   nc.addEventListener('pointerdown',e=>{
     if(e.pointerType!=='pen')return;
-    e.preventDefault(); drawing=true; nc.setPointerCapture(e.pointerId);
-    penErasing=TOOL.mode==='erase'||(e.buttons&32)>0;
-    if(penErasing){
-      ctx.globalCompositeOperation='destination-out';
-      ctx.lineWidth=getEraserWidth();
-    } else {
-      ctx.globalCompositeOperation='source-over';
-      ctx.strokeStyle=TOOL.color;
-    }
-    const r=nc.getBoundingClientRect();
-    lx=e.clientX-r.left; ly=e.clientY-r.top;
-    ctx.beginPath(); ctx.moveTo(lx,ly);
-    S.hasInk=true;
+    e.preventDefault();drawing=true;nc.setPointerCapture(e.pointerId);
+    isEr=T.mode==='erase'||(e.buttons&32)>0;
+    ctx.globalCompositeOperation=isEr?'destination-out':'source-over';
+    if(!isEr){ctx.strokeStyle=T.color;}
+    const r=nc.getBoundingClientRect();lx=e.clientX-r.left;ly=e.clientY-r.top;
+    ctx.beginPath();ctx.moveTo(lx,ly);S.hasInk=true;
   },{passive:false});
 
   nc.addEventListener('pointermove',e=>{
@@ -883,85 +868,59 @@ function setupCanvas(canvasId,wrapId,pageNum){
     e.preventDefault();
     const r=nc.getBoundingClientRect();
     const x=e.clientX-r.left,y=e.clientY-r.top;
-    if(!penErasing) ctx.lineWidth=getPenWidth(e.pressure);
-    ctx.lineTo(x,y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x,y); lx=x; ly=y;
+    ctx.lineWidth=isEr?eraserW():penW(e.pressure);
+    ctx.lineTo(x,y);ctx.stroke();ctx.beginPath();ctx.moveTo(x,y);lx=x;ly=y;
   },{passive:false});
 
   nc.addEventListener('pointerup',e=>{
     if(e.pointerType!=='pen')return;
-    drawing=false; lastPenUp=Date.now();
+    drawing=false;lastPenUp=Date.now();
     ctx.globalCompositeOperation='source-over';
-    saveCanvas(pageNum,nc);
-    pulseSyncDot();
+    saveC(pg,nc);pulseDot();
   });
   nc.addEventListener('pointercancel',()=>{drawing=false;});
 
-  // Double tap typewriter — pen-aware, 180-500ms, 40px proximity
+  // Double-tap typewriter
   let tapT=0,tapX=0,tapY=0;
   nc.addEventListener('touchend',e=>{
-    const now=Date.now();
-    if(now-lastPenUp<400)return; // pen was just active
+    const now=Date.now();if(now-lastPenUp<400)return;
     const t=e.changedTouches[0];
-    const dx=t.clientX-tapX,dy=t.clientY-tapY;
-    if(now-tapT>180&&now-tapT<500&&Math.hypot(dx,dy)<40){
-      // Place label relative to visible viewport (keyboard-aware)
+    if(now-tapT>180&&now-tapT<500&&Math.hypot(t.clientX-tapX,t.clientY-tapY)<40){
       const vv=window.visualViewport;
-      S.twX=t.clientX-(vv?vv.offsetLeft:0);
-      S.twY=t.clientY-(vv?vv.offsetTop:0);
-      S.twWrapId=wrapId;
+      S.twX=t.clientX-(vv?vv.offsetLeft:0);S.twY=t.clientY-(vv?vv.offsetTop:0);S.twWrap=wid;
       document.getElementById('tw-overlay').classList.add('open');
       setTimeout(()=>document.getElementById('tw-box').focus(),80);
     }
-    tapT=now; tapX=t.clientX; tapY=t.clientY;
+    tapT=now;tapX=t.clientX;tapY=t.clientY;
   },{passive:true});
 }
 
-// ══════════════════════════════
-// GRID GEOMETRY
-// ══════════════════════════════
+// ══ GRID ══
 function fixGrid(){
-  const wrap=document.getElementById('toc-grid-panel');
-  const grid=document.getElementById('toc-grid');
+  const wrap=document.getElementById('toc-grid-panel'),grid=document.getElementById('toc-grid');
   if(!wrap||!grid)return;
   const pd=16,W=wrap.clientWidth-pd*2,H=wrap.clientHeight-pd*2;
   if(W<=0||H<=0)return;
-  let g=Math.round(H-2*W); g=Math.max(4,Math.min(g,24));
-  const cell=Math.floor((H-3*g)/4); if(cell<=0)return;
+  let g=Math.round(H-2*W);g=Math.max(4,Math.min(g,24));
+  const cell=Math.floor((H-3*g)/4);if(cell<=0)return;
   grid.style.gap=g+'px';
   grid.style.gridTemplateColumns='repeat(2,'+cell+'px)';
   grid.style.gridTemplateRows='repeat(4,'+cell+'px)';
-  grid.style.width=(cell*2+g)+'px';
-  grid.style.height=(cell*4+g*3)+'px';
+  grid.style.width=(cell*2+g)+'px';grid.style.height=(cell*4+g*3)+'px';
 }
 
-// ══════════════════════════════
-// ORIENTATION LOCK WHILE DRAWING
-// ══════════════════════════════
-let _lockedOrientation=null;
-let _resizeTimer=null;
-
+let _rt=null;
 window.addEventListener('resize',()=>{
-  clearTimeout(_resizeTimer);
-  _resizeTimer=setTimeout(()=>{
-    if(S.screen==='interior'){
-      const nowLS=isLandscapeNow();
-      // If drawing, lock orientation
-      if(S.hasInk){
-        // Don't re-render — orientation is locked
-        return;
-      }
-      renderSpread();
-    }
-    if(S.screen==='toc') setTocState(S.tocState);
+  clearTimeout(_rt);_rt=setTimeout(()=>{
+    if(S.screen==='interior'&&!S.hasInk)renderSpread();
+    if(S.screen==='toc')setTocView(S.tocView);
     fixGrid();
   },350);
 });
 
-// ══════════════════════════════
-// TAP HELPER
-// ══════════════════════════════
-function on(el,fn){
-  if(typeof el==='string') el=document.getElementById(el);
+// ══ TAP HELPER ══
+function on(id,fn){
+  const el=typeof id==='string'?document.getElementById(id):id;
   if(!el)return;
   let ts=0;
   el.addEventListener('touchstart',()=>{ts=Date.now();},{passive:true});
@@ -969,169 +928,92 @@ function on(el,fn){
   el.addEventListener('click',fn);
 }
 
-// DRAF. — 400ms hold = palette
-let drafHoldTimer=null;
+// ══ PALETTE — fixed with hold, z-index above nav ══
+// DRAF. hold 400ms = toggle palette
+let drafTimer=null;
 const drafEl=document.getElementById('nav-draf');
-drafEl.addEventListener('touchstart',()=>{
-  drafHoldTimer=setTimeout(()=>togglePalette(),400);
-},{passive:true});
-drafEl.addEventListener('touchend',()=>clearTimeout(drafHoldTimer),{passive:true});
-drafEl.addEventListener('touchmove',()=>clearTimeout(drafHoldTimer),{passive:true});
-
-// ══════════════════════════════
-// WIRING
-// ══════════════════════════════
-on('cover-face',()=>{showScreen('threshold');setTimeout(()=>showScreen('toc'),420);});
-on('btn-prev',handlePrev);
-on('btn-next',handleNext);
-on('btn-menu',toggleMenu);
-on('nav-privacy',()=>{
-  S.privacyOn=!S.privacyOn;
-  document.getElementById('nav-privacy').textContent=S.privacyOn?'🔓':'🔒';
-  document.getElementById('nav-privacy').classList.toggle('active',S.privacyOn);
-});
-
-// TOC rows → go to page
-on('tr2',()=>goToPage(2));on('tr3',()=>goToPage(3));
-on('tr4',()=>goToPage(4));on('tr5',()=>goToPage(5));on('tr6',()=>goToPage(6));
-// Grid cells
-on('gc-new',()=>newBlankPage());
-on('gc1',()=>goToPage(2));on('gc2',()=>goToPage(4));
-on('gc3',()=>goToPage(5));
-
-// Menu
-on('m-toc',()=>{showScreen('toc');closeMenu();});
-on('m-index',()=>{showScreen('index');closeMenu();});
-on('m-work',()=>{showScreen('interior');closeMenu();});
-on('m-sync',()=>{forcSync();closeMenu();});
-on('m-close',()=>{showScreen('cover');closeMenu();});
-on('m-dismiss',closeMenu);
-
-function goToPage(pg){
-  S.currentPage=clampPage(pg);
-  if(isLandscapeNow()&&S.currentPage%2!==0)S.currentPage=clampPage(S.currentPage-1);
-  localStorage.setItem('draf-pg',S.currentPage);
-  showScreen('interior');
-}
-
-function newBlankPage(){
-  // Find next unused page
-  for(let i=2;i<=TOTAL;i++){
-    if(!localStorage.getItem('draf-c'+i)){
-      S.currentPage=i;
-      if(isLandscapeNow()&&i%2!==0)S.currentPage=i-1;
-      localStorage.setItem('draf-pg',S.currentPage);
-      showScreen('interior');
-      return;
+drafEl.addEventListener('touchstart',e=>{
+  e.preventDefault(); // prevent click
+  drafTimer=setTimeout(()=>{
+    if(S.screen==='interior'){
+      T.paletteOpen=!T.paletteOpen;
+      document.getElementById('tool-palette').classList.toggle('open',T.paletteOpen);
     }
-  }
-  // All pages have content — go to page 2
-  goToPage(2);
-}
+  },400);
+},{passive:false});
+drafEl.addEventListener('touchend',()=>clearTimeout(drafTimer),{passive:true});
+drafEl.addEventListener('touchmove',()=>clearTimeout(drafTimer),{passive:true});
 
-function forcSync(){
-  const dot=document.getElementById('sync-dot');
-  if(dot){dot.classList.add('pulse');setTimeout(()=>dot.classList.remove('pulse'),1500);}
-  // Future: trigger cloud sync
-}
+function closePalette(){T.paletteOpen=false;document.getElementById('tool-palette').classList.remove('open');}
 
-function toggleMenu(){document.getElementById('menu-overlay').classList.toggle('open');}
-function closeMenu(){document.getElementById('menu-overlay').classList.remove('open');}
-
-// ══════════════════════════════
-// PALETTE
-// ══════════════════════════════
-function togglePalette(){
-  if(S.screen!=='interior')return;
-  TOOL.paletteOpen=!TOOL.paletteOpen;
-  document.getElementById('tool-palette').classList.toggle('open',TOOL.paletteOpen);
+// Pen
+function setPen(size){
+  T.penSize=size;T.mode='draw';
+  document.querySelectorAll('#pen-thin,#pen-med,#pen-thick,#er-med,#er-large,#er-xl').forEach(b=>b.classList.remove('on'));
+  document.getElementById({thin:'pen-thin',medium:'pen-med',thick:'pen-thick'}[size]).classList.add('on');
 }
-function closePalette(){
-  TOOL.paletteOpen=false;
-  document.getElementById('tool-palette').classList.remove('open');
+// Eraser
+function setEr(size){
+  T.eraserSize=size;T.mode='erase';
+  document.querySelectorAll('#pen-thin,#pen-med,#pen-thick,#er-med,#er-large,#er-xl').forEach(b=>b.classList.remove('on'));
+  document.getElementById({medium:'er-med',large:'er-large',xl:'er-xl'}[size]).classList.add('on');
 }
-
-// Pen sizes
-['pen-thin','pen-med','pen-thick'].forEach(id=>{
-  on(id,()=>{
-    TOOL.penSize=id==='pen-thin'?'thin':id==='pen-med'?'medium':'thick';
-    TOOL.mode='draw';
-    document.querySelectorAll('#pen-thin,#pen-med,#pen-thick,#er-med,#er-large,#er-xl').forEach(b=>b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-  });
-});
-// Eraser sizes
-['er-med','er-large','er-xl'].forEach(id=>{
-  on(id,()=>{
-    TOOL.eraserSize=id==='er-med'?'medium':id==='er-large'?'large':'xl';
-    TOOL.mode='erase';
-    document.querySelectorAll('#pen-thin,#pen-med,#pen-thick,#er-med,#er-large,#er-xl').forEach(b=>b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-  });
-});
-// Colors
+on('pen-thin',()=>setPen('thin'));on('pen-med',()=>setPen('medium'));on('pen-thick',()=>setPen('thick'));
+on('er-med',()=>setEr('medium'));on('er-large',()=>setEr('large'));on('er-xl',()=>setEr('xl'));
 ['col-ink','col-fired','col-blue','col-paper'].forEach(id=>{
   on(id,()=>{
-    TOOL.color=document.getElementById(id).dataset.color;
-    TOOL.mode='draw';
-    document.querySelectorAll('.pcol').forEach(b=>b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    document.querySelectorAll('#pen-thin,#pen-med,#pen-thick,#er-med,#er-large,#er-xl').forEach(b=>b.classList.remove('active'));
-    document.getElementById('pen-thin').classList.add('active');
+    T.color=document.getElementById(id).dataset.c;T.mode='draw';
+    document.querySelectorAll('.pc').forEach(b=>b.classList.remove('on'));
+    document.getElementById(id).classList.add('on');
+    setPen(T.penSize);
   });
 });
-// Tips
-['tip-coil','tip-flat','tip-round'].forEach(id=>{
-  on(id,()=>{
-    TOOL.tip=id.replace('tip-','');
-    document.querySelectorAll('#tip-coil,#tip-flat,#tip-round').forEach(b=>b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-  });
-});
+function setTip(t){
+  T.tip=t;
+  document.querySelectorAll('#tip-coil,#tip-flat,#tip-round').forEach(b=>b.classList.remove('on'));
+  document.getElementById('tip-'+t).classList.add('on');
+}
+on('tip-coil',()=>setTip('coil'));on('tip-flat',()=>setTip('flat'));on('tip-round',()=>setTip('round'));
 
-// ══════════════════════════════
-// TYPEWRITER
-// ══════════════════════════════
-// Keyboard-aware placement using visualViewport
+// ══ WIRING ══
+on('cover-face',()=>{show('threshold');setTimeout(()=>show('toc'),420);});
+on('btn-prev',handlePrev);on('btn-next',handleNext);
+on('btn-menu',()=>document.getElementById('menu-overlay').classList.toggle('open'));
+on('nav-priv',()=>{S.privacy=!S.privacy;const b=document.getElementById('nav-priv');b.textContent=S.privacy?'🔓':'🔒';b.classList.toggle('on',S.privacy);});
+on('tr2',()=>goPage(2));on('tr3',()=>goPage(3));on('tr4',()=>goPage(4));on('tr5',()=>goPage(5));
+on('gc-new',()=>newPage());on('gc1',()=>goPage(2));on('gc2',()=>goPage(4));on('gc3',()=>goPage(5));
+on('m-toc',()=>{show('toc');closeMenu();});on('m-index',()=>{show('index');closeMenu();});
+on('m-work',()=>{show('interior');closeMenu();});
+on('m-import',()=>{if(S.screen==='interior'){openImport();}else{show('interior');setTimeout(openImport,300);}});
+on('m-sync',()=>{pulseDot();closeMenu();});on('m-close',()=>{show('cover');closeMenu();});
+on('m-dismiss',closeMenu);
+
+function closeMenu(){document.getElementById('menu-overlay').classList.remove('open');}
+function goPage(pg){S.page=clamp(pg);if(LS()&&S.page%2!==0)S.page=clamp(S.page-1);localStorage.setItem('dp',S.page);show('interior');}
+function newPage(){for(let i=2;i<=TOTAL;i++){if(!localStorage.getItem('dc'+i)){goPage(i);return;}}goPage(2);}
+
+// ══ TYPEWRITER ══
 if(window.visualViewport){
   window.visualViewport.addEventListener('resize',()=>{
-    const tw=document.getElementById('tw-overlay');
-    if(tw.classList.contains('open')){
-      const vv=window.visualViewport;
-      tw.style.height=vv.height+'px';
-      tw.style.top=vv.offsetTop+'px';
-    }
+    const tw=document.getElementById('tw-overlay');if(!tw.classList.contains('open'))return;
+    const vv=window.visualViewport;tw.style.height=vv.height+'px';tw.style.top=vv.offsetTop+'px';
   });
 }
-
-function closeTW(){
-  document.getElementById('tw-box').value='';
-  document.getElementById('tw-overlay').classList.remove('open');
-  document.getElementById('tw-overlay').style.height='';
-  document.getElementById('tw-overlay').style.top='';
-}
+function closeTW(){document.getElementById('tw-box').value='';const tw=document.getElementById('tw-overlay');tw.classList.remove('open');tw.style.height='';tw.style.top='';}
 on('tw-cancel',closeTW);
 on('tw-confirm',()=>{
   const text=document.getElementById('tw-box').value.trim();
   if(text){
-    const wrap=document.getElementById(S.twWrapId);
-    const r=wrap.getBoundingClientRect();
+    const wrap=document.getElementById(S.twWrap);const r=wrap.getBoundingClientRect();
     const vv=window.visualViewport;
-    const x=S.twX-r.left;
-    const y=S.twY-r.top+(vv?vv.offsetTop:0);
-    const lb=buildLabel(text,Math.max(8,y-20)+'px',Math.max(8,x-20)+'px');
-    wrap.appendChild(lb);
-    initLabel(lb,wrap);
+    const lb=makeLbl(text,Math.max(8,S.twY-r.top+(vv?vv.offsetTop:0)-16)+'px',Math.max(8,S.twX-r.left-16)+'px');
+    wrap.appendChild(lb);attachLbl(lb,wrap);
   }
   closeTW();
 });
-document.getElementById('tw-overlay').addEventListener('touchend',e=>{
-  if(e.target===document.getElementById('tw-overlay'))closeTW();
-},{passive:true});
+document.getElementById('tw-overlay').addEventListener('touchend',e=>{if(e.target===document.getElementById('tw-overlay'))closeTW();},{passive:true});
 
-// ══════════════════════════════
-// INIT
-// ══════════════════════════════
+// ══ INIT ══
 setTimeout(fixGrid,150);
 </script>
 
