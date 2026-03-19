@@ -17,9 +17,15 @@ body{background:#0a0a09;font-family:'Courier New',Courier,monospace;-webkit-user
 .screen.active{display:flex;}
 #screen-cover,#screen-threshold{align-items:center;justify-content:center;}
 
-/* COVER */
+/* ── COVER ── */
 #screen-cover{background:#171717;}
-.cover-face{background-color:#1A3A5C;position:relative;overflow:visible;box-shadow:0 24px 80px rgba(0,0,0,0.88);width:min(100vw,calc(100vh * 5.5 / 8));height:min(100vh,calc(100vw * 8 / 5.5));aspect-ratio:5.5/8;flex-shrink:0;}
+.cover-face{
+background-color:#1A3A5C;position:relative;overflow:visible;
+box-shadow:0 24px 80px rgba(0,0,0,0.88);
+width:min(100vw, calc(100vh * 5.5 / 8));
+height:min(100vh, calc(100vw * 8 / 5.5));
+aspect-ratio:5.5/8;flex-shrink:0;
+}
 .cover-face svg.folds{position:absolute;inset:0;width:100%;height:100%;z-index:3;}
 .cover-band{position:absolute;bottom:0;left:0;right:0;height:28%;background:#F5F2EB;border-top:1px solid rgba(15,15,13,0.2);z-index:4;display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
 .cbs{font-size:clamp(7px,1.6vw,10px);letter-spacing:0.14em;text-transform:uppercase;color:rgba(15,15,13,0.6);}
@@ -27,76 +33,117 @@ body{background:#0a0a09;font-family:'Courier New',Courier,monospace;-webkit-user
 .cover-mark{position:absolute;top:40%;left:24%;transform:translateY(-50%);font-weight:700;font-size:clamp(20px,4.5vh,34px);color:#F5F2EB;line-height:1;z-index:10;letter-spacing:-0.02em;}
 .cover-mark .p{color:#D4500A;}
 .cover-vol{position:absolute;top:4%;right:5%;font-size:clamp(7px,1.2vh,9px);letter-spacing:0.16em;color:rgba(245,242,235,0.22);z-index:10;text-transform:uppercase;}
-.cover-ribbon{position:absolute;top:0;left:0;width:8px;height:100%;background:rgba(26,58,92,0.72);z-index:20;}
-.cover-ribbon-tail{position:absolute;bottom:-22px;left:0;width:8px;height:30px;background:rgba(26,58,92,0.72);clip-path:polygon(0 0,100% 0,100% 65%,50% 100%,0 65%);z-index:20;}
+.cover-ribbon{position:absolute;bottom:0;left:0;width:8px;height:calc(100% + 0.5in);background:rgba(26,58,92,0.72);z-index:20;}
+.cover-ribbon-tail{position:absolute;top:-8px;left:0;width:8px;height:20px;background:rgba(26,58,92,0.72);clip-path:polygon(0 100%,100% 100%,100% 30%,50% 0%,0 30%);z-index:20;}
 .wear-coffee{position:absolute;top:36%;left:32%;width:10%;aspect-ratio:1;border-radius:50%;border:1.5px solid rgba(110,72,24,0.11);z-index:15;pointer-events:none;}
 .wear-scratch{position:absolute;height:1px;background:rgba(245,242,235,0.08);z-index:15;pointer-events:none;}
 .tap-hint{position:absolute;bottom:31%;width:100%;text-align:center;font-size:clamp(7px,1.4vw,9px);letter-spacing:0.22em;color:rgba(15,15,13,0.25);text-transform:uppercase;z-index:30;animation:hint-out 3s ease 2s forwards;}
 @keyframes hint-out{to{opacity:0;}}
 
-/* THRESHOLD */
+/* ── THRESHOLD ── */
 #screen-threshold{background:#D4500A;}
 .threshold-mark{font-weight:700;color:#F5F2EB;animation:t-exp 0.4s cubic-bezier(0.16,1,0.3,1) forwards;}
 @keyframes t-exp{0%{font-size:clamp(28px,6vh,48px);opacity:0.4;}100%{font-size:clamp(90px,24vh,180px);opacity:1;}}
 
-/* NAV BAR */
-#bottom-nav{position:fixed;bottom:0;left:0;right:0;height:48px;background:rgba(10,10,9,0.97);border-top:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:500;}
+/* ── NAV BAR ──
+Left:  [DRAF.] [🔒]
+Center: [‹] [spread label] [›]
+Right: [≡]
+*/
+#bottom-nav{
+position:fixed;bottom:0;left:0;right:0;height:52px;
+background:rgba(10,10,9,0.97);border-top:1px solid #222;
+display:flex;align-items:center;justify-content:space-between;
+padding:0 16px;z-index:500;
+}
 #bottom-nav.hidden{display:none;}
-.nav-left{display:flex;align-items:center;gap:12px;}
-.nav-mark{font-weight:700;font-size:12px;color:#D4500A;letter-spacing:0.12em;cursor:pointer;padding:8px 4px;}
-.nbtn{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#888;background:none;border:none;padding:10px 4px;cursor:pointer;font-family:‘Courier New’,monospace;-webkit-appearance:none;}
-.nav-right{display:flex;align-items:center;gap:4px;}
-.nav-pg{font-size:10px;color:#666;letter-spacing:0.1em;min-width:88px;text-align:center;}
-.nav-arrow{font-size:20px;color:#666;background:none;border:none;padding:8px 10px;cursor:pointer;-webkit-appearance:none;line-height:1;}
+.nav-left{display:flex;align-items:center;gap:10px;}
+.nav-mark{font-weight:700;font-size:12px;color:#D4500A;letter-spacing:0.12em;cursor:pointer;padding:10px 6px;min-width:44px;text-align:center;}
+.nav-privacy{font-size:14px;color:#555;background:none;border:none;padding:10px 6px;cursor:pointer;-webkit-appearance:none;min-width:36px;text-align:center;}
+.nav-privacy.active{color:#D4500A;}
+.nav-center{display:flex;align-items:center;gap:0;}
+.nav-arrow{font-size:22px;color:#666;background:none;border:none;padding:10px 18px;cursor:pointer;-webkit-appearance:none;line-height:1;min-width:52px;text-align:center;}
 .nav-arrow:active{color:#D4500A;}
+.nav-pg{font-size:10px;color:#666;letter-spacing:0.08em;min-width:100px;text-align:center;white-space:nowrap;}
+.nav-right{display:flex;align-items:center;}
+.nav-menu{font-size:18px;color:#666;background:none;border:none;padding:10px 6px;cursor:pointer;-webkit-appearance:none;min-width:44px;text-align:center;}
 
-/* TOOL PALETTE */
-#tool-palette{position:fixed;bottom:48px;left:0;right:0;background:rgba(10,10,9,0.98);border-top:1px solid #333;display:none;flex-direction:column;z-index:499;padding:12px 16px;}
+/* ── TOOL PALETTE ── */
+#tool-palette{position:fixed;bottom:52px;left:0;right:0;background:rgba(10,10,9,0.98);border-top:1px solid #333;display:none;flex-direction:column;z-index:499;padding:12px 16px;}
 #tool-palette.open{display:flex;}
-.palette-row{display:flex;align-items:center;gap:8px;padding:6px 0;}
-.palette-label{font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#555;min-width:60px;}
-.palette-btn{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#888;background:none;border:1px solid #333;padding:6px 12px;cursor:pointer;font-family:‘Courier New’,monospace;-webkit-appearance:none;border-radius:0;}
-.palette-btn.active{color:#F5F2EB;border-color:#D4500A;background:rgba(212,80,10,0.15);}
-.palette-color-btn{width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex-shrink:0;}
-.palette-color-btn.active{border-color:#F5F2EB;}
-.palette-divider{height:1px;background:#222;margin:2px 0;}
+.palette-row{display:flex;align-items:center;gap:8px;padding:5px 0;}
+.palette-label{font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#555;min-width:64px;}
+.pbtn{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#888;background:none;border:1px solid #333;padding:7px 14px;cursor:pointer;font-family:‘Courier New’,monospace;-webkit-appearance:none;border-radius:0;}
+.pbtn.active{color:#F5F2EB;border-color:#D4500A;background:rgba(212,80,10,0.15);}
+.pcol{width:30px;height:30px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex-shrink:0;}
+.pcol.active{border-color:#F5F2EB;}
+.pdiv{height:1px;background:#222;margin:2px 0;}
 
-/* TOC */
-#screen-toc{padding-bottom:48px;}
+/* ── TOC ── */
+/* TOC has three panels: list, grid, shown via internal nav */
+#screen-toc{padding-bottom:52px;}
 .toc-hdr{flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:14px 20px 10px;border-bottom:1.5px solid #0F0F0D;background:#F5F2EB;}
 .toc-hdr-t{font-weight:700;font-size:clamp(10px,2vw,13px);letter-spacing:0.18em;text-transform:uppercase;color:#0F0F0D;}
 .toc-hdr-s{font-size:clamp(8px,1.5vw,10px);letter-spacing:0.12em;color:rgba(15,15,13,0.5);}
-.toc-body{flex:1;display:flex;overflow:hidden;min-height:0;}
-.toc-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 18px;background-color:#F5F2EB;background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);background-size:11.34px 11.34px;}
-.toc-grid-panel{display:flex;background-color:#F5F2EB;background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);background-size:11.34px 11.34px;}
-@media(orientation:landscape){.toc-list{border-right:1px solid rgba(15,15,13,0.15);}.toc-grid-panel{flex:1;align-items:center;justify-content:center;padding:16px;}}
-@media(orientation:portrait){.toc-grid-panel{display:none;}.toc-grid-panel.visible{display:flex;flex:1;align-items:center;justify-content:center;padding:16px;}.toc-list.hidden{display:none;}}
-.toc-col-hds{display:grid;grid-template-columns:40px 16px 16px 1fr 22px;gap:0 10px;padding-bottom:6px;border-bottom:1px solid rgba(15,15,13,0.2);margin-bottom:6px;}
-.toc-ch{font-size:8px;letter-spacing:0.12em;color:rgba(15,15,13,0.5);text-transform:uppercase;}
-.toc-row{display:grid;grid-template-columns:40px 16px 16px 1fr 22px;gap:0 10px;padding:6px 0;border-bottom:1px solid rgba(15,15,13,0.1);align-items:center;cursor:pointer;}
+
+/* TOC panels — list and grid side by side in landscape, toggled in portrait */
+.toc-body{flex:1;display:flex;overflow:hidden;min-height:0;position:relative;}
+.toc-panel{
+position:absolute;inset:0;
+background-color:#F5F2EB;
+background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);
+background-size:11.34px 11.34px;
+display:none;
+}
+.toc-panel.active{display:flex;flex-direction:column;}
+
+/* Landscape: both panels side by side */
+@media(orientation:landscape){
+.toc-panel{position:relative;flex:1;}
+.toc-panel.active{display:flex;}
+.toc-panel#toc-list{border-right:1px solid rgba(15,15,13,0.15);}
+/* Both always shown in landscape */
+.toc-panel#toc-list,.toc-panel#toc-grid-panel{display:flex;position:relative;}
+}
+
+.toc-list-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 18px;}
+.toc-col-hds{display:grid;grid-template-columns:40px 14px 14px 1fr 20px;gap:0 8px;padding-bottom:6px;border-bottom:1px solid rgba(15,15,13,0.2);margin-bottom:6px;}
+.toc-ch{font-size:8px;letter-spacing:0.1em;color:rgba(15,15,13,0.5);text-transform:uppercase;}
+.toc-row{display:grid;grid-template-columns:40px 14px 14px 1fr 20px;gap:0 8px;padding:6px 0;border-bottom:1px solid rgba(15,15,13,0.1);align-items:center;cursor:pointer;}
+.toc-row:active{background:rgba(212,80,10,0.06);}
 .tc{font-size:clamp(9px,1.8vw,11px);color:#0F0F0D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .tc-pg{font-size:9px;color:rgba(15,15,13,0.6);}
 .tag-a{display:inline-block;width:9px;height:9px;background:#D4500A;}
 .tag-h{display:inline-block;width:9px;height:9px;background:#1A3A5C;opacity:0.5;}
 .arr{color:#D4500A;font-size:13px;}
-.ch-tags{margin-top:16px;padding-top:12px;border-top:1px solid rgba(15,15,13,0.1);}
+.ch-tags{margin-top:14px;padding-top:10px;border-top:1px solid rgba(15,15,13,0.1);}
 .ch-tags-lbl{font-size:8px;letter-spacing:0.14em;color:#D4500A;text-transform:uppercase;margin-bottom:8px;}
 .ctag{display:inline-block;font-size:8px;padding:3px 8px;border:1px solid #D4500A;color:#D4500A;margin:2px 3px 2px 0;}
-.toc-grid-toggle{margin-top:16px;padding-top:12px;border-top:1px solid rgba(15,15,13,0.1);}
-.grid-toggle-btn{font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#D4500A;background:none;border:1px solid #D4500A;padding:4px 10px;cursor:pointer;font-family:‘Courier New’,monospace;-webkit-appearance:none;}
+
+/* TOC grid panel */
+.toc-grid-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;}
 .toc-grid{display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(4,1fr);}
 .gcell{aspect-ratio:1/1;border:1px solid rgba(15,15,13,0.15);display:flex;flex-direction:column;padding:10px;position:relative;overflow:hidden;cursor:pointer;}
+.gcell:active{background:rgba(15,15,13,0.04);}
 .gcell-num{font-size:7px;letter-spacing:0.1em;color:rgba(15,15,13,0.45);margin-bottom:4px;text-transform:uppercase;}
 .gcell-name{font-size:clamp(8px,1.3vw,10px);color:#0F0F0D;line-height:1.4;}
 .gcell-new{border-color:#D4500A;align-items:center;justify-content:center;}
 .new-mark{font-weight:700;font-size:clamp(18px,3.5vh,28px);color:#D4500A;line-height:1;}
-.gcell-inbox{border:1.5px solid #D4500A;}
+.gcell-inbox{border:1.5px solid #D4500A;overflow:hidden;}
 .inbox-lbl{font-size:7px;letter-spacing:0.1em;color:#D4500A;margin-bottom:4px;text-transform:uppercase;}
-.postit{position:absolute;bottom:6px;right:6px;width:48px;height:44px;background:#f9f0c8;box-shadow:1px 1px 4px rgba(0,0,0,0.18);transform:rotate(-3deg);padding:5px 4px;font-size:6px;color:#333;line-height:1.4;}
+.postit{
+position:absolute;bottom:6px;right:-60px;
+width:52px;height:46px;
+background:#f9f0c8;box-shadow:1px 1px 4px rgba(0,0,0,0.18);
+transform:rotate(-3deg);padding:5px 4px;
+font-size:6px;color:#333;line-height:1.4;
+animation:postit-settle 0.3s ease 0.4s forwards;
+}
+@keyframes postit-settle{to{right:6px;}}
 .postit-from{font-size:5.5px;color:#D4500A;font-weight:700;margin-bottom:2px;}
 
-/* INTERIOR */
-#screen-interior{padding-bottom:48px;}
+/* ── INTERIOR ── */
+#screen-interior{padding-bottom:52px;}
 .spread-wrap{flex:1;display:flex;min-height:0;overflow:hidden;position:relative;}
 .gutter-line{position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(15,15,13,0.15);z-index:10;pointer-events:none;}
 .page-face{
@@ -105,55 +152,37 @@ background-color:#F5F2EB;
 background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);
 background-size:11.34px 11.34px;
 }
-/* In portrait, right page is hidden — left shows the current page */
-@media(orientation:portrait){
-.page-face.page-right{display:none;}
-.gutter-line{display:none;}
-}
+@media(orientation:portrait){.page-face.page-right{display:none;}.gutter-line{display:none;}}
 .page-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:5;touch-action:none;background:transparent;}
-.page-num{position:absolute;bottom:14px;font-size:11px;letter-spacing:0.1em;color:rgba(15,15,13,0.6);z-index:20;font-family:‘Courier New’,monospace;font-weight:700;}
+.page-num{position:absolute;bottom:14px;font-size:11px;letter-spacing:0.1em;color:rgba(15,15,13,0.85);z-index:20;font-family:‘Courier New’,monospace;font-weight:700;}
 .page-num.ol{left:16px;}.page-num.or{right:16px;}
-.sync-dot{position:absolute;bottom:17px;right:80px;width:7px;height:7px;border-radius:50%;background:#aaa;z-index:20;animation:breathe 2s ease-in-out infinite;}
+/* Sync dot */
+.sync-dot{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:#aaa;z-index:20;transition:background 0.2s;}
+.sync-dot.pulse{background:#D4500A;}
 @keyframes breathe{0%,100%{opacity:0.35;}50%{opacity:1;}}
 
-/* SCRAP — no handles, just move/scale/delete */
+/* ── SCRAP ── */
 .scrap{position:absolute;z-index:8;touch-action:none;cursor:move;}
-.scrap-tape{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:36px;height:14px;background:rgba(200,190,160,0.58);border:0.5px solid rgba(15,15,13,0.1);z-index:2;}
+.scrap-tape{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:36px;height:14px;background:rgba(200,190,160,0.58);border:0.5px solid rgba(15,15,13,0.1);z-index:2;cursor:default;}
 .scrap-img-wrap{position:relative;display:inline-block;}
 .scrap-img-wrap svg,.scrap-img-wrap img{display:block;box-shadow:2px 2px 8px rgba(0,0,0,0.2);}
 .scrap-lineage{position:absolute;bottom:-14px;right:0;font-size:6.5px;color:rgba(15,15,13,0.5);letter-spacing:0.04em;white-space:nowrap;}
-
-/* Delete button — top right, only when selected */
-.scrap-delete{
-position:absolute;top:-14px;right:-14px;
-width:26px;height:26px;
-background:#D4500A;color:#F5F2EB;
-border-radius:50%;font-size:14px;line-height:26px;
-text-align:center;z-index:15;cursor:pointer;
-display:none;
-}
+.scrap-delete{position:absolute;top:-14px;right:-14px;width:28px;height:28px;background:#D4500A;color:#F5F2EB;border-radius:50%;font-size:15px;line-height:28px;text-align:center;z-index:15;cursor:pointer;display:none;}
 .scrap.selected .scrap-delete{display:block;}
-
-/* Scale handle — bottom right corner only */
-.scrap-scale{
-position:absolute;bottom:-8px;right:-8px;
-width:20px;height:20px;
-background:#F5F2EB;border:1.5px solid rgba(15,15,13,0.3);
-border-radius:50%;z-index:15;cursor:se-resize;
-display:none;
-align-items:center;justify-content:center;
-font-size:10px;color:rgba(15,15,13,0.5);
-}
+.scrap-scale{position:absolute;bottom:-10px;right:-10px;width:36px;height:36px;background:#F5F2EB;border:1.5px solid rgba(15,15,13,0.25);border-radius:50%;z-index:15;cursor:se-resize;display:none;align-items:center;justify-content:center;font-size:14px;color:rgba(15,15,13,0.5);}
 .scrap.selected .scrap-scale{display:flex;}
 
-/* Type label */
-.type-label{position:absolute;font-family:‘Courier New’,monospace;font-size:11px;color:#0F0F0D;line-height:1.6;letter-spacing:0.04em;z-index:8;border-bottom:1px solid rgba(15,15,13,0.25);padding-bottom:2px;touch-action:none;cursor:move;}
+/* Lineage popup */
+.lineage-popup{position:fixed;background:#0F0F0D;color:#F5F2EB;padding:12px 16px;font-size:9px;letter-spacing:0.08em;line-height:1.8;z-index:800;border:1px solid #333;max-width:240px;font-family:‘Courier New’,monospace;}
+
+/* ── TYPE LABEL ── */
+.type-label{position:absolute;font-family:‘Courier New’,monospace;font-size:11px;font-weight:700;color:#0F0F0D;line-height:1.6;letter-spacing:0.04em;z-index:8;border-bottom:1px solid rgba(15,15,13,0.25);padding-bottom:2px;touch-action:none;cursor:move;background:rgba(245,242,235,0.02);text-shadow:0 0 8px rgba(245,242,235,0.8);}
 .type-label.selected{outline:1px dashed rgba(212,80,10,0.4);}
-.type-label-delete{position:absolute;top:-14px;right:-14px;width:22px;height:22px;background:#D4500A;color:#F5F2EB;border-radius:50%;font-size:12px;line-height:22px;text-align:center;z-index:15;display:none;}
+.type-label-delete{position:absolute;top:-14px;right:-14px;width:26px;height:26px;background:#D4500A;color:#F5F2EB;border-radius:50%;font-size:14px;line-height:26px;text-align:center;z-index:15;display:none;}
 .type-label.selected .type-label-delete{display:block;}
 
-/* INDEX */
-#screen-index{padding-bottom:48px;background-color:#F5F2EB;background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);background-size:11.34px 11.34px;}
+/* ── INDEX ── */
+#screen-index{padding-bottom:52px;background-color:#F5F2EB;background-image:radial-gradient(rgba(15,15,13,0.2) 0.6px,transparent 0.6px);background-size:11.34px 11.34px;}
 .index-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .index-wrap{padding:18px 20px 40px;}
 .index-hdr{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:12px;border-bottom:1.5px solid #0F0F0D;margin-bottom:22px;}
@@ -168,22 +197,22 @@ font-size:10px;color:rgba(15,15,13,0.5);
 .gps-lbl{font-size:9px;letter-spacing:0.16em;color:#1A3A5C;text-transform:uppercase;margin-bottom:10px;}
 .gps-body{font-size:clamp(9px,1.8vw,11px);color:rgba(15,15,13,0.6);line-height:1.9;font-style:italic;}
 
-/* MENU */
+/* ── MENU ── */
 #menu-overlay{position:fixed;inset:0;background:rgba(10,10,9,0.95);z-index:600;display:none;flex-direction:column;align-items:flex-end;padding:60px 32px 32px;}
 #menu-overlay.open{display:flex;}
-.mitem{font-size:clamp(22px,5vw,32px);letter-spacing:0.08em;text-transform:uppercase;color:rgba(245,242,235,0.7);padding:12px 0;border-bottom:1px solid rgba(245,242,235,0.08);width:100%;text-align:right;cursor:pointer;}
+.mitem{font-size:clamp(20px,4.5vw,30px);letter-spacing:0.08em;text-transform:uppercase;color:rgba(245,242,235,0.7);padding:12px 0;border-bottom:1px solid rgba(245,242,235,0.08);width:100%;text-align:right;cursor:pointer;}
 .mitem:active{color:#D4500A;}
-.mitem-dim{color:rgba(245,242,235,0.25);font-size:clamp(14px,3vw,20px);}
-.mclose{font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#444;cursor:pointer;margin-top:24px;}
+.mitem-dim{color:rgba(245,242,235,0.3);font-size:clamp(13px,2.8vw,18px);}
+.mclose{font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#444;cursor:pointer;margin-top:20px;}
 
-/* TYPEWRITER */
-#tw-overlay{position:fixed;inset:0;background:rgba(10,10,9,0.8);z-index:700;display:none;align-items:center;justify-content:center;padding:32px;}
+/* ── TYPEWRITER ── */
+#tw-overlay{position:fixed;inset:0;background:rgba(10,10,9,0.8);z-index:700;display:none;align-items:flex-start;justify-content:center;padding:20px;}
 #tw-overlay.open{display:flex;}
-#tw-form{display:flex;flex-direction:column;width:100%;max-width:520px;gap:10px;}
-#tw-box{background:#F5F2EB;border:1.5px solid #0F0F0D;padding:20px;width:100%;font-family:‘Courier New’,monospace;font-size:15px;color:#0F0F0D;line-height:1.6;letter-spacing:0.04em;resize:none;outline:none;min-height:90px;border-radius:0;-webkit-appearance:none;}
+#tw-form{display:flex;flex-direction:column;width:100%;max-width:520px;gap:10px;margin-top:60px;}
+#tw-box{background:#F5F2EB;border:1.5px solid #0F0F0D;padding:18px;width:100%;font-family:‘Courier New’,monospace;font-size:15px;color:#0F0F0D;line-height:1.6;letter-spacing:0.04em;resize:none;outline:none;min-height:80px;border-radius:0;-webkit-appearance:none;}
 .tw-btns{display:flex;gap:10px;justify-content:flex-end;}
-#tw-cancel{background:none;border:1.5px solid rgba(15,15,13,0.35);color:#0F0F0D;padding:12px 24px;font-family:‘Courier New’,monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;-webkit-appearance:none;border-radius:0;}
-#tw-confirm{background:#D4500A;color:#F5F2EB;border:none;padding:12px 28px;font-family:‘Courier New’,monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;-webkit-appearance:none;border-radius:0;}
+#tw-cancel{background:none;border:1.5px solid rgba(15,15,13,0.35);color:#0F0F0D;padding:12px 22px;font-family:‘Courier New’,monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;-webkit-appearance:none;border-radius:0;}
+#tw-confirm{background:#D4500A;color:#F5F2EB;border:none;padding:12px 26px;font-family:‘Courier New’,monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;-webkit-appearance:none;border-radius:0;}
 </style>
 
 </head>
@@ -201,7 +230,8 @@ font-size:10px;color:rgba(15,15,13,0.5);
       <polygon points="0,0 148,0 132,338 0,338" fill="rgba(245,242,235,0.03)"/>
       <polygon points="148,0 528,0 528,490 148,0" fill="rgba(0,0,0,0.05)"/>
     </svg>
-    <div class="cover-ribbon"></div><div class="cover-ribbon-tail"></div>
+    <div class="cover-ribbon"></div>
+    <div class="cover-ribbon-tail"></div>
     <div class="cover-mark">DRAF<span class="p">.</span></div>
     <div class="cover-vol">Vol. 01</div>
     <div class="cover-band"><span class="cbs">Winter · MMXXVI</span><span class="cbc">WI · 001/100</span></div>
@@ -222,43 +252,53 @@ font-size:10px;color:rgba(15,15,13,0.5);
 <div id="screen-toc" class="screen">
   <div class="toc-hdr">
     <div class="toc-hdr-t">DRAF. · Contents</div>
-    <div class="toc-hdr-s">Vol. 01 · Winter MMXXVI · [-2]/[-1]</div>
+    <div class="toc-hdr-s" id="toc-hdr-sub">Vol. 01 · Winter MMXXVI · [-2]</div>
   </div>
-  <div class="toc-body">
-    <div class="toc-list" id="toc-list-panel">
-      <div class="toc-col-hds">
-        <div class="toc-ch">pg</div><div class="toc-ch">tag</div><div class="toc-ch">⬤</div><div class="toc-ch">project</div><div class="toc-ch">↗</div>
-      </div>
-      <div class="toc-row" id="tr2"><div class="tc tc-pg">[002]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">STRADE_B · active</div><div class="arr">↗</div></div>
-      <div class="toc-row" id="tr3"><div class="tc tc-pg">[003]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">STRADE_B · active</div><div class="arr">↗</div></div>
-      <div class="toc-row" id="tr4"><div class="tc tc-pg">[004]</div><div class="tc"><span class="tag-h"></span></div><div class="tc" style="opacity:0.5">◐</div><div class="tc">LUM_FIELD · research</div><div class="arr" style="color:#1A3A5C;opacity:0.5">↗</div></div>
-      <div class="toc-row" id="tr5"><div class="tc tc-pg">[005]</div><div class="tc"><span class="tag-a"></span></div><div class="tc" style="opacity:0.28">○</div><div class="tc">AT_COST · active</div><div class="arr">↗</div></div>
-      <div class="ch-tags">
-        <div class="ch-tags-lbl">Dynamic Folio</div>
-        <span class="ctag">STRADE_B · 002–003</span>
-        <span class="ctag" style="border-color:#1A3A5C;color:#1A3A5C;opacity:0.6">LUM_FIELD · 004</span>
-        <span class="ctag">AT_COST · 005</span>
-      </div>
-      <div class="toc-grid-toggle">
-        <button class="grid-toggle-btn" id="grid-toggle-btn">Grid view ↗</button>
+  <div class="toc-body" id="toc-body">
+
+```
+<!-- LIST panel [-2] -->
+<div class="toc-panel active" id="toc-list">
+  <div class="toc-list-scroll">
+    <div class="toc-col-hds">
+      <div class="toc-ch">pg</div><div class="toc-ch">tag</div><div class="toc-ch">⬤</div>
+      <div class="toc-ch">project · type</div><div class="toc-ch">↗</div>
+    </div>
+    <div class="toc-row" id="tr2"><div class="tc tc-pg">[002]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">STRADE_B · active</div><div class="arr">↗</div></div>
+    <div class="toc-row" id="tr3"><div class="tc tc-pg">[003]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">STRADE_B · active</div><div class="arr">↗</div></div>
+    <div class="toc-row" id="tr4"><div class="tc tc-pg">[004]</div><div class="tc"><span class="tag-h"></span></div><div class="tc" style="opacity:0.5">◐</div><div class="tc">LUM_FIELD · research</div><div class="arr" style="color:#1A3A5C;opacity:0.5">↗</div></div>
+    <div class="toc-row" id="tr5"><div class="tc tc-pg">[005]</div><div class="tc"><span class="tag-a"></span></div><div class="tc" style="opacity:0.28">○</div><div class="tc">AT_COST · active</div><div class="arr">↗</div></div>
+    <div class="toc-row" id="tr6"><div class="tc tc-pg">[006]</div><div class="tc"><span class="tag-a"></span></div><div class="tc">●</div><div class="tc">PERSONAL · personal</div><div class="arr" style="opacity:0.25">—</div></div>
+    <div class="ch-tags">
+      <div class="ch-tags-lbl">Dynamic Folio</div>
+      <span class="ctag">STRADE_B · 002–003</span>
+      <span class="ctag" style="border-color:#1A3A5C;color:#1A3A5C;opacity:0.6">LUM_FIELD · 004</span>
+      <span class="ctag">AT_COST · 005</span>
+    </div>
+  </div>
+</div>
+
+<!-- GRID panel [-1] -->
+<div class="toc-panel" id="toc-grid-panel">
+  <div class="toc-grid-wrap">
+    <div class="toc-grid" id="toc-grid">
+      <div class="gcell gcell-new" id="gc-new"><div class="new-mark">//|</div></div>
+      <div class="gcell" id="gc1"><div class="gcell-num">01 · STRADE_B</div><div class="gcell-name">pg 002–003</div></div>
+      <div class="gcell" id="gc2"><div class="gcell-num">02 · LUM_FIELD</div><div class="gcell-name">pg 004</div></div>
+      <div class="gcell" id="gc3"><div class="gcell-num">03 · AT_COST</div><div class="gcell-name">pg 005</div></div>
+      <div class="gcell" style="opacity:0.3"><div class="gcell-num">04 · —</div><div class="gcell-name">unassigned</div></div>
+      <div class="gcell" style="opacity:0.3"><div class="gcell-num">05 · —</div><div class="gcell-name">unassigned</div></div>
+      <div class="gcell" style="opacity:0.3"><div class="gcell-num">06 · —</div><div class="gcell-name">unassigned</div></div>
+      <div class="gcell gcell-inbox" id="gc-inbox">
+        <div class="inbox-lbl">08 · Inbox ↗</div>
+        <div class="gcell-name" style="font-size:8px;opacity:0.55;">notifications</div>
+        <div class="postit"><div class="postit-from">MARGOT</div>STRADE_B — door hinge pg 002</div>
       </div>
     </div>
-    <div class="toc-grid-panel" id="toc-grid-panel">
-      <div class="toc-grid" id="toc-grid">
-        <div class="gcell gcell-new" id="gc-new"><div class="new-mark">//|</div></div>
-        <div class="gcell" id="gc1"><div class="gcell-num">01 · STRADE_B</div><div class="gcell-name">pg 002–003</div></div>
-        <div class="gcell" id="gc2"><div class="gcell-num">02 · LUM_FIELD</div><div class="gcell-name">pg 004</div></div>
-        <div class="gcell" id="gc3"><div class="gcell-num">03 · AT_COST</div><div class="gcell-name">pg 005</div></div>
-        <div class="gcell" style="opacity:0.3"><div class="gcell-num">04 · —</div><div class="gcell-name">unassigned</div></div>
-        <div class="gcell" style="opacity:0.3"><div class="gcell-num">05 · —</div><div class="gcell-name">unassigned</div></div>
-        <div class="gcell" style="opacity:0.3"><div class="gcell-num">06 · —</div><div class="gcell-name">unassigned</div></div>
-        <div class="gcell gcell-inbox" id="gc-inbox">
-          <div class="inbox-lbl">08 · Inbox ↗</div>
-          <div class="gcell-name" style="font-size:8px;opacity:0.55;">notifications</div>
-          <div class="postit"><div class="postit-from">MARGOT</div>STRADE_B — door hinge pg 002</div>
-        </div>
-      </div>
-    </div>
+  </div>
+</div>
+```
+
   </div>
 </div>
 
@@ -267,16 +307,14 @@ font-size:10px;color:rgba(15,15,13,0.5);
 <div id="screen-interior" class="screen">
   <div class="spread-wrap" id="spread-wrap">
     <div class="gutter-line"></div>
-    <!-- LEFT page — even numbers in landscape, current page in portrait -->
     <div class="page-face page-left" id="page-left">
       <canvas class="page-canvas" id="canvas-left"></canvas>
       <div class="page-num ol" id="pg-left">—</div>
     </div>
-    <!-- RIGHT page — landscape only, odd numbers -->
     <div class="page-face page-right" id="page-right">
       <canvas class="page-canvas" id="canvas-right"></canvas>
       <div class="page-num or" id="pg-right">—</div>
-      <div class="sync-dot"></div>
+      <div class="sync-dot" id="sync-dot"></div>
     </div>
   </div>
 </div>
@@ -292,6 +330,16 @@ font-size:10px;color:rgba(15,15,13,0.5);
       <div class="index-entry"><span>LUM_FIELD — Luminous Field brand</span><span class="index-pg">004</span></div>
       <div class="index-entry"><span>AT_COST — Paris–Roubaix series</span><span class="index-pg">005</span></div>
     </div>
+    <div class="index-sec">
+      <div class="index-sec-h">Session Types</div>
+      <div class="index-entry"><span>Active project</span><span class="index-pg">002, 003, 005</span></div>
+      <div class="index-entry"><span>Research</span><span class="index-pg">004</span></div>
+      <div class="index-entry"><span>Personal</span><span class="index-pg">006</span></div>
+    </div>
+    <div class="index-sec">
+      <div class="index-sec-h">Taped-In Scraps</div>
+      <div class="index-entry"><span>Site sketch · iPhone · 14.03.26 · STRADE_B</span><span class="index-pg">002</span></div>
+    </div>
     <div class="gps-block">
       <div class="gps-lbl">GPS Anchor · Darius Okafor · Winter MMXXVI</div>
       <div class="gps-body">44.4268°N, 26.1025°E<br>Bucharest · January · age 7<br>grandmother's courtyard · linden trees in winter<br>said once aloud · never published</div>
@@ -304,15 +352,15 @@ font-size:10px;color:rgba(15,15,13,0.5);
 <div id="bottom-nav" class="hidden">
   <div class="nav-left">
     <span class="nav-mark" id="nav-draf">DRAF.</span>
-    <button class="nbtn" id="btn-toc">TOC</button>
-    <button class="nbtn" id="btn-index">Index</button>
-    <button class="nbtn" id="btn-work">Work</button>
+    <button class="nav-privacy" id="nav-privacy" title="Privacy">🔒</button>
   </div>
-  <div class="nav-right">
+  <div class="nav-center">
     <button class="nav-arrow" id="btn-prev">‹</button>
     <div class="nav-pg" id="nav-pg">[002]/[003]</div>
     <button class="nav-arrow" id="btn-next">›</button>
-    <button class="nbtn" id="btn-menu">≡</button>
+  </div>
+  <div class="nav-right">
+    <button class="nav-menu" id="btn-menu">≡</button>
   </div>
 </div>
 
@@ -320,31 +368,32 @@ font-size:10px;color:rgba(15,15,13,0.5);
 
 <div id="tool-palette">
   <div class="palette-row">
-    <span class="palette-label">Thickness</span>
-    <button class="palette-btn active" id="size-thin">Thin</button>
-    <button class="palette-btn" id="size-med">Medium</button>
-    <button class="palette-btn" id="size-thick">Thick</button>
+    <span class="palette-label">Pen</span>
+    <button class="pbtn active" id="pen-thin">Thin</button>
+    <button class="pbtn" id="pen-med">Medium</button>
+    <button class="pbtn" id="pen-thick">Thick</button>
   </div>
-  <div class="palette-divider"></div>
+  <div class="pdiv"></div>
+  <div class="palette-row">
+    <span class="palette-label">Eraser</span>
+    <button class="pbtn" id="er-med">Medium</button>
+    <button class="pbtn" id="er-large">Large</button>
+    <button class="pbtn" id="er-xl">X-Large</button>
+  </div>
+  <div class="pdiv"></div>
   <div class="palette-row">
     <span class="palette-label">Color</span>
-    <div class="palette-color-btn active" id="col-ink" data-color="#0F0F0D" style="background:#0F0F0D;"></div>
-    <div class="palette-color-btn" id="col-fired" data-color="#D4500A" style="background:#D4500A;"></div>
-    <div class="palette-color-btn" id="col-blueprint" data-color="#1A3A5C" style="background:#1A3A5C;"></div>
-    <div class="palette-color-btn" id="col-paper" data-color="#F5F2EB" style="background:#F5F2EB;border-color:#ccc;"></div>
+    <div class="pcol active" id="col-ink" data-color="#0F0F0D" style="background:#0F0F0D;"></div>
+    <div class="pcol" id="col-fired" data-color="#D4500A" style="background:#D4500A;"></div>
+    <div class="pcol" id="col-blue" data-color="#1A3A5C" style="background:#1A3A5C;"></div>
+    <div class="pcol" id="col-paper" data-color="#F5F2EB" style="background:#F5F2EB;border:1px solid #bbb;"></div>
   </div>
-  <div class="palette-divider"></div>
-  <div class="palette-row">
-    <span class="palette-label">Mode</span>
-    <button class="palette-btn active" id="mode-draw">Draw</button>
-    <button class="palette-btn" id="mode-erase">Erase</button>
-  </div>
-  <div class="palette-divider"></div>
+  <div class="pdiv"></div>
   <div class="palette-row">
     <span class="palette-label">Tip</span>
-    <button class="palette-btn active" id="tip-round">Round</button>
-    <button class="palette-btn" id="tip-flat">Flat</button>
-    <button class="palette-btn" id="tip-pressure">Pressure</button>
+    <button class="pbtn active" id="tip-coil">Coil</button>
+    <button class="pbtn" id="tip-flat">Flat</button>
+    <button class="pbtn" id="tip-round">Round</button>
   </div>
 </div>
 
@@ -354,6 +403,7 @@ font-size:10px;color:rgba(15,15,13,0.5);
   <div class="mitem" id="m-toc">TOC</div>
   <div class="mitem" id="m-index">Index</div>
   <div class="mitem" id="m-work">Work</div>
+  <div class="mitem" id="m-sync">Force Sync</div>
   <div class="mitem mitem-dim">Import — Phase 2</div>
   <div class="mitem" id="m-close">Close Book</div>
   <div class="mclose" id="m-dismiss">✕ dismiss</div>
@@ -371,108 +421,234 @@ font-size:10px;color:rgba(15,15,13,0.5);
   </div>
 </div>
 
-<script>
-// ══ TOOL STATE ══
-const TOOL={color:'#0F0F0D',size:'thin',mode:'draw',tip:'round',paletteOpen:false};
+<!-- LINEAGE POPUP -->
 
-function getLineWidth(pressure){
-  const base=TOOL.size==='thin'?1.2:TOOL.size==='medium'?2.8:5;
-  if(TOOL.tip==='pressure') return Math.max(0.4,pressure*base*2.2);
-  if(TOOL.tip==='flat') return base*1.6;
+<div class="lineage-popup" id="lineage-popup" style="display:none;"></div>
+
+<script>
+// ══════════════════════════════
+// TOOL STATE
+// ══════════════════════════════
+const TOOL={
+  color:'#0F0F0D',
+  penSize:'thin',
+  eraserSize:'medium',
+  mode:'draw', // draw | erase
+  tip:'coil',
+  paletteOpen:false,
+  erasing:false
+};
+
+function getPenWidth(pressure){
+  const p=pressure||0.5;
+  // Coil tip: tapers with pressure variation
+  if(TOOL.tip==='coil'){
+    const base=TOOL.penSize==='thin'?0.8:TOOL.penSize==='medium'?2.2:4.5;
+    return Math.max(0.3, base * (0.4 + p * 1.2));
+  }
+  if(TOOL.tip==='flat'){
+    const base=TOOL.penSize==='thin'?1.5:TOOL.penSize==='medium'?3:6;
+    return base;
+  }
+  // round
+  const base=TOOL.penSize==='thin'?1:TOOL.penSize==='medium'?2.5:5;
   return base;
 }
+function getEraserWidth(){
+  return TOOL.eraserSize==='medium'?20:TOOL.eraserSize==='large'?40:70;
+}
 
-// ══ PAGE STATE ══
-// Portrait: tracks single current page (2..100)
-// Landscape: left page always even (2,4,6..), right = left+1
+// ══════════════════════════════
+// PAGE STATE
+// ══════════════════════════════
 const TOTAL=100;
 const isLandscape=()=>window.innerWidth>window.innerHeight;
 
+// TOC has 3 states: list, grid, work
+// portrait: list → grid → work via › / ‹
+// landscape: list+grid always shown, › goes to work
+const TOC_STATES=['list','grid','work'];
+
 const S={
-  // currentPage = the page shown in portrait, or left page in landscape
   currentPage:parseInt(localStorage.getItem('draf-pg')||'2'),
   screen:'cover',
-  twX:0,twY:0,twWrapId:'page-left'
+  tocState:'list', // list | grid
+  privacyOn:false,
+  twX:0,twY:0,twWrapId:'page-left',
+  hasInk:false // tracks if current page has pencil strokes (for orientation lock)
 };
 
-// Ensure currentPage is always valid (≥2)
-function clampPage(p){ return Math.max(2,Math.min(p,TOTAL)); }
+function clampPage(p){return Math.max(2,Math.min(p,TOTAL));}
+function pad(n){return String(n).padStart(3,'0');}
+function isLandscapeNow(){return window.innerWidth>window.innerHeight;}
 
 function getLeftPage(){
-  // In landscape, left must be even
-  const p=S.currentPage;
-  return p%2===0?p:p-1;
+  if(isLandscapeNow()){
+    const p=S.currentPage;
+    return p%2===0?p:p-1;
+  }
+  return S.currentPage;
 }
-function getRightPage(){ return getLeftPage()+1; }
-
-function pad(n){return String(n).padStart(3,'0');}
+function getRightPage(){return getLeftPage()+1;}
 
 function getNavLabel(){
-  if(isLandscape()){
+  if(S.screen==='toc'){
+    return S.tocState==='list'?'[-2]':'[-1]';
+  }
+  if(S.screen==='index') return 'Index';
+  if(isLandscapeNow()){
     const l=getLeftPage(),r=getRightPage();
     return r<=TOTAL?'['+pad(l)+']/['+pad(r)+']':'['+pad(l)+']';
   }
   return '['+pad(S.currentPage)+']';
 }
 
-// ══ CANVAS PERSISTENCE ══
+// ══════════════════════════════
+// CANVAS PERSISTENCE
+// ══════════════════════════════
 function saveCanvas(pageNum,canvas){
-  try{ localStorage.setItem('draf-c'+pageNum,canvas.toDataURL('image/png')); }catch(e){}
+  try{
+    const data=canvas.toDataURL('image/png');
+    localStorage.setItem('draf-c'+pageNum,data);
+  }catch(e){}
 }
 function loadCanvas(pageNum,canvas){
   const d=localStorage.getItem('draf-c'+pageNum);
   if(!d)return;
   const img=new Image();
-  img.onload=()=>canvas.getContext('2d').drawImage(img,0,0);
+  img.onload=()=>{ canvas.getContext('2d').drawImage(img,0,0); };
   img.src=d;
 }
-
-// ══ SAVE CURRENT CANVASES ══
 function saveCurrentCanvases(){
   const cl=document.getElementById('canvas-left');
   const cr=document.getElementById('canvas-right');
-  if(isLandscape()){
-    if(cl) saveCanvas(getLeftPage(),cl);
-    if(cr&&getRightPage()<=TOTAL) saveCanvas(getRightPage(),cr);
+  if(isLandscapeNow()){
+    if(cl)saveCanvas(getLeftPage(),cl);
+    if(cr&&getRightPage()<=TOTAL)saveCanvas(getRightPage(),cr);
   } else {
-    if(cl) saveCanvas(S.currentPage,cl);
+    if(cl)saveCanvas(S.currentPage,cl);
   }
 }
 
-// ══ PREV / NEXT ══
-function prevPage(){
-  saveCurrentCanvases();
-  if(isLandscape()){
-    S.currentPage=clampPage(getLeftPage()-2);
-  } else {
-    S.currentPage=clampPage(S.currentPage-1);
-  }
-  localStorage.setItem('draf-pg',S.currentPage);
-  renderSpread();
-}
-function nextPage(){
-  saveCurrentCanvases();
-  if(isLandscape()){
-    const next=getLeftPage()+2;
-    S.currentPage=clampPage(next%2===0?next:next-1);
-  } else {
-    S.currentPage=clampPage(S.currentPage+1);
-  }
-  localStorage.setItem('draf-pg',S.currentPage);
-  renderSpread();
+// Sync dot pulse on save
+function pulseSyncDot(){
+  const dot=document.getElementById('sync-dot');
+  if(!dot)return;
+  dot.classList.add('pulse');
+  setTimeout(()=>dot.classList.remove('pulse'),800);
 }
 
-// ══ RENDER SPREAD ══
+// ══════════════════════════════
+// NAVIGATION — prev / next
+// ══════════════════════════════
+function handlePrev(){
+  if(S.screen==='toc'){
+    // List is first, no going back from list in portrait
+    if(!isLandscapeNow()){
+      if(S.tocState==='grid'){ setTocState('list'); return; }
+    }
+    return;
+  }
+  if(S.screen==='interior'){
+    if(S.hasInk) return; // orientation lock while drawing — no nav? Actually this is page nav not orientation
+    saveCurrentCanvases();
+    if(isLandscapeNow()){
+      S.currentPage=clampPage(getLeftPage()-2);
+      if(S.currentPage%2!==0)S.currentPage--;
+      S.currentPage=clampPage(S.currentPage);
+    } else {
+      S.currentPage=clampPage(S.currentPage-1);
+    }
+    localStorage.setItem('draf-pg',S.currentPage);
+    renderSpread();
+    return;
+  }
+  if(S.screen==='index'){
+    showScreen('toc');return;
+  }
+}
+
+function handleNext(){
+  if(S.screen==='toc'){
+    if(!isLandscapeNow()){
+      if(S.tocState==='list'){ setTocState('grid'); return; }
+      if(S.tocState==='grid'){ showScreen('interior'); return; }
+    } else {
+      // Landscape — both panels shown, › goes to work
+      showScreen('interior'); return;
+    }
+    return;
+  }
+  if(S.screen==='interior'){
+    saveCurrentCanvases();
+    if(isLandscapeNow()){
+      let next=getLeftPage()+2;
+      if(next%2!==0)next--;
+      S.currentPage=clampPage(next);
+    } else {
+      S.currentPage=clampPage(S.currentPage+1);
+    }
+    localStorage.setItem('draf-pg',S.currentPage);
+    renderSpread();
+    return;
+  }
+  if(S.screen==='index'){
+    showScreen('interior');return;
+  }
+}
+
+// ══════════════════════════════
+// TOC STATE
+// ══════════════════════════════
+function setTocState(state){
+  S.tocState=state;
+  const list=document.getElementById('toc-list');
+  const grid=document.getElementById('toc-grid-panel');
+  const sub=document.getElementById('toc-hdr-sub');
+
+  if(isLandscapeNow()){
+    // Both always visible in landscape
+    list.classList.add('active');
+    grid.classList.add('active');
+    sub.textContent='Vol. 01 · Winter MMXXVI · [-2]/[-1]';
+  } else {
+    list.classList.toggle('active',state==='list');
+    grid.classList.toggle('active',state==='grid');
+    sub.textContent=state==='list'?'Vol. 01 · Winter MMXXVI · [-2]':'Vol. 01 · Winter MMXXVI · [-1]';
+  }
+  document.getElementById('nav-pg').textContent=getNavLabel();
+  if(state==='grid') requestAnimationFrame(fixGrid);
+}
+
+// ══════════════════════════════
+// SHOW SCREEN
+// ══════════════════════════════
+function showScreen(name){
+  if(S.screen==='interior') saveCurrentCanvases();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  S.screen=name;
+  const nav=document.getElementById('bottom-nav');
+  (name==='cover'||name==='threshold')?nav.classList.add('hidden'):nav.classList.remove('hidden');
+  if(name==='interior'){S.hasInk=false;renderSpread();}
+  if(name==='toc'){setTocState(isLandscapeNow()?'list':S.tocState||'list');}
+  if(name==='index'){document.getElementById('nav-pg').textContent='Index';}
+  closePalette();
+}
+
+// ══════════════════════════════
+// RENDER SPREAD
+// ══════════════════════════════
 function renderSpread(){
   document.getElementById('nav-pg').textContent=getNavLabel();
-
-  if(isLandscape()){
+  if(isLandscapeNow()){
     const l=getLeftPage(),r=getRightPage();
     document.getElementById('pg-left').textContent='['+pad(l)+']';
     document.getElementById('pg-right').textContent=r<=TOTAL?'['+pad(r)+']':'';
+    document.getElementById('page-right').style.display='';
+    document.getElementById('gutter-line')||null;
     setupCanvas('canvas-left','page-left',l);
     if(r<=TOTAL) setupCanvas('canvas-right','page-right',r);
-    // Sample content on pages 2 and 3
     renderPageContent('page-left',l);
     renderPageContent('page-right',r);
   } else {
@@ -483,41 +659,37 @@ function renderSpread(){
   }
 }
 
-// ══ SAMPLE PAGE CONTENT ══
+// ══════════════════════════════
+// PAGE CONTENT (sample)
+// ══════════════════════════════
 function renderPageContent(wrapId,pageNum){
   const wrap=document.getElementById(wrapId);
-  // Remove previous dynamic content (scraps, labels) but not canvas or page-num
   wrap.querySelectorAll('.scrap,.type-label').forEach(e=>e.remove());
-
   if(pageNum===2){
-    const scrap=buildScrap();
-    wrap.appendChild(scrap);
-    initScrap(scrap,wrap);
-    const lbl=buildLabel('door hinge detail — section A\nclearance: 12mm min.','48%','8%');
-    wrap.appendChild(lbl);
-    initLabel(lbl,wrap);
+    const sc=buildScrap();
+    wrap.appendChild(sc);
+    initScrap(sc,wrap);
+    const lb=buildLabel('door hinge detail — section A\nclearance: 12mm min.','48%','8%');
+    wrap.appendChild(lb);
+    initLabel(lb,wrap);
   }
 }
 
 function buildScrap(){
   const el=document.createElement('div');
   el.className='scrap';
-  el.id='sample-scrap-'+Date.now();
-  el.style.cssText='top:14%;left:8%;';
+  el.style.cssText='top:12%;left:6%;';
   el.innerHTML=`
-    <div style="position:relative;display:inline-block;">
-      <div class="scrap-tape"></div>
-      <div class="scrap-img-wrap" style="transform:rotate(-3deg);">
-        <svg width="140" height="100" viewBox="0 0 140 100">
-          <rect width="140" height="100" fill="#c4bdb4"/>
-          <path d="M12,72 Q42,48 75,62 Q108,76 122,52" stroke="#3a3530" stroke-width="2.2" fill="none" opacity="0.6"/>
-          <path d="M22,36 L40,30 L65,40 L90,33 L112,38" stroke="#4a4540" stroke-width="1" fill="none" opacity="0.45"/>
-          <text x="6" y="93" fill="#444" font-size="6.5" font-family="monospace" opacity="0.7">site sketch · 14.03.26</text>
-        </svg>
-        <div class="scrap-delete">✕</div>
-        <div class="scrap-scale">↘</div>
-      </div>
-      <div class="scrap-lineage">iPhone · 14.03.26 · STRADE_B</div>
+    <div class="scrap-tape" id="scrap-tape-hold"></div>
+    <div class="scrap-img-wrap" style="transform:rotate(-3deg);">
+      <svg width="140" height="100" viewBox="0 0 140 100">
+        <rect width="140" height="100" fill="#c4bdb4"/>
+        <path d="M12,72 Q42,48 75,62 Q108,76 122,52" stroke="#3a3530" stroke-width="2.2" fill="none" opacity="0.6"/>
+        <path d="M22,36 L40,30 L65,40 L90,33 L112,38" stroke="#4a4540" stroke-width="1" fill="none" opacity="0.45"/>
+        <text x="6" y="93" fill="#444" font-size="6.5" font-family="monospace" opacity="0.7">site sketch · 14.03.26</text>
+      </svg>
+      <div class="scrap-delete">✕</div>
+      <div class="scrap-scale">↘</div>
     </div>`;
   return el;
 }
@@ -533,58 +705,68 @@ function buildLabel(text,top,left){
   return el;
 }
 
-// ══ SCRAP INTERACTION ══
-// Finger on image = move
-// Double tap = toggle selected (shows delete + scale)
-// Scale handle bottom-right = scale from center
+// ══════════════════════════════
+// SCRAP INTERACTION
+// ══════════════════════════════
 function initScrap(el,wrap){
   let dragging=false,scaling=false;
-  let ox=0,oy=0,startDist=0,startW=0,startH=0;
-  let tapT=0,tapX=0,tapY=0;
+  let ox=0,oy=0,tapT=0,tapX=0,tapY=0;
+  let startDist=0,startW=0,startH=0,centerX=0,centerY=0;
 
   const imgWrap=el.querySelector('.scrap-img-wrap');
   const del=el.querySelector('.scrap-delete');
   const scaleHandle=el.querySelector('.scrap-scale');
+  const tape=el.querySelector('.scrap-tape');
 
   // Delete
-  del.addEventListener('touchend',e=>{e.stopPropagation();el.remove();},{passive:false});
+  del.addEventListener('touchend',e=>{e.stopPropagation();e.preventDefault();el.remove();},{passive:false});
 
-  // Scale handle — bottom right, scales from center
+  // Tape hold — show lineage popup
+  let tapeHoldTimer=null;
+  tape.addEventListener('touchstart',e=>{
+    tapeHoldTimer=setTimeout(()=>showLineage(e.touches[0],el),500);
+  },{passive:true});
+  tape.addEventListener('touchend',()=>{clearTimeout(tapeHoldTimer);},{passive:true});
+  tape.addEventListener('touchmove',()=>{clearTimeout(tapeHoldTimer);},{passive:true});
+
+  // Scale — bottom right corner, uniform x+y from center
   scaleHandle.addEventListener('touchstart',e=>{
-    e.stopPropagation();
+    e.stopPropagation(); e.preventDefault();
     scaling=true;
     const t=e.touches[0];
-    const er=imgWrap.getBoundingClientRect();
-    startDist=Math.hypot(t.clientX-(er.left+er.width/2),t.clientY-(er.top+er.height/2));
+    const ir=imgWrap.getBoundingClientRect();
+    centerX=ir.left+ir.width/2; centerY=ir.top+ir.height/2;
+    startDist=Math.hypot(t.clientX-centerX,t.clientY-centerY);
     startW=imgWrap.offsetWidth; startH=imgWrap.offsetHeight;
-  },{passive:true});
+  },{passive:false});
 
-  document.addEventListener('touchmove',e=>{
-    if(!scaling) return;
+  const scaleMove=e=>{
+    if(!scaling)return;
     const t=e.touches[0];
-    const er=imgWrap.getBoundingClientRect();
-    const dist=Math.hypot(t.clientX-(er.left+er.width/2),t.clientY-(er.top+er.height/2));
-    const ratio=dist/startDist;
-    const newW=Math.max(60,startW*ratio);
-    imgWrap.style.width=newW+'px';
-  },{passive:true});
+    const d=Math.hypot(t.clientX-centerX,t.clientY-centerY);
+    const ratio=d/Math.max(startDist,1);
+    const nw=Math.max(60,startW*ratio);
+    const nh=Math.max(44,startH*ratio);
+    imgWrap.style.width=nw+'px';
+    imgWrap.style.height=nh+'px';
+  };
+  const scaleEnd=()=>{scaling=false;};
+  document.addEventListener('touchmove',scaleMove,{passive:true});
+  document.addEventListener('touchend',scaleEnd,{passive:true});
 
-  document.addEventListener('touchend',()=>{ scaling=false; },{passive:true});
-
-  // Move — finger drag on scrap body
+  // Move
   el.addEventListener('touchstart',e=>{
-    if(e.target===del||e.target===scaleHandle) return;
+    if(e.target===del||e.target===scaleHandle||e.target===tape)return;
     const t=e.touches[0];
-    tapX=t.clientX; tapY=t.clientY;
+    tapX=t.clientX; tapY=t.clientY; tapT=Date.now();
     const wr=wrap.getBoundingClientRect();
     const er=el.getBoundingClientRect();
     ox=t.clientX-er.left; oy=t.clientY-er.top;
-    dragging=true;
-    el.style.transform='none';
+    dragging=true; el.style.transform='none';
   },{passive:true});
 
   el.addEventListener('touchmove',e=>{
-    if(!dragging||scaling) return;
+    if(!dragging||scaling)return;
     e.preventDefault();
     const t=e.touches[0];
     const wr=wrap.getBoundingClientRect();
@@ -596,124 +778,137 @@ function initScrap(el,wrap){
     dragging=false;
     const t=e.changedTouches[0];
     const now=Date.now();
-    const dx=t.clientX-tapX, dy=t.clientY-tapY;
-    const dist=Math.hypot(dx,dy);
-    if(now-tapT>180&&now-tapT<500&&dist<40){
-      // Double tap — toggle selected
+    if(now-tapT>180&&now-tapT<500&&Math.hypot(t.clientX-tapX,t.clientY-tapY)<40){
       el.classList.toggle('selected');
     }
     tapT=now;
   },{passive:true});
 }
 
-// ══ LABEL INTERACTION ══
+function showLineage(touch,scrap){
+  const pop=document.getElementById('lineage-popup');
+  pop.innerHTML='<div style="font-size:8px;letter-spacing:0.12em;color:#D4500A;text-transform:uppercase;margin-bottom:8px;">Lineage</div>SOURCE: iPhone 15 Pro<br>CREATED: 14.03.26 · 09:42<br>TAPED: 18.03.26 · 14:12<br>PROJECT: STRADE_B<br><br><span style="color:#555;font-size:7px;cursor:pointer" id="pop-close">Tap to dismiss</span>';
+  pop.style.display='block';
+  pop.style.left=Math.min(touch.clientX+10,window.innerWidth-250)+'px';
+  pop.style.top=Math.min(touch.clientY-20,window.innerHeight-180)+'px';
+  document.getElementById('pop-close').addEventListener('touchend',()=>{pop.style.display='none';},{passive:true,once:true});
+}
+
+// ══════════════════════════════
+// LABEL INTERACTION
+// ══════════════════════════════
 function initLabel(el,wrap){
   let dragging=false,ox=0,oy=0,tapT=0,tapX=0,tapY=0;
   const del=el.querySelector('.type-label-delete');
-  del.addEventListener('touchend',e=>{e.stopPropagation();el.remove();},{passive:false});
-
+  del.addEventListener('touchend',e=>{e.stopPropagation();e.preventDefault();el.remove();},{passive:false});
   el.addEventListener('touchstart',e=>{
-    if(e.target===del) return;
+    if(e.target===del)return;
     const t=e.touches[0];
-    tapX=t.clientX; tapY=t.clientY;
+    tapX=t.clientX; tapY=t.clientY; tapT=Date.now();
     const wr=wrap.getBoundingClientRect();
     const er=el.getBoundingClientRect();
-    ox=t.clientX-er.left; oy=t.clientY-er.top;
-    dragging=true;
+    ox=t.clientX-er.left; oy=t.clientY-er.top; dragging=true;
   },{passive:true});
-
   el.addEventListener('touchmove',e=>{
-    if(!dragging) return;
-    e.preventDefault();
+    if(!dragging)return; e.preventDefault();
     const t=e.touches[0];
     const wr=wrap.getBoundingClientRect();
     el.style.left=(t.clientX-wr.left-ox)+'px';
     el.style.top=(t.clientY-wr.top-oy)+'px';
   },{passive:false});
-
   el.addEventListener('touchend',e=>{
     dragging=false;
-    const t=e.changedTouches[0];
-    const now=Date.now();
-    const dx=t.clientX-tapX,dy=t.clientY-tapY;
-    if(now-tapT>180&&now-tapT<500&&Math.hypot(dx,dy)<40){
+    const t=e.changedTouches[0],now=Date.now();
+    if(now-tapT>180&&now-tapT<500&&Math.hypot(t.clientX-tapX,t.clientY-tapY)<40){
       el.classList.toggle('selected');
     }
     tapT=now;
   },{passive:true});
 }
 
-// Deselect all on page tap
+// Deselect on background tap
 ['page-left','page-right'].forEach(id=>{
   const el=document.getElementById(id);
-  if(el) el.addEventListener('touchend',e=>{
+  if(el)el.addEventListener('touchend',e=>{
     if(!e.target.closest('.scrap,.type-label')){
       document.querySelectorAll('.scrap.selected,.type-label.selected').forEach(x=>x.classList.remove('selected'));
+      document.getElementById('lineage-popup').style.display='none';
     }
   },{passive:true});
 });
 
-// ══ CANVAS SETUP ══
-const canvasData={};// track which page each canvas is loaded for
+// ══════════════════════════════
+// CANVAS SETUP
+// ══════════════════════════════
+const canvasPageMap={};
 
 function setupCanvas(canvasId,wrapId,pageNum){
   const wrap=document.getElementById(wrapId);
   const old=document.getElementById(canvasId);
-  if(!wrap||!old) return;
-
-  // If already loaded for this page + correct size, skip reinit
-  if(canvasData[canvasId]===pageNum&&old.width===wrap.offsetWidth&&old.height===wrap.offsetHeight) return;
+  if(!wrap||!old)return;
+  if(canvasPageMap[canvasId]===pageNum&&old.width===wrap.offsetWidth&&old.height===wrap.offsetHeight)return;
 
   const nc=document.createElement('canvas');
   nc.id=canvasId; nc.className='page-canvas';
   nc.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:5;touch-action:none;background:transparent;';
   old.parentNode.replaceChild(nc,old);
   nc.width=wrap.offsetWidth; nc.height=wrap.offsetHeight;
-  canvasData[canvasId]=pageNum;
-
+  canvasPageMap[canvasId]=pageNum;
   loadCanvas(pageNum,nc);
 
   const ctx=nc.getContext('2d');
   ctx.lineCap='round'; ctx.lineJoin='round';
-  let drawing=false,lx=0,ly=0,erasing=false;
+  let drawing=false,lx=0,ly=0,penErasing=false;
+  let lastPenUp=0;
 
   nc.addEventListener('pointerdown',e=>{
-    if(e.pointerType!=='pen') return;
+    if(e.pointerType!=='pen')return;
     e.preventDefault(); drawing=true; nc.setPointerCapture(e.pointerId);
-    erasing=TOOL.mode==='erase'||(e.buttons&32)>0;
-    ctx.globalCompositeOperation=erasing?'destination-out':'source-over';
-    if(!erasing) ctx.strokeStyle=TOOL.color;
+    penErasing=TOOL.mode==='erase'||(e.buttons&32)>0;
+    if(penErasing){
+      ctx.globalCompositeOperation='destination-out';
+      ctx.lineWidth=getEraserWidth();
+    } else {
+      ctx.globalCompositeOperation='source-over';
+      ctx.strokeStyle=TOOL.color;
+    }
     const r=nc.getBoundingClientRect();
     lx=e.clientX-r.left; ly=e.clientY-r.top;
     ctx.beginPath(); ctx.moveTo(lx,ly);
+    S.hasInk=true;
   },{passive:false});
 
   nc.addEventListener('pointermove',e=>{
-    if(!drawing||e.pointerType!=='pen') return;
+    if(!drawing||e.pointerType!=='pen')return;
     e.preventDefault();
     const r=nc.getBoundingClientRect();
     const x=e.clientX-r.left,y=e.clientY-r.top;
-    ctx.lineWidth=erasing?28:getLineWidth(e.pressure||0.5);
+    if(!penErasing) ctx.lineWidth=getPenWidth(e.pressure);
     ctx.lineTo(x,y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x,y); lx=x; ly=y;
   },{passive:false});
 
   nc.addEventListener('pointerup',e=>{
-    if(e.pointerType!=='pen') return;
-    drawing=false; ctx.globalCompositeOperation='source-over';
+    if(e.pointerType!=='pen')return;
+    drawing=false; lastPenUp=Date.now();
+    ctx.globalCompositeOperation='source-over';
     saveCanvas(pageNum,nc);
+    pulseSyncDot();
   });
-  nc.addEventListener('pointercancel',()=>{ drawing=false; });
+  nc.addEventListener('pointercancel',()=>{drawing=false;});
 
-  // Double tap typewriter — 180-500ms, within 40px, not during pencil writing
-  let tapT=0,tapX=0,tapY=0,lastPenUp=0;
-  nc.addEventListener('pointerup',e=>{ if(e.pointerType==='pen') lastPenUp=Date.now(); });
+  // Double tap typewriter — pen-aware, 180-500ms, 40px proximity
+  let tapT=0,tapX=0,tapY=0;
   nc.addEventListener('touchend',e=>{
     const now=Date.now();
-    if(now-lastPenUp<300) return; // ignore if pen was just active
+    if(now-lastPenUp<400)return; // pen was just active
     const t=e.changedTouches[0];
     const dx=t.clientX-tapX,dy=t.clientY-tapY;
     if(now-tapT>180&&now-tapT<500&&Math.hypot(dx,dy)<40){
-      S.twX=t.clientX; S.twY=t.clientY; S.twWrapId=wrapId;
+      // Place label relative to visible viewport (keyboard-aware)
+      const vv=window.visualViewport;
+      S.twX=t.clientX-(vv?vv.offsetLeft:0);
+      S.twY=t.clientY-(vv?vv.offsetTop:0);
+      S.twWrapId=wrapId;
       document.getElementById('tw-overlay').classList.add('open');
       setTimeout(()=>document.getElementById('tw-box').focus(),80);
     }
@@ -721,92 +916,133 @@ function setupCanvas(canvasId,wrapId,pageNum){
   },{passive:true});
 }
 
-// ══ GRID GEOMETRY ══
+// ══════════════════════════════
+// GRID GEOMETRY
+// ══════════════════════════════
 function fixGrid(){
   const wrap=document.getElementById('toc-grid-panel');
   const grid=document.getElementById('toc-grid');
-  if(!wrap||!grid) return;
+  if(!wrap||!grid)return;
   const pd=16,W=wrap.clientWidth-pd*2,H=wrap.clientHeight-pd*2;
-  if(W<=0||H<=0) return;
+  if(W<=0||H<=0)return;
   let g=Math.round(H-2*W); g=Math.max(4,Math.min(g,24));
-  const cell=Math.floor((H-3*g)/4); if(cell<=0) return;
+  const cell=Math.floor((H-3*g)/4); if(cell<=0)return;
   grid.style.gap=g+'px';
   grid.style.gridTemplateColumns='repeat(2,'+cell+'px)';
   grid.style.gridTemplateRows='repeat(4,'+cell+'px)';
-  grid.style.width=(cell*2+g)+'px'; grid.style.height=(cell*4+g*3)+'px';
+  grid.style.width=(cell*2+g)+'px';
+  grid.style.height=(cell*4+g*3)+'px';
 }
 
-// ══ ORIENTATION CHANGE ══
-let _orientTimer=null;
+// ══════════════════════════════
+// ORIENTATION LOCK WHILE DRAWING
+// ══════════════════════════════
+let _lockedOrientation=null;
+let _resizeTimer=null;
+
 window.addEventListener('resize',()=>{
-  fixGrid();
-  clearTimeout(_orientTimer);
-  _orientTimer=setTimeout(()=>{ if(S.screen==='interior') renderSpread(); },400);
+  clearTimeout(_resizeTimer);
+  _resizeTimer=setTimeout(()=>{
+    if(S.screen==='interior'){
+      const nowLS=isLandscapeNow();
+      // If drawing, lock orientation
+      if(S.hasInk){
+        // Don't re-render — orientation is locked
+        return;
+      }
+      renderSpread();
+    }
+    if(S.screen==='toc') setTocState(S.tocState);
+    fixGrid();
+  },350);
 });
 
-// ══ SHOW ══
-function show(name){
-  if(S.screen==='interior') saveCurrentCanvases();
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+name).classList.add('active');
-  S.screen=name;
-  const nav=document.getElementById('bottom-nav');
-  (name==='cover'||name==='threshold')?nav.classList.add('hidden'):nav.classList.remove('hidden');
-  if(name==='interior') renderSpread();
-  if(name==='toc') requestAnimationFrame(fixGrid);
-  closePalette();
-}
-
-// ══ TAP HELPER ══
+// ══════════════════════════════
+// TAP HELPER
+// ══════════════════════════════
 function on(el,fn){
   if(typeof el==='string') el=document.getElementById(el);
-  if(!el) return;
+  if(!el)return;
   let ts=0;
   el.addEventListener('touchstart',()=>{ts=Date.now();},{passive:true});
   el.addEventListener('touchend',e=>{if(Date.now()-ts<300){e.preventDefault();fn(e);}},{passive:false});
   el.addEventListener('click',fn);
 }
 
-// ══ WIRING ══
-on('cover-face',()=>{ show('threshold'); setTimeout(()=>show('toc'),420); });
-on('btn-toc',()=>show('toc'));
-on('btn-index',()=>show('index'));
-on('btn-work',()=>show('interior'));
-on('btn-prev',prevPage);
-on('btn-next',nextPage);
-on('btn-menu',toggleMenu);
-on('nav-draf',togglePalette);
-on('m-toc',()=>{show('toc');closeMenu();});
-on('m-index',()=>{show('index');closeMenu();});
-on('m-work',()=>{show('interior');closeMenu();});
-on('m-close',()=>{show('cover');closeMenu();});
-on('m-dismiss',closeMenu);
+// DRAF. — 400ms hold = palette
+let drafHoldTimer=null;
+const drafEl=document.getElementById('nav-draf');
+drafEl.addEventListener('touchstart',()=>{
+  drafHoldTimer=setTimeout(()=>togglePalette(),400);
+},{passive:true});
+drafEl.addEventListener('touchend',()=>clearTimeout(drafHoldTimer),{passive:true});
+drafEl.addEventListener('touchmove',()=>clearTimeout(drafHoldTimer),{passive:true});
 
-on('gc-new',()=>show('interior'));
+// ══════════════════════════════
+// WIRING
+// ══════════════════════════════
+on('cover-face',()=>{showScreen('threshold');setTimeout(()=>showScreen('toc'),420);});
+on('btn-prev',handlePrev);
+on('btn-next',handleNext);
+on('btn-menu',toggleMenu);
+on('nav-privacy',()=>{
+  S.privacyOn=!S.privacyOn;
+  document.getElementById('nav-privacy').textContent=S.privacyOn?'🔓':'🔒';
+  document.getElementById('nav-privacy').classList.toggle('active',S.privacyOn);
+});
+
+// TOC rows → go to page
+on('tr2',()=>goToPage(2));on('tr3',()=>goToPage(3));
+on('tr4',()=>goToPage(4));on('tr5',()=>goToPage(5));on('tr6',()=>goToPage(6));
+// Grid cells
+on('gc-new',()=>newBlankPage());
 on('gc1',()=>goToPage(2));on('gc2',()=>goToPage(4));
 on('gc3',()=>goToPage(5));
-on('tr2',()=>goToPage(2));on('tr3',()=>goToPage(3));
-on('tr4',()=>goToPage(4));on('tr5',()=>goToPage(5));
 
-on('grid-toggle-btn',()=>{
-  const list=document.getElementById('toc-list-panel');
-  const grid=document.getElementById('toc-grid-panel');
-  const isGrid=grid.classList.contains('visible');
-  if(isGrid){grid.classList.remove('visible');list.classList.remove('hidden');document.getElementById('grid-toggle-btn').textContent='Grid view ↗';}
-  else{list.classList.add('hidden');grid.classList.add('visible');document.getElementById('grid-toggle-btn').textContent='← List view';requestAnimationFrame(fixGrid);}
-});
+// Menu
+on('m-toc',()=>{showScreen('toc');closeMenu();});
+on('m-index',()=>{showScreen('index');closeMenu();});
+on('m-work',()=>{showScreen('interior');closeMenu();});
+on('m-sync',()=>{forcSync();closeMenu();});
+on('m-close',()=>{showScreen('cover');closeMenu();});
+on('m-dismiss',closeMenu);
 
 function goToPage(pg){
   S.currentPage=clampPage(pg);
+  if(isLandscapeNow()&&S.currentPage%2!==0)S.currentPage=clampPage(S.currentPage-1);
   localStorage.setItem('draf-pg',S.currentPage);
-  show('interior');
+  showScreen('interior');
 }
+
+function newBlankPage(){
+  // Find next unused page
+  for(let i=2;i<=TOTAL;i++){
+    if(!localStorage.getItem('draf-c'+i)){
+      S.currentPage=i;
+      if(isLandscapeNow()&&i%2!==0)S.currentPage=i-1;
+      localStorage.setItem('draf-pg',S.currentPage);
+      showScreen('interior');
+      return;
+    }
+  }
+  // All pages have content — go to page 2
+  goToPage(2);
+}
+
+function forcSync(){
+  const dot=document.getElementById('sync-dot');
+  if(dot){dot.classList.add('pulse');setTimeout(()=>dot.classList.remove('pulse'),1500);}
+  // Future: trigger cloud sync
+}
+
 function toggleMenu(){document.getElementById('menu-overlay').classList.toggle('open');}
 function closeMenu(){document.getElementById('menu-overlay').classList.remove('open');}
 
-// ══ PALETTE ══
+// ══════════════════════════════
+// PALETTE
+// ══════════════════════════════
 function togglePalette(){
-  if(S.screen!=='interior') return;
+  if(S.screen!=='interior')return;
   TOOL.paletteOpen=!TOOL.paletteOpen;
   document.getElementById('tool-palette').classList.toggle('open',TOOL.paletteOpen);
 }
@@ -814,50 +1050,88 @@ function closePalette(){
   TOOL.paletteOpen=false;
   document.getElementById('tool-palette').classList.remove('open');
 }
-['size-thin','size-med','size-thick'].forEach(id=>{
+
+// Pen sizes
+['pen-thin','pen-med','pen-thick'].forEach(id=>{
   on(id,()=>{
-    TOOL.size=id==='size-thin'?'thin':id==='size-med'?'medium':'thick';
-    document.querySelectorAll('#size-thin,#size-med,#size-thick').forEach(b=>b.classList.remove('active'));
+    TOOL.penSize=id==='pen-thin'?'thin':id==='pen-med'?'medium':'thick';
+    TOOL.mode='draw';
+    document.querySelectorAll('#pen-thin,#pen-med,#pen-thick,#er-med,#er-large,#er-xl').forEach(b=>b.classList.remove('active'));
     document.getElementById(id).classList.add('active');
   });
 });
-['col-ink','col-fired','col-blueprint','col-paper'].forEach(id=>{
+// Eraser sizes
+['er-med','er-large','er-xl'].forEach(id=>{
+  on(id,()=>{
+    TOOL.eraserSize=id==='er-med'?'medium':id==='er-large'?'large':'xl';
+    TOOL.mode='erase';
+    document.querySelectorAll('#pen-thin,#pen-med,#pen-thick,#er-med,#er-large,#er-xl').forEach(b=>b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  });
+});
+// Colors
+['col-ink','col-fired','col-blue','col-paper'].forEach(id=>{
   on(id,()=>{
     TOOL.color=document.getElementById(id).dataset.color;
-    document.querySelectorAll('.palette-color-btn').forEach(b=>b.classList.remove('active'));
+    TOOL.mode='draw';
+    document.querySelectorAll('.pcol').forEach(b=>b.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    if(TOOL.mode==='erase'){TOOL.mode='draw';document.getElementById('mode-draw').classList.add('active');document.getElementById('mode-erase').classList.remove('active');}
+    document.querySelectorAll('#pen-thin,#pen-med,#pen-thick,#er-med,#er-large,#er-xl').forEach(b=>b.classList.remove('active'));
+    document.getElementById('pen-thin').classList.add('active');
   });
 });
-on('mode-draw',()=>{ TOOL.mode='draw'; document.getElementById('mode-draw').classList.add('active'); document.getElementById('mode-erase').classList.remove('active'); });
-on('mode-erase',()=>{ TOOL.mode='erase'; document.getElementById('mode-erase').classList.add('active'); document.getElementById('mode-draw').classList.remove('active'); });
-['tip-round','tip-flat','tip-pressure'].forEach(id=>{
+// Tips
+['tip-coil','tip-flat','tip-round'].forEach(id=>{
   on(id,()=>{
     TOOL.tip=id.replace('tip-','');
-    document.querySelectorAll('#tip-round,#tip-flat,#tip-pressure').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('#tip-coil,#tip-flat,#tip-round').forEach(b=>b.classList.remove('active'));
     document.getElementById(id).classList.add('active');
   });
 });
 
-// ══ TYPEWRITER ══
-function closeTW(){document.getElementById('tw-box').value='';document.getElementById('tw-overlay').classList.remove('open');}
+// ══════════════════════════════
+// TYPEWRITER
+// ══════════════════════════════
+// Keyboard-aware placement using visualViewport
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize',()=>{
+    const tw=document.getElementById('tw-overlay');
+    if(tw.classList.contains('open')){
+      const vv=window.visualViewport;
+      tw.style.height=vv.height+'px';
+      tw.style.top=vv.offsetTop+'px';
+    }
+  });
+}
+
+function closeTW(){
+  document.getElementById('tw-box').value='';
+  document.getElementById('tw-overlay').classList.remove('open');
+  document.getElementById('tw-overlay').style.height='';
+  document.getElementById('tw-overlay').style.top='';
+}
 on('tw-cancel',closeTW);
 on('tw-confirm',()=>{
   const text=document.getElementById('tw-box').value.trim();
   if(text){
     const wrap=document.getElementById(S.twWrapId);
     const r=wrap.getBoundingClientRect();
-    const lbl=buildLabel(text,Math.max(8,S.twY-r.top-20)+'px',Math.max(8,S.twX-r.left-20)+'px');
-    wrap.appendChild(lbl);
-    initLabel(lbl,wrap);
+    const vv=window.visualViewport;
+    const x=S.twX-r.left;
+    const y=S.twY-r.top+(vv?vv.offsetTop:0);
+    const lb=buildLabel(text,Math.max(8,y-20)+'px',Math.max(8,x-20)+'px');
+    wrap.appendChild(lb);
+    initLabel(lb,wrap);
   }
   closeTW();
 });
 document.getElementById('tw-overlay').addEventListener('touchend',e=>{
-  if(e.target===document.getElementById('tw-overlay')) closeTW();
+  if(e.target===document.getElementById('tw-overlay'))closeTW();
 },{passive:true});
 
-// ══ INIT ══
+// ══════════════════════════════
+// INIT
+// ══════════════════════════════
 setTimeout(fixGrid,150);
 </script>
 
