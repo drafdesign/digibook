@@ -703,7 +703,7 @@ letter-spacing: 0.05em;
 margin-top: 2px;
 }
 
-/* Chapter icon — subtle corner mark */
+/* Chapter icon */
 .chapter-dot {
 position: absolute;
 top: 6px;
@@ -1095,7 +1095,6 @@ z-index: 10;
 <div id="threshold">
   <div class="threshold-mark">
     <svg width="80" height="120" viewBox="0 0 80 120">
-      <!-- //| mark -->
       <line x1="8" y1="100" x2="22" y2="20" stroke="#F5F2EB" stroke-width="1.5" opacity="0.6"/>
       <line x1="22" y1="100" x2="36" y2="20" stroke="#F5F2EB" stroke-width="1.5" opacity="0.6"/>
       <line x1="48" y1="20" x2="48" y2="100" stroke="#F5F2EB" stroke-width="1.5" opacity="0.6"/>
@@ -1108,7 +1107,7 @@ z-index: 10;
 ============================================================ -->
 
 <div id="exit-threshold">
-  <div class="exit-mark">|\\  //|</div>
+  <div class="exit-mark">|\  //|</div>
   <div class="exit-text">You have left the book.</div>
 </div>
 
@@ -1158,12 +1157,8 @@ z-index: 10;
 
 <!-- TOC overlay -->
 <div id="toc">
-  <div class="toc-grid" id="toc-grid">
-    <!-- Cells populated by JS -->
-  </div>
-  <div class="toc-list" id="toc-list">
-    <!-- List populated by JS -->
-  </div>
+  <div class="toc-grid" id="toc-grid"></div>
+  <div class="toc-list" id="toc-list"></div>
 </div>
 ```
 
@@ -1206,7 +1201,7 @@ z-index: 10;
     </div>
   </div>
 
-</div>
+</div><!-- end page-shell -->
 
 <!-- CONTEXT MENU -->
 
@@ -1287,7 +1282,7 @@ z-index: 10;
 // ============================================================
 
 const STATE = {
-  screen: 'cover', // cover | threshold | page
+  screen: 'cover',
   currentPage: 0,
   zoom: 1,
   zoomOrigin: { x: 0, y: 0 },
@@ -1303,6 +1298,7 @@ const STATE = {
   holdTarget: null,
   selectedObject: null,
   clipboard: null,
+  contextPos: null,
   pages: [],
   projects: ['Paula Scher', 'Saul Bass', 'Luminous Field',
              'Blacksmiths Folly', 'Spring Cover', 'Strade Bianche'],
@@ -1348,7 +1344,6 @@ function formatFilename(label, timestamp) {
 // INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
-  // Create initial pages
   STATE.pages.push(createPage());
   STATE.pages.push(createPage());
   STATE.pages.push(createPage());
@@ -1441,7 +1436,6 @@ function closeBook() {
       setTimeout(() => {
         exit.classList.remove('visible');
         exit.style.opacity = '';
-        // Return to cover
         const cover = document.getElementById('cover');
         cover.style.display = 'flex';
         cover.style.opacity = '0';
@@ -1469,8 +1463,6 @@ function setupCanvas() {
   window.addEventListener('resize', resize);
   resize();
 
-  // Pencil = draw (pointer type stylus)
-  // Finger = navigate (pointer type touch/mouse)
   canvas.addEventListener('pointerdown', onPointerDown);
   canvas.addEventListener('pointermove', onPointerMove);
   canvas.addEventListener('pointerup', onPointerUp);
@@ -1499,7 +1491,6 @@ function getNibPx() {
 }
 
 function onPointerDown(e) {
-  // Pencil only draws
   if (e.pointerType !== 'pen') return;
 
   e.preventDefault();
@@ -1545,7 +1536,6 @@ function onPointerUp(e) {
   if (e.pointerType !== 'pen') return;
   STATE.drawing = false;
   STATE.lastPoint = null;
-  // Save on pen lift
   saveCurrentPage();
 }
 
@@ -1573,7 +1563,6 @@ document.getElementById('page-area').addEventListener('touchmove', onTouchMove, 
 document.getElementById('page-area').addEventListener('touchend', onTouchEnd, { passive: false });
 
 function onTouchStart(e) {
-  // Close menus on page touch
   closePalette();
   closeBurger();
   closeContextMenu();
@@ -1590,7 +1579,6 @@ function onTouchStart(e) {
     };
   }
 
-  // Long press detection (finger)
   if (e.touches.length === 1) {
     const touch = e.touches[0];
     STATE.holdTimer = setTimeout(() => {
@@ -1611,7 +1599,6 @@ function onTouchMove(e) {
       y: (t1.clientY + t2.clientY) / 2,
     };
 
-    // Pinch zoom — anchors to midpoint
     const scale = dist / (fingerState.lastDist || dist);
     STATE.zoom = Math.min(Math.max(STATE.zoom * scale, 0.5), 8);
 
@@ -1688,7 +1675,6 @@ function setupPalette() {
     if (holdTimer) { clearTimeout(holdTimer); holdTimer = null; }
   });
 
-  // Nib selection
   document.querySelectorAll('.nib-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const id = btn.dataset.nib;
@@ -1704,7 +1690,6 @@ function setupPalette() {
     });
   });
 
-  // Color selection
   document.querySelectorAll('.color-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       STATE.color = btn.dataset.color;
@@ -1714,7 +1699,6 @@ function setupPalette() {
     });
   });
 
-  // Shape selection
   document.querySelectorAll('.shape-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       STATE.activeShape = btn.dataset.shape;
@@ -1741,7 +1725,6 @@ function setupNav() {
   document.getElementById('prev-btn').addEventListener('click', prevPage);
   document.getElementById('next-btn').addEventListener('click', nextPage);
 
-  // Double-tap spread label = label dialog
   let lastTap = 0;
   document.getElementById('spread-label').addEventListener('click', () => {
     const now = Date.now();
@@ -1749,7 +1732,6 @@ function setupNav() {
     lastTap = now;
   });
 
-  // Privacy toggle
   document.getElementById('privacy-toggle').addEventListener('click', () => {
     const page = STATE.pages[STATE.currentPage];
     page.private = !page.private;
@@ -1766,7 +1748,6 @@ function prevPage() {
     STATE.currentPage--;
     initPage();
   } else {
-    // First page — return to TOC
     openTOC();
   }
 }
@@ -1777,7 +1758,6 @@ function nextPage() {
     STATE.currentPage++;
     initPage();
   } else {
-    // Last page — create new
     newPage();
   }
 }
@@ -1823,11 +1803,9 @@ function setupBurger() {
         case 'toc': openTOC(); break;
         case 'close': closeBook(); break;
         case 'sync':
-          // Force sync placeholder
           alert('Vole. · Sync complete.');
           break;
         default:
-          // Index, Work, Import — Phase 2
           break;
       }
     });
@@ -1842,7 +1820,7 @@ function closeBurger() {
 // TOC
 // ============================================================
 function setupTOC() {
-  // Close on outside tap handled by dimmer
+  // Close handled by dimmer
 }
 
 function openTOC() {
@@ -1860,10 +1838,9 @@ function buildTOC() {
   grid.innerHTML = '';
   list.innerHTML = '';
 
-  // Sort pages by most recently touched (simplified: reverse order)
   const sorted = [...STATE.pages].slice().reverse().slice(0, 6);
 
-  sorted.forEach((page, i) => {
+  sorted.forEach((page) => {
     const cell = document.createElement('div');
     cell.className = 'toc-cell';
 
@@ -1896,18 +1873,15 @@ function buildTOC() {
     grid.appendChild(cell);
   });
 
-  // Cell 7 — new page
   const newCell = document.createElement('div');
   newCell.className = 'toc-cell new-page';
   newCell.addEventListener('click', () => { closeTOC(); newPage(); });
   grid.appendChild(newCell);
 
-  // Cell 8 — inbox
   const inboxCell = document.createElement('div');
   inboxCell.className = 'toc-cell inbox';
   grid.appendChild(inboxCell);
 
-  // List
   STATE.pages.forEach((page, i) => {
     const item = document.createElement('div');
     item.className = 'list-item';
@@ -1945,7 +1919,7 @@ function setupContextMenu() {
   });
 }
 
-function showContextMenu(x, y, onObject) {
+function showContextMenu(x, y) {
   const menu = document.getElementById('context-menu');
   menu.style.left = x + 'px';
   menu.style.top = y + 'px';
@@ -2112,7 +2086,6 @@ function renderTextBlocks() {
     inner.style.fontSize = block.fontSize + 'px';
     inner.textContent = block.text;
 
-    // Font size controls
     const controls = document.createElement('div');
     controls.className = 'font-controls';
     controls.style.display = 'none';
@@ -2138,7 +2111,6 @@ function renderTextBlocks() {
     controls.appendChild(minus);
     controls.appendChild(plus);
 
-    // Resize handles
     const rHandle = document.createElement('div');
     rHandle.className = 'text-handle-r';
 
@@ -2150,14 +2122,12 @@ function renderTextBlocks() {
     el.appendChild(rHandle);
     el.appendChild(bHandle);
 
-    // Select / drag
     el.addEventListener('pointerdown', (e) => {
       if (e.pointerType === 'pen') return;
       selectTextBlock(el, block);
       startDragText(e, el, block);
     });
 
-    // Long tap = style toggle / controls
     let holdT = null;
     el.addEventListener('pointerdown', () => {
       holdT = setTimeout(() => {
@@ -2268,7 +2238,6 @@ function renderImports() {
     wrap.appendChild(img);
     wrap.appendChild(opInd);
 
-    // Select
     wrap.addEventListener('pointerdown', (e) => {
       if (e.pointerType === 'pen') return;
       e.stopPropagation();
@@ -2276,7 +2245,6 @@ function renderImports() {
       startDragImport(e, wrap, imp);
     });
 
-    // Long tap on import = layer controls + opacity
     let impHold = null;
     wrap.addEventListener('pointerdown', () => {
       impHold = setTimeout(() => {
@@ -2294,14 +2262,12 @@ function renderImports() {
 function selectImport(wrap, imp) {
   document.querySelectorAll('.imported-image').forEach(el => {
     el.classList.remove('selected');
-    // Remove handles
     el.querySelectorAll('.handle, .send-icon').forEach(h => h.remove());
   });
 
   wrap.classList.add('selected');
   STATE.selectedObject = imp;
 
-  // Add handles
   ['tl','tr','bl','br'].forEach(pos => {
     const h = document.createElement('div');
     h.className = `handle ${pos}`;
@@ -2312,7 +2278,6 @@ function selectImport(wrap, imp) {
     wrap.appendChild(h);
   });
 
-  // Rotate handle
   const rot = document.createElement('div');
   rot.className = 'handle rotate';
   rot.addEventListener('pointerdown', (e) => {
@@ -2321,7 +2286,6 @@ function selectImport(wrap, imp) {
   });
   wrap.appendChild(rot);
 
-  // Send icon
   const send = document.createElement('div');
   send.className = 'send-icon';
   send.textContent = '↗';
@@ -2392,7 +2356,6 @@ function startRotate(e, wrap, imp) {
 }
 
 function showImportControls(wrap, imp) {
-  // +/- opacity overlay
   const existing = wrap.querySelector('.opacity-controls');
   if (existing) { existing.remove(); return; }
 
@@ -2467,7 +2430,6 @@ function setupSendDialog() {
     const recipients = [...document.querySelectorAll('.recipient-check.checked')]
       .map(el => el.nextSibling.textContent);
     if (recipients.length > 0) {
-      // Send quietly — no notification
       console.log(`Page sent to: ${recipients.join(', ')}. Note: ${note || 'none'}`);
     }
     closeSendDialog();
@@ -2477,7 +2439,6 @@ function setupSendDialog() {
 function openSendDialog() {
   document.getElementById('send-dialog').classList.add('open');
   document.getElementById('send-note').value = '';
-  // Uncheck all
   document.querySelectorAll('.recipient-check').forEach(c => c.classList.remove('checked'));
 }
 
@@ -2525,7 +2486,6 @@ document.getElementById('dimmer').addEventListener('click', () => {
   document.getElementById('toc').classList.remove('open');
   document.getElementById('dimmer').classList.remove('active');
 
-  // Deselect objects
   document.querySelectorAll('.imported-image').forEach(el => {
     el.classList.remove('selected');
     el.querySelectorAll('.handle, .send-icon, .opacity-controls').forEach(h => h.remove());
@@ -2538,7 +2498,6 @@ document.getElementById('dimmer').addEventListener('click', () => {
   STATE.selectedObject = null;
 });
 
-// Activate dimmer when menus open
 const burgerBtn = document.getElementById('burger');
 burgerBtn.addEventListener('click', () => {
   document.getElementById('dimmer').classList.add('active');
