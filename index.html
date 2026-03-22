@@ -3,32 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DRAF. // DIGIBOOK</title>
+    <title>DRAF. // VOLE.</title>
     <style>
         :root {
             --ink: #0F0F0D;
             --bone: #F5F2EB;
-            --fired: #F06D06;
+            --fired: #D4500A; /* Calibrated Fired */
+            --blueprint: #1A3A5C;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* VOLE. SURFACE INTEGRITY: DE-BROWSERFICATION */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-touch-callout: none;   /* Disable long-press callout */
+            -webkit-user-select: none;     /* Disable text selection */
+            user-select: none;             /* Standard surface lock */
+            -webkit-tap-highlight-color: transparent; /* Remove tap flicker */
+        }
 
         body {
             background-color: var(--ink);
             font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center; /* Centered for Reclined Stable V1 */
             min-height: 100vh;
-            padding: 20px;
-            overflow-x: hidden;
+            overflow: hidden; /* Prevent accidental scrolling */
+            touch-action: none; /* Block browser-level pan/zoom */
         }
 
         /* STABLE IPAD CONTAINER */
         .digibook-frame {
-            width: 100%;
+            width: 100vw;
+            height: 94vh; /* Studio standard viewport */
             max-width: 1024px;
-            min-height: 90vh;
             background-color: var(--bone);
             border: 1px solid var(--ink);
             position: relative;
@@ -38,22 +48,26 @@
             box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
 
-        /* THE LIGHT GRID */
+        /* LAYER 1: THE DOT GRID (CALIBRATED) */
         .grid-bg {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
+            /* 0.5px dot at 15.1px spacing */
             background-image: radial-gradient(var(--ink) 0.5px, transparent 0.5px);
-            background-size: 20px 20px;
-            opacity: 0.05;
+            background-size: 15.1px 15.1px; 
+            opacity: 0.08; /* Studio Standard 8% */
             pointer-events: none;
+            z-index: 1;
         }
 
         /* ASYMMETRIC BRANDING */
         .header {
+            position: relative;
+            z-index: 2;
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            border-bottom: 2px solid var(--ink);
+            border-bottom: 1.5px solid var(--ink);
             padding-bottom: 10px;
             margin-bottom: 50px;
         }
@@ -61,25 +75,27 @@
         .brand { 
             font-weight: 900; 
             font-size: 24px; 
-            letter-spacing: -1px;
+            letter-spacing: -1.5px;
             color: var(--ink);
         }
         
-        .brand span { color: var(--fired); } /* The Fired Mark */
+        .brand span { color: var(--fired); }
 
         .meta { 
             font-size: 10px; 
             text-transform: uppercase; 
             text-align: right;
-            color: rgba(15, 15, 13, 0.4); /* Economy of Means / Transparent */
+            line-height: 1.4;
+            color: rgba(15, 15, 13, 0.5);
         }
 
         .content-area {
+            position: relative;
+            z-index: 2;
             flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 1px dashed rgba(0,0,0,0.1);
         }
 
         .status-box {
@@ -89,20 +105,24 @@
         .status-tag {
             background: var(--ink);
             color: var(--bone);
-            padding: 8px 15px;
+            padding: 8px 18px;
             font-size: 11px;
             display: inline-block;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
         }
 
         .footer {
+            position: relative;
+            z-index: 2;
             margin-top: 50px;
-            border-top: 1px solid var(--ink);
+            border-top: 1.5px solid var(--ink);
             padding-top: 15px;
             display: flex;
             justify-content: space-between;
             font-size: 9px;
             color: var(--ink);
+            letter-spacing: 1px;
         }
     </style>
 </head>
@@ -122,7 +142,7 @@
     <div class="content-area">
         <div class="status-box">
             <div class="status-tag">SYSTEM_REVIVAL // IN_PROGRESS</div>
-            <p style="letter-spacing: 3px; font-size: 12px;">AUTOPSY COMPLETE. AWAITING TRANSPLANT.</p>
+            <p style="letter-spacing: 3px; font-size: 12px; font-weight: bold;">AUTOPSY COMPLETE. AWAITING TRANSPLANT.</p>
         </div>
     </div>
 
@@ -135,4 +155,5 @@
 
 </body>
 </html>
+
 
