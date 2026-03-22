@@ -32,6 +32,7 @@
             box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
 
+        /* LAYER 1: DOT GRID */
         .grid-bg {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             background-image: radial-gradient(var(--ink) 0.5px, transparent 0.5px);
@@ -39,10 +40,11 @@
             opacity: 0.08; pointer-events: none; z-index: 1;
         }
 
-        /* LAYER 2: THE INK ENGINE */
+        /* LAYER 2: INK ENGINE */
         #ink-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 20; touch-action: none; pointer-events: none; /* Initially locked */
+            z-index: 20; touch-action: none;
+            cursor: crosshair;
         }
 
         .header, .footer { position: relative; z-index: 30; color: var(--ink); pointer-events: none; }
@@ -52,51 +54,22 @@
             border-bottom: 1.5px solid var(--ink); padding-bottom: 10px; margin-bottom: 50px;
         }
 
-        .brand { font-weight: 900; font-size: 24px; letter-spacing: -1.5px; }
-        .brand span { color: var(--fired); }
+        .brand { font-weight: 900; font-size: 24px; letter-spacing: -1.5px; transition: color 0.3s ease; }
+        .brand span { color: var(--fired); transition: transform 0.2s ease; display: inline-block; }
 
         .meta { font-size: 10px; text-transform: uppercase; text-align: right; line-height: 1.4; color: rgba(15, 15, 13, 0.5); }
-
-        .content-area {
-            position: relative; z-index: 10; flex-grow: 1;
-            display: flex; justify-content: center; align-items: center;
-            pointer-events: none;
-        }
-
-        .status-box {
-            text-align: center; cursor: pointer; pointer-events: auto !important;
-            z-index: 25;
-            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s ease;
-        }
-
-        .status-box.dissolved { opacity: 0; pointer-events: none !important; transform: scale(0.98); }
-
-        .status-tag {
-            background: var(--ink); color: var(--bone);
-            padding: 8px 18px; font-size: 11px; display: inline-block;
-            margin-bottom: 25px; letter-spacing: 1px;
-        }
-
-        .footer { margin-top: 50px; border-top: 1.5px solid var(--ink); padding-top: 15px; display: flex; justify-content: space-between; font-size: 9px; letter-spacing: 1px; }
+        .footer { margin-top: auto; border-top: 1.5px solid var(--ink); padding-top: 15px; display: flex; justify-content: space-between; font-size: 9px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
-<div class="digibook-frame" id="main-frame">
+<div class="digibook-frame">
     <div class="grid-bg"></div>
-    
     <svg id="ink-layer" xmlns="http://www.w3.org/2000/svg"></svg>
     
     <div class="header">
-        <div class="brand">DRAF<span>.</span></div>
+        <div class="brand" id="studio-mark">DRAF<span id="fired-dot">.</span></div>
         <div class="meta">INTERNAL_PROJECT: [VOLE]<br>REVISION: RECLINED_STABLE_V1</div>
-    </div>
-
-    <div class="content-area">
-        <div id="transplant-target" class="status-box">
-            <div class="status-tag">SYSTEM_REVIVAL // IN_PROGRESS</div>
-            <p style="letter-spacing: 3px; font-size: 12px; font-weight: bold;">AUTOPSY COMPLETE. AWAITING TRANSPLANT.</p>
-        </div>
     </div>
 
     <div class="footer">
@@ -108,30 +81,22 @@
 
 <script>
     const svg = document.getElementById('ink-layer');
-    const target = document.getElementById('transplant-target');
+    const dot = document.getElementById('fired-dot');
     let isDrawing = false;
     let currentPath = null;
     
-    const NIBS = { "01": 0.25 };
-    let activeNib = NIBS["01"];
+    const activeNib = 0.25; // Standard 01 Micron
 
-    // SYSTEM ACTIVATION
-    target.addEventListener('pointerdown', (e) => {
-        e.stopPropagation();
-        initiateTransplant();
-    }, { once: true });
-
-    function initiateTransplant() {
-        target.classList.add('dissolved');
-        svg.style.pointerEvents = "auto"; // Unlock the drawing engine
-        setupDrawingListeners();
-    }
-
-    function setupDrawingListeners() {
+    function setupDrawing() {
         svg.addEventListener('pointerdown', (e) => {
-            // Strict Pencil/Stylus check; Fallback to mouse for debug
+            // Confirming Pencil contact
             if (e.pointerType === 'stylus' || e.pointerType === 'mouse') {
                 isDrawing = true;
+                
+                // Studio Feedback: Pulse the Fired Mark
+                dot.style.transform = "scale(1.5)";
+                setTimeout(() => { dot.style.transform = "scale(1)"; }, 150);
+
                 const pt = getCoordinates(e);
                 currentPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 currentPath.setAttribute("d", `M ${pt.x} ${pt.y}`);
@@ -161,12 +126,10 @@
             y: e.clientY - rect.top
         };
     }
+
+    // Initialize Surface
+    setupDrawing();
 </script>
 
 </body>
 </html>
-
-
-
-
-
