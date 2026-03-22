@@ -5,118 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>DRAF. // VOLE.</title>
     <style>
-        :root {
-            --ink: #0F0F0D;
-            --bone: #F5F2EB;
-            --fired: #D4500A;
+        :root { --ink: #0F0F0D; --bone: #F5F2EB; --fired: #D4500A; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--ink); font-family: 'Courier New', Courier, monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; touch-action: none; }
+        
+        .digibook-frame { 
+            width: 100vw; height: 94vh; max-width: 1024px; background-color: var(--bone); 
+            border: 1px solid var(--ink); position: relative; padding: 40px; 
+            display: flex; flex-direction: column; box-shadow: 0 30px 60px rgba(0,0,0,0.5); 
         }
 
-        /* VOLE. SURFACE INTEGRITY */
-        * { 
-            margin: 0; padding: 0; box-sizing: border-box; 
-            -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+        .grid-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(var(--ink) 0.5px, transparent 0.5px); background-size: 15.1px 15.1px; opacity: 0.08; pointer-events: none; z-index: 1; }
 
-        body {
-            background-color: var(--ink);
-            font-family: 'Courier New', Courier, monospace;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; overflow: hidden; touch-action: none;
-        }
-
-        .digibook-frame {
-            width: 100vw; height: 94vh; max-width: 1024px;
-            background-color: var(--bone); border: 1px solid var(--ink);
-            position: relative; padding: 40px; display: flex; flex-direction: column;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-        }
-
-        .grid-bg {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background-image: radial-gradient(var(--ink) 0.5px, transparent 0.5px);
-            background-size: 15.1px 15.1px; 
-            opacity: 0.08; pointer-events: none; z-index: 1;
-        }
-
-        #ink-layer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 20; touch-action: none;
-        }
+        #ink-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 20; touch-action: none; }
 
         .header, .footer { position: relative; z-index: 30; color: var(--ink); pointer-events: none; }
-        
-        .header {
-            display: flex; justify-content: space-between; align-items: baseline;
-            border-bottom: 1.5px solid var(--ink); padding-bottom: 10px; margin-bottom: 50px;
-        }
-
-        .brand { font-weight: 900; font-size: 24px; letter-spacing: -1.5px; }
+        .header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1.5px solid var(--ink); padding-bottom: 10px; margin-bottom: 50px; }
+        .brand { font-weight: 900; font-size: 24px; letter-spacing: -1.5px; pointer-events: auto; cursor: pointer; }
         #fired-dot { color: var(--fired); display: inline-block; transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-        .meta { 
-            font-size: 10px; text-transform: uppercase; text-align: right; 
-            line-height: 1.4; color: rgba(15, 15, 13, 0.5); 
-        }
-
-        .footer {
-            margin-top: auto; border-top: 1.5px solid var(--ink);
-            padding-top: 15px; display: flex; justify-content: space-between;
-            font-size: 9px; letter-spacing: 1px;
-        }
+        .meta { font-size: 10px; text-transform: uppercase; text-align: right; line-height: 1.4; color: rgba(15, 15, 13, 0.5); }
+        .footer { margin-top: auto; border-top: 1.5px solid var(--ink); padding-top: 15px; display: flex; justify-content: space-between; font-size: 9px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
 <div class="digibook-frame">
     <div class="grid-bg"></div>
-    
     <svg id="ink-layer" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
         <rect id="hit-surface" width="100%" height="100%" fill="#FFFFFF" fill-opacity="0.01" pointer-events="all" />
     </svg>
     
     <div class="header">
-        <div class="brand">DRAF<span id="fired-dot">.</span></div>
-        <div class="meta">
-            INTERNAL_PROJECT: [VOLE]<br>
-            REVISION: RECLINED_STABLE_V1
-        </div>
+        <div class="brand" id="studio-logo">DRAF<span id="fired-dot">.</span></div>
+        <div class="meta">INTERNAL_PROJECT: [VOLE]<br>REVISION: RECLINED_STABLE_V2</div>
     </div>
 
     <div class="footer">
         <div>SHANE SMILEY // PRINCIPAL</div>
         <div>//| DRAF. STUDIO 2026.03.22</div>
-        <div>STABLE_VIEWPORT_V1</div>
+        <div>STABLE_VIEWPORT_V2_PERSIST</div>
     </div>
 </div>
 
 <script>
     const svg = document.getElementById('ink-layer');
     const dot = document.getElementById('fired-dot');
+    const logo = document.getElementById('studio-logo');
     let isDrawing = false;
     let currentPath = null;
-    
-    const activeNib = 0.6; 
+    const activeNib = 0.6;
 
+    // --- PERSISTENCE ENGINE ---
+    const STORAGE_KEY = 'VOLE_SESSIONS_V1';
+
+    function saveState() {
+        const paths = Array.from(svg.querySelectorAll('path')).map(p => p.getAttribute('d'));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(paths));
+    }
+
+    function loadState() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const paths = JSON.parse(saved);
+            paths.forEach(d => {
+                const path = createPathElement(d);
+                svg.appendChild(path);
+            });
+            console.log("VOLE. // State Recovered.");
+        }
+    }
+
+    function createPathElement(d) {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", d);
+        path.setAttribute("stroke", "var(--ink)");
+        path.setAttribute("stroke-width", activeNib);
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke-linecap", "round");
+        path.setAttribute("stroke-linejoin", "round");
+        return path;
+    }
+
+    // --- DRAWING LOGIC ---
     function setupDrawing() {
         const surface = document.getElementById('hit-surface');
 
         surface.addEventListener('pointerdown', (e) => {
             if (e.pointerType === 'stylus' || e.buttons === 1 || e.pointerType === 'touch') {
                 isDrawing = true;
-                
-                // Pulse Confirmation
                 dot.style.transform = "scale(2.5)";
                 setTimeout(() => { dot.style.transform = "scale(1)"; }, 150);
 
                 const pt = getCoordinates(e);
-                currentPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                currentPath.setAttribute("d", `M ${pt.x} ${pt.y}`);
-                currentPath.setAttribute("stroke", "var(--ink)");
-                currentPath.setAttribute("stroke-width", activeNib);
-                currentPath.setAttribute("fill", "none");
-                currentPath.setAttribute("stroke-linecap", "round");
-                currentPath.setAttribute("stroke-linejoin", "round");
+                currentPath = createPathElement(`M ${pt.x} ${pt.y}`);
                 svg.appendChild(currentPath);
             }
         });
@@ -128,20 +110,30 @@
             currentPath.setAttribute("d", `${d} L ${pt.x} ${pt.y}`);
         });
 
-        window.addEventListener('pointerup', () => { isDrawing = false; currentPath = null; });
-        window.addEventListener('pointercancel', () => { isDrawing = false; currentPath = null; });
+        window.addEventListener('pointerup', () => { 
+            if (isDrawing) saveState();
+            isDrawing = false; 
+            currentPath = null; 
+        });
+        
+        // Manual Wipe: Double Click Logo
+        logo.addEventListener('dblclick', () => {
+            if(confirm("DRAF. // CLEAR ALL MARKS?")) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        });
     }
 
     function getCoordinates(e) {
         const rect = svg.getBoundingClientRect();
-        return {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top
-        };
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
     }
 
+    loadState();
     setupDrawing();
 </script>
 
 </body>
 </html>
+
