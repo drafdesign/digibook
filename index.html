@@ -42,10 +42,10 @@
         /* LAYER 2: THE INK ENGINE */
         #ink-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 5; touch-action: none;
+            z-index: 20; touch-action: none; pointer-events: none; /* Initially locked */
         }
 
-        .header, .footer { position: relative; z-index: 10; color: var(--ink); pointer-events: none; }
+        .header, .footer { position: relative; z-index: 30; color: var(--ink); pointer-events: none; }
         
         .header {
             display: flex; justify-content: space-between; align-items: baseline;
@@ -58,17 +58,18 @@
         .meta { font-size: 10px; text-transform: uppercase; text-align: right; line-height: 1.4; color: rgba(15, 15, 13, 0.5); }
 
         .content-area {
-            position: relative; z-index: 2; flex-grow: 1;
+            position: relative; z-index: 10; flex-grow: 1;
             display: flex; justify-content: center; align-items: center;
             pointer-events: none;
         }
 
         .status-box {
-            text-align: center; cursor: pointer; pointer-events: auto;
+            text-align: center; cursor: pointer; pointer-events: auto !important;
+            z-index: 25;
             transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s ease;
         }
 
-        .status-box.dissolved { opacity: 0; pointer-events: none; transform: scale(0.98); }
+        .status-box.dissolved { opacity: 0; pointer-events: none !important; transform: scale(0.98); }
 
         .status-tag {
             background: var(--ink); color: var(--bone);
@@ -92,7 +93,7 @@
     </div>
 
     <div class="content-area">
-        <div id="transplant-target" class="status-box" onclick="initiateTransplant()">
+        <div id="transplant-target" class="status-box">
             <div class="status-tag">SYSTEM_REVIVAL // IN_PROGRESS</div>
             <p style="letter-spacing: 3px; font-size: 12px; font-weight: bold;">AUTOPSY COMPLETE. AWAITING TRANSPLANT.</p>
         </div>
@@ -107,22 +108,29 @@
 
 <script>
     const svg = document.getElementById('ink-layer');
+    const target = document.getElementById('transplant-target');
     let isDrawing = false;
     let currentPath = null;
     
-    // NIB CALIBRATION (Sakura Micron equivalents in px)
-    const NIBS = { "005": 0.20, "01": 0.25, "02": 0.30 };
+    const NIBS = { "01": 0.25 };
     let activeNib = NIBS["01"];
 
+    // SYSTEM ACTIVATION
+    target.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        initiateTransplant();
+    }, { once: true });
+
     function initiateTransplant() {
-        document.getElementById('transplant-target').classList.add('dissolved');
+        target.classList.add('dissolved');
+        svg.style.pointerEvents = "auto"; // Unlock the drawing engine
         setupDrawingListeners();
     }
 
     function setupDrawingListeners() {
         svg.addEventListener('pointerdown', (e) => {
-            // Pencil check: Only draw if it's the Apple Pencil (stylus)
-            if (e.pointerType === 'stylus' || e.buttons === 1) {
+            // Strict Pencil/Stylus check; Fallback to mouse for debug
+            if (e.pointerType === 'stylus' || e.pointerType === 'mouse') {
                 isDrawing = true;
                 const pt = getCoordinates(e);
                 currentPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -143,7 +151,7 @@
             currentPath.setAttribute("d", `${d} L ${pt.x} ${pt.y}`);
         });
 
-        svg.addEventListener('pointerup', () => { isDrawing = false; });
+        window.addEventListener('pointerup', () => { isDrawing = false; });
     }
 
     function getCoordinates(e) {
@@ -157,6 +165,7 @@
 
 </body>
 </html>
+
 
 
 
