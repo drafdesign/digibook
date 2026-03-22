@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>DRAF. // VOLE.</title>
     <style>
         :root {
@@ -44,7 +44,6 @@
         #ink-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 20; touch-action: none;
-            cursor: crosshair;
         }
 
         .header, .footer { position: relative; z-index: 30; color: var(--ink); pointer-events: none; }
@@ -54,8 +53,9 @@
             border-bottom: 1.5px solid var(--ink); padding-bottom: 10px; margin-bottom: 50px;
         }
 
-        .brand { font-weight: 900; font-size: 24px; letter-spacing: -1.5px; transition: color 0.3s ease; }
-        .brand span { color: var(--fired); transition: transform 0.2s ease; display: inline-block; }
+        .brand { font-weight: 900; font-size: 24px; letter-spacing: -1.5px; }
+        /* The Pulse logic */
+        #fired-dot { color: var(--fired); display: inline-block; transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
         .meta { font-size: 10px; text-transform: uppercase; text-align: right; line-height: 1.4; color: rgba(15, 15, 13, 0.5); }
         .footer { margin-top: auto; border-top: 1.5px solid var(--ink); padding-top: 15px; display: flex; justify-content: space-between; font-size: 9px; letter-spacing: 1px; }
@@ -65,10 +65,13 @@
 
 <div class="digibook-frame">
     <div class="grid-bg"></div>
-    <svg id="ink-layer" xmlns="http://www.w3.org/2000/svg"></svg>
+    
+    <svg id="ink-layer" xmlns="http://www.w3.org/2000/svg">
+        <rect id="hit-surface" width="100%" height="100%" fill="transparent" pointer-events="all" />
+    </svg>
     
     <div class="header">
-        <div class="brand" id="studio-mark">DRAF<span id="fired-dot">.</span></div>
+        <div class="brand">DRAF<span id="fired-dot">.</span></div>
         <div class="meta">INTERNAL_PROJECT: [VOLE]<br>REVISION: RECLINED_STABLE_V1</div>
     </div>
 
@@ -85,17 +88,19 @@
     let isDrawing = false;
     let currentPath = null;
     
-    const activeNib = 0.25; // Standard 01 Micron
+    const activeNib = 0.5; // Bumped to 0.5 for Retina visibility check
 
     function setupDrawing() {
+        console.log("VOLE. // Surface Grafted.");
+
         svg.addEventListener('pointerdown', (e) => {
-            // Confirming Pencil contact
-            if (e.pointerType === 'stylus' || e.pointerType === 'mouse') {
+            // Pencil check
+            if (e.pointerType === 'stylus' || e.pointerType === 'mouse' || e.pointerType === 'touch') {
                 isDrawing = true;
                 
-                // Studio Feedback: Pulse the Fired Mark
-                dot.style.transform = "scale(1.5)";
-                setTimeout(() => { dot.style.transform = "scale(1)"; }, 150);
+                // Studio Feedback: Pulse
+                dot.style.transform = "scale(2)";
+                setTimeout(() => { dot.style.transform = "scale(1)"; }, 100);
 
                 const pt = getCoordinates(e);
                 currentPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -116,7 +121,9 @@
             currentPath.setAttribute("d", `${d} L ${pt.x} ${pt.y}`);
         });
 
-        window.addEventListener('pointerup', () => { isDrawing = false; });
+        window.addEventListener('pointerup', () => { 
+            isDrawing = false; 
+        });
     }
 
     function getCoordinates(e) {
@@ -127,7 +134,6 @@
         };
     }
 
-    // Initialize Surface
     setupDrawing();
 </script>
 
