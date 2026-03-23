@@ -3,113 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>DRAF. // VOLE. V2.4 REV-R</title>
+    <title>DRAF. // VOLE. V2.4 REV-S</title>
     <style>
         :root {
             --bone: #F5F2EB;
             --ink: #0F0F0D;
             --spring-pink: #F48FB1;
             --dot: rgba(15,15,13,0.05);
-            --transition: 400ms cubic-bezier(0.4, 0, 0.2, 1);
             --nav-height: 80px;
             --ribbon-w: 48px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; touch-action: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; touch-action: none; }
         body { background: var(--bone); font-family: 'Courier New', Courier, monospace; overflow: hidden; height: 100vh; }
 
-        /* --- COVER: PORTRAIT LOCKED --- */
+        /* --- COVER: DIRECT INJECTION --- */
         #screen-cover {
             position: fixed; inset: 0; z-index: 2000; background: var(--bone);
-            display: flex; justify-content: center; align-items: center; transition: opacity var(--transition);
+            display: flex; justify-content: center; align-items: center; transition: opacity 0.4s;
         }
         #cover-image { width: 100%; height: 100%; object-fit: cover; object-position: center; }
         .ribbon-cover { position: absolute; bottom: 48px; left: 50%; width: var(--ribbon-w); height: 120px; background: var(--spring-pink); transform: translateX(-50%); z-index: 2100; cursor: pointer; }
 
-        /* --- HANDSHAKE: 1.2s --- */
+        /* --- HANDSHAKE --- */
         #threshold { position: fixed; inset: 0; z-index: 3000; background: var(--bone); display: none; justify-content: center; align-items: center; font-size: 80px; font-weight: 900; color: var(--ink); }
 
-        /* --- UI LAYER --- */
-        #ui-layer { position: fixed; inset: 0; z-index: 1000; pointer-events: none; opacity: 0; }
-        .nav-bar, .footer-bar { position: absolute; width: 100%; height: var(--nav-height); background: var(--bone); pointer-events: auto; display: flex; align-items: center; padding: 0 40px; font-size: 10px; z-index: 1010; }
-        .nav-bar { top: 0; border-bottom: 0.5px solid rgba(0,0,0,0.05); }
-        .footer-bar { bottom: 0; border-top: 0.5px solid rgba(0,0,0,0.05); justify-content: space-between; }
-        #ribbon { position: absolute; bottom: var(--nav-height); width: var(--ribbon-w); height: 140px; background: var(--spring-pink); z-index: 1005; transition: left 0.3s ease; }
-
-        /* --- PALETTE --- */
-        #palette {
-            position: absolute; bottom: calc(var(--nav-height) + 20px); right: 40px; width: 140px; 
-            background: var(--bone); border: 0.5px solid var(--ink); display: none; grid-template-rows: 1fr 1fr; pointer-events: auto; z-index: 1100;
-        }
-        .pal-row { display: grid; grid-template-columns: repeat(3, 1fr); height: 44px; }
-        .tool { border: 0.2px solid rgba(15,15,13,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 9px; }
-        .tool.active { background: var(--ink); color: var(--bone); }
-        .tool.eraser { grid-column: span 3; }
-
         /* --- WORKSPACE --- */
+        #ui-layer { position: fixed; inset: 0; z-index: 1000; pointer-events: none; opacity: 0; visibility: hidden; }
         #main-viewport { position: absolute; top: var(--nav-height); bottom: var(--nav-height); left: 0; right: 0; background: var(--bone); overflow: hidden; display: none; }
         #canvas-container { width: 100%; height: 100%; display: grid; grid-template-columns: 1fr 1fr; }
-        .page-surface { position: relative; height: 100%; }
-        .dot-grid { position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(var(--dot) 0.5px, transparent 0.5px); background-size: 15.1px 15.1px; }
+        .page-surface { position: relative; height: 100%; border-right: 0.5px solid rgba(0,0,0,0.02); }
+        .dot-grid { position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(var(--dot) 0.5px, transparent 0.5px); background-size: 16px 16px; }
         canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
 
-        .visible { opacity: 1 !important; display: block !important; }
+        .active-view { opacity: 1 !important; visibility: visible !important; display: block !important; }
 
         @media (orientation: portrait) {
             #canvas-container { grid-template-columns: 1fr; width: 200%; }
-            #canvas-container.show-right { transform: translateX(-50%); }
-            .on-left #ribbon { left: calc(100% - var(--ribbon-w)); }
-            .on-right #ribbon { left: 0; }
         }
     </style>
 </head>
-<body class="on-left">
+<body>
 
     <section id="screen-cover" onclick="triggerHandshake()">
-        <img id="cover-image" src="./cover.png" onerror="this.src='https://i.postimg.cc/47N9h976/image.png'">
+        <img id="cover-image" src="https://i.postimg.cc/47N9h976/image.png">
         <div class="ribbon-cover"></div>
     </section>
 
     <div id="threshold">//|</div>
 
     <div id="ui-layer">
-        <header class="nav-bar">DRAF. // LABORATORY</header>
-        <div id="ribbon"></div>
-        <div id="palette">
-            <div class="pal-row">
-                <div class="tool active" onclick="setTool(0.5, this)">0.5</div>
-                <div class="tool" onclick="setTool(1.2, this)">1.2</div>
-                <div class="tool" onclick="setTool(2.5, this)">2.5</div>
+        <div id="main-viewport">
+            <div id="canvas-container">
+                <article class="page-surface"><div class="dot-grid"></div><canvas id="cl"></canvas></article>
+                <article class="page-surface"><div class="dot-grid"></div><canvas id="cr"></canvas></article>
             </div>
-            <div class="pal-row"><div class="tool eraser" onclick="setTool(20, this, true)">ERASER</div></div>
         </div>
-        <footer class="footer-bar">
-            <div onclick="togglePage('left')" style="cursor:pointer">[002]</div>
-            <div onclick="togglePalette()" style="cursor:pointer; font-weight:900;">TOOLS</div>
-            <div onclick="togglePage('right')" style="cursor:pointer">[003]</div>
-        </footer>
     </div>
 
-    <main id="main-viewport">
-        <div id="canvas-container">
-            <article class="page-surface" id="p_l"><div class="dot-grid"></div><canvas id="cl"></canvas></article>
-            <article class="page-surface" id="p_r"><div class="dot-grid"></div><canvas id="cr"></canvas></article>
-        </div>
-    </main>
-
     <script>
-        let inkColor = '#0F0F0D';
-        let strokeWidth = 0.5;
-
         function triggerHandshake() {
             document.getElementById('screen-cover').style.opacity = '0';
             const thresh = document.getElementById('threshold');
             thresh.style.display = 'flex';
+            
             setTimeout(() => {
                 thresh.style.display = 'none';
                 document.getElementById('screen-cover').style.display = 'none';
-                document.getElementById('ui-layer').classList.add('visible');
-                document.getElementById('main-viewport').classList.add('visible');
+                document.getElementById('ui-layer').classList.add('active-view');
+                document.getElementById('main-viewport').classList.add('active-view');
+                
                 requestAnimationFrame(() => { initCanvas('cl'); initCanvas('cr'); });
             }, 1200);
         }
@@ -121,40 +84,23 @@
             canvas.width = canvas.offsetWidth * dpr;
             canvas.height = canvas.offsetHeight * dpr;
             ctx.scale(dpr, dpr);
+            
             const saved = localStorage.getItem(id);
             if(saved) {
                 const img = new Image();
                 img.onload = () => ctx.drawImage(img, 0, 0, canvas.width/dpr, canvas.height/dpr);
                 img.src = saved;
             }
+
             let drawing = false;
             canvas.onpointerdown = (e) => { if(e.pointerType === 'pen') { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); } };
-            canvas.onpointermove = (e) => { if(drawing) { ctx.strokeStyle = inkColor; ctx.lineWidth = strokeWidth; ctx.lineCap = 'round'; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
+            canvas.onpointermove = (e) => { if(drawing) { ctx.strokeStyle = '#0F0F0D'; ctx.lineWidth = 0.5; ctx.lineCap = 'round'; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
             window.onpointerup = () => { if(drawing) { drawing = false; localStorage.setItem(id, canvas.toDataURL()); } };
-        }
-
-        function setTool(w, el, erase=false) {
-            strokeWidth = w;
-            inkColor = erase ? '#F5F2EB' : '#0F0F0D';
-            document.querySelectorAll('.tool').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-        }
-
-        function togglePalette() {
-            const p = document.getElementById('palette');
-            p.style.display = p.style.display === 'grid' ? 'none' : 'grid';
-        }
-
-        function togglePage(side) {
-            const container = document.getElementById('canvas-container');
-            if (window.innerWidth < window.innerHeight) {
-                if (side === 'right') { container.classList.add('show-right'); document.body.className = 'on-right'; }
-                else { container.classList.remove('show-right'); document.body.className = 'on-left'; }
-            }
         }
     </script>
 </body>
 </html>
+
 
 
 
