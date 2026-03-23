@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>DRAF. // VOLE. V2.4 REV-F</title>
+    <title>DRAF. // VOLE. V2.4 REV-G</title>
     <style>
         :root {
             --bone: #F5F2EB;
@@ -14,10 +14,10 @@
             --nav-height: 80px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; touch-action: none; -webkit-touch-callout: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; touch-action: none; }
         body { background: var(--ink); font-family: 'Courier New', Courier, monospace; overflow: hidden; height: 100vh; }
 
-        /* --- COVER: RYO SPRING --- */
+        /* --- COVER --- */
         #screen-cover {
             position: fixed; inset: 0; z-index: 2000; background: var(--bone);
             display: flex; justify-content: center; align-items: center; transition: opacity var(--transition);
@@ -28,44 +28,23 @@
             background: var(--spring-pink); transform: translateX(-50%); z-index: 2100; 
         }
 
-        /* --- THE HANDSHAKE --- */
-        #threshold { position: fixed; inset: 0; z-index: 3000; background: var(--bone); display: none; justify-content: center; align-items: center; font-size: 80px; font-weight: 900; }
-
-        /* --- FIXED UI LAYER --- */
+        /* --- UI LAYER --- */
         #ui-layer { position: fixed; inset: 0; z-index: 1000; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; }
-        .nav-bar, .footer-bar { 
-            height: var(--nav-height); width: 100%; background: var(--bone); 
-            pointer-events: auto; display: flex; align-items: center; padding: 0 40px; 
-            font-size: 10px; border-bottom: 0.5px solid rgba(0,0,0,0.05); 
-        }
+        .nav-bar, .footer-bar { height: var(--nav-height); width: 100%; background: var(--bone); pointer-events: auto; display: flex; align-items: center; padding: 0 40px; font-size: 10px; border-bottom: 0.5px solid rgba(0,0,0,0.05); }
         .footer-bar { border-top: 0.5px solid rgba(0,0,0,0.05); justify-content: space-between; }
-        .ribbon-gutter { 
-            position: absolute; top: 0; bottom: 48px; left: 50%; width: 32px; 
-            background: var(--spring-pink); transform: translateX(-50%); 
-        }
+        .ribbon-gutter { position: absolute; top: 0; bottom: 80px; left: 50%; width: 32px; background: var(--spring-pink); transform: translateX(-50%); }
 
         /* --- VIEWPORT --- */
         #main-viewport { position: absolute; top: var(--nav-height); bottom: var(--nav-height); left: 0; right: 0; background: var(--bone); overflow: hidden; display: none; }
-        #canvas-container { 
-            width: 100%; height: 100%; display: grid; grid-template-columns: 1fr 1fr; 
-            transform-origin: center; transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
+        #canvas-container { width: 100%; height: 100%; display: grid; grid-template-columns: 1fr 1fr; transform-origin: center; transition: transform 0.2s ease; }
         .page-surface { position: relative; height: 100%; border-right: 1px solid rgba(0,0,0,0.02); }
         .dot-grid { position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(var(--dot) 0.5px, transparent 0.5px); background-size: 15.1px 15.1px; }
 
-        /* --- REGISTRY CONTENT --- */
-        .toc-grid { display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 1fr); gap: 20px; padding: 60px; height: 100%; }
-        .cell { border: 1px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; background: var(--bone); transition: background 0.2s; }
-        .cell:active { background: rgba(0,0,0,0.05); }
-        .toc-list { padding: 60px; display: flex; flex-direction: column; gap: 10px; }
-        .list-item { font-size: 10px; border-bottom: 0.5px solid rgba(0,0,0,0.1); padding: 12px 0; letter-spacing: 1px; }
-
-        /* --- PORTRAIT: SINGLE PAGE TOGGLE --- */
+        /* --- PORTRAIT --- */
         @media (orientation: portrait) {
             #canvas-container { grid-template-columns: 1fr; width: 200%; }
             .ribbon-gutter { left: 0; transform: none; width: 16px; bottom: 80px; }
             #canvas-container.show-right { transform: translateX(-50%); }
-            .nav-bar { padding: 0 20px; }
         }
 
         .show { display: flex !important; }
@@ -75,22 +54,19 @@
 <body>
 
     <section id="screen-cover" onclick="triggerHandshake()">
-        <img id="cover-image" src="https://i.postimg.cc/mD8zYpS2/image.png" alt="Ryo Spring Cover">
+        <img id="cover-image" src="https://i.ibb.co/Lz0D79m/ryo-spring.png" alt="Ryo Spring Cover">
         <div class="ribbon-cover"></div>
     </section>
 
-    <div id="threshold">//|</div>
+    <div id="threshold" style="position:fixed; inset:0; z-index:3000; background:var(--bone); display:none; justify-content:center; align-items:center; font-size:80px;">//|</div>
 
     <div id="ui-layer" class="hide">
         <header class="nav-bar">DRAF. // REGISTRY</header>
         <div class="ribbon-gutter"></div>
         <footer class="footer-bar">
-            <div class="marker" id="p-left" onclick="togglePage('left')">[882]</div>
-            <div style="display:flex; gap:20px;">
-                <span onclick="togglePage('left')" style="cursor:pointer">TOC</span>
-                <span onclick="togglePage('right')" style="cursor:pointer">INDEX</span>
-            </div>
-            <div class="marker" id="p-right" onclick="togglePage('right')">[883]</div>
+            <div class="marker" onclick="togglePage('left')">[882]</div>
+            <div style="display:flex; gap:20px;"><span onclick="togglePage('left')">TOC</span><span onclick="togglePage('right')">INDEX</span></div>
+            <div class="marker" onclick="togglePage('right')">[883]</div>
         </footer>
     </div>
 
@@ -98,19 +74,19 @@
         <div id="canvas-container">
             <article class="page-surface" id="left-page">
                 <div class="dot-grid"></div>
-                <div class="toc-grid">
-                    <div class="cell" onclick="alert('Laboratory Initializing...')">//|</div><div class="cell"></div>
-                    <div class="cell"></div><div class="cell"></div>
-                    <div class="cell"></div><div class="cell"></div>
-                    <div class="cell"></div><div class="cell" style="background:#FCF59B; border:none; font-size: 10px; font-weight: 900;">STICKY_INBOX</div>
+                <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:20px; padding:60px; height:100%;">
+                    <div style="border:1px solid var(--ink); display:flex; align-items:center; justify-content:center;">//|</div>
+                    <div style="border:1px solid var(--ink);"></div><div style="border:1px solid var(--ink);"></div>
+                    <div style="border:1px solid var(--ink);"></div><div style="border:1px solid var(--ink);"></div>
+                    <div style="border:1px solid var(--ink);"></div><div style="border:1px solid var(--ink);"></div>
+                    <div style="background:#FCF59B; border:none; display:flex; align-items:center; justify-content:center; font-size:10px;">STICKY_INBOX</div>
                 </div>
             </article>
             <article class="page-surface" id="right-page">
                 <div class="dot-grid"></div>
-                <div class="toc-list">
-                    <div class="list-item">[[20260323]] - [09:02] *RYO_COVER* ASSET_SWAP</div>
-                    <div class="list-item">[[20260323]] - [09:05] PORTRAIT_TASK_ISOLATION</div>
-                    <div class="list-item">[[20260323]] - [09:10] REGISTER_F_COMMIT</div>
+                <div style="padding:60px; font-size:10px;">
+                    <p style="border-bottom:1px solid #ddd; padding:10px 0;">[[20260323]] - [09:15] COVER_RECOVERY_SUCCESS</p>
+                    <p style="border-bottom:1px solid #ddd; padding:10px 0;">[[20260323]] - [09:20] RIBBON_STABILITY_LOCKED</p>
                 </div>
             </article>
         </div>
@@ -123,15 +99,13 @@
         const main = document.getElementById('main-viewport');
         const container = document.getElementById('canvas-container');
 
-        window.oncontextmenu = (e) => { e.preventDefault(); return false; };
-
         function triggerHandshake() {
             cover.classList.add('hide');
             thresh.style.display = 'flex';
             setTimeout(() => {
                 thresh.style.display = 'none';
                 ui.classList.add('show');
-                main.style.display = 'block';
+                main.classList.add('show');
             }, 400);
         }
 
@@ -142,7 +116,6 @@
             }
         }
 
-        // Zoom Clamping
         let scale = 1;
         window.addEventListener('wheel', (e) => {
             e.preventDefault();
@@ -152,3 +125,4 @@
     </script>
 </body>
 </html>
+
