@@ -5,135 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>DRAF. // VOLE.</title>
     <style>
-        :root { --ink: #0F0F0D; --bone: #F5F2EB; --fired: #D4500A; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--ink); font-family: 'Courier New', Courier, monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; touch-action: none; }
-        
-        .digibook-frame { 
-            width: 100vw; height: 94vh; max-width: 1024px; background-color: var(--bone); 
-            border: 1px solid var(--ink); position: relative; padding: 40px; 
-            display: flex; flex-direction: column; box-shadow: 0 30px 60px rgba(0,0,0,0.5); 
+        :root {
+            --bone: #F5F2EB;
+            --ink: #0F0F0D;
+            --fired: #D4500A;
+            --dot: rgba(15,15,13,0.12); /* 3mm Register */
+            --transition: 400ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .grid-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(var(--ink) 0.5px, transparent 0.5px); background-size: 15.1px 15.1px; opacity: 0.08; pointer-events: none; z-index: 1; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; touch-action: none; }
+        
+        body { background: var(--ink); font-family: 'Courier New', Courier, monospace; overflow: hidden; }
 
-        #ink-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 20; touch-action: none; }
+        /* --- THE PRISTINE SPREAD --- */
+        #toc-layer {
+            width: 100vw; height: 100vh;
+            background: var(--bone); /* No wear engine artifacts here */
+            display: grid; grid-template-columns: 1fr 1fr;
+            padding: 80px; gap: 100px; position: relative;
+            opacity: 1; /* Interior is clinical and bright */
+        }
 
-        .header, .footer { position: relative; z-index: 30; color: var(--ink); pointer-events: none; }
-        .header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1.5px solid var(--ink); padding-bottom: 10px; margin-bottom: 50px; }
-        .brand { font-weight: 900; font-size: 24px; letter-spacing: -1.5px; pointer-events: auto; cursor: pointer; }
-        #fired-dot { color: var(--fired); display: inline-block; transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .grid-bg {
+            position: absolute; inset: 0; pointer-events: none;
+            background-image: radial-gradient(var(--dot) 0.5px, transparent 0.5px);
+            background-size: 11.34px 11.34px; /* Locked 3mm Register */
+            z-index: 1;
+        }
 
-        .meta { font-size: 10px; text-transform: uppercase; text-align: right; line-height: 1.4; color: rgba(15, 15, 13, 0.5); }
-        .footer { margin-top: auto; border-top: 1.5px solid var(--ink); padding-top: 15px; display: flex; justify-content: space-between; font-size: 9px; letter-spacing: 1px; }
+        /* --- THE RIBBON --- */
+        .ribbon {
+            position: absolute; top: 0; right: 15%; width: 42px; height: 64px;
+            background: var(--fired); z-index: 100; cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .ribbon:active { transform: translateY(4px); }
+
+        /* --- LEFT: 2x4 GRID --- */
+        .toc-left { display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 1fr); gap: 20px; z-index: 10; }
+        .cell { 
+            border: 1px solid var(--ink); aspect-ratio: 1/1; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: transparent; position: relative; cursor: pointer;
+        }
+        .cell-new { color: var(--fired); font-weight: 900; font-size: 32px; }
+        .cell-label { position: absolute; bottom: 8px; left: 8px; font-size: 8px; letter-spacing: 1px; }
+
+        /* --- RIGHT: THE LEDGER --- */
+        .toc-right { 
+            z-index: 10; display: flex; flex-direction: column; 
+            border-left: 0.5px solid rgba(15,15,13,0.1); padding-left: 60px; 
+        }
+        .ledger-header { font-size: 11px; font-weight: 900; margin-bottom: 40px; letter-spacing: 3px; display: flex; justify-content: space-between; }
+        .ledger-entry { 
+            display: flex; justify-content: space-between; padding: 12px 0; 
+            border-bottom: 0.5px solid rgba(15,15,13,0.08); font-size: 9px; letter-spacing: 1.5px;
+        }
+        .ledger-entry b { color: var(--ink); font-weight: 900; }
+
+        .inbox-cell { background: #FCF59B; border: none; font-size: 9px; font-weight: 900; }
     </style>
 </head>
 <body>
 
-<div class="digibook-frame">
-    <div class="grid-bg"></div>
-    <svg id="ink-layer" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-        <rect id="hit-surface" width="100%" height="100%" fill="#FFFFFF" fill-opacity="0.01" pointer-events="all" />
-    </svg>
-    
-    <div class="header">
-        <div class="brand" id="studio-logo">DRAF<span id="fired-dot">.</span></div>
-        <div class="meta">INTERNAL_PROJECT: [VOLE]<br>REVISION: RECLINED_STABLE_V2</div>
-    </div>
+    <main id="toc-layer">
+        <div class="grid-bg"></div>
+        <div class="ribbon" title="Snap to last edit"></div>
 
-    <div class="footer">
-        <div>SHANE SMILEY // PRINCIPAL</div>
-        <div>//| DRAF. STUDIO 2026.03.22</div>
-        <div>STABLE_VIEWPORT_V2_PERSIST</div>
-    </div>
-</div>
+        <div class="toc-left">
+            <div class="cell cell-new" id="new-page-trigger">//| <span class="cell-label">NEW_SESSION</span></div>
+            <div class="cell"><span class="cell-label">01 // AT_COST</span></div>
+            <div class="cell"><span class="cell-label">02 // VOLE_UX</span></div>
+            <div class="cell"><span class="cell-label">03 // STRADE_B</span></div>
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell inbox-cell">STICKY_INBOX</div>
+        </div>
 
-<script>
-    const svg = document.getElementById('ink-layer');
-    const dot = document.getElementById('fired-dot');
-    const logo = document.getElementById('studio-logo');
-    let isDrawing = false;
-    let currentPath = null;
-    const activeNib = 0.6;
+        <div class="toc-right">
+            <div class="ledger-header">
+                <span>INDEX_CHRONO</span>
+                <span style="color:var(--fired)">VOL_01</span>
+            </div>
+            <div id="ledger-list">
+                </div>
+        </div>
+    </main>
 
-    // --- PERSISTENCE ENGINE ---
-    const STORAGE_KEY = 'VOLE_SESSIONS_V1';
+    <script>
+        const trigger = document.getElementById('new-page-trigger');
+        const ledger = document.getElementById('ledger-list');
 
-    function saveState() {
-        const paths = Array.from(svg.querySelectorAll('path')).map(p => p.getAttribute('d'));
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(paths));
-    }
-
-    function loadState() {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-            const paths = JSON.parse(saved);
-            paths.forEach(d => {
-                const path = createPathElement(d);
-                svg.appendChild(path);
-            });
-            console.log("VOLE. // State Recovered.");
-        }
-    }
-
-    function createPathElement(d) {
-        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        path.setAttribute("d", d);
-        path.setAttribute("stroke", "var(--ink)");
-        path.setAttribute("stroke-width", activeNib);
-        path.setAttribute("fill", "none");
-        path.setAttribute("stroke-linecap", "round");
-        path.setAttribute("stroke-linejoin", "round");
-        return path;
-    }
-
-    // --- DRAWING LOGIC ---
-    function setupDrawing() {
-        const surface = document.getElementById('hit-surface');
-
-        surface.addEventListener('pointerdown', (e) => {
-            if (e.pointerType === 'stylus' || e.buttons === 1 || e.pointerType === 'touch') {
-                isDrawing = true;
-                dot.style.transform = "scale(2.5)";
-                setTimeout(() => { dot.style.transform = "scale(1)"; }, 150);
-
-                const pt = getCoordinates(e);
-                currentPath = createPathElement(`M ${pt.x} ${pt.y}`);
-                svg.appendChild(currentPath);
-            }
+        trigger.addEventListener('pointerdown', () => {
+            const now = new Date();
+            const dateStr = now.toISOString().split('T')[0].replace(/-/g, '');
+            const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+            
+            const entry = document.createElement('div');
+            entry.className = 'ledger-entry';
+            entry.innerHTML = `<span>[${dateStr}] ${timeStr}</span> <b>AUTOSPY_INIT</b>`;
+            ledger.appendChild(entry);
         });
-
-        surface.addEventListener('pointermove', (e) => {
-            if (!isDrawing || !currentPath) return;
-            const pt = getCoordinates(e);
-            const d = currentPath.getAttribute("d");
-            currentPath.setAttribute("d", `${d} L ${pt.x} ${pt.y}`);
-        });
-
-        window.addEventListener('pointerup', () => { 
-            if (isDrawing) saveState();
-            isDrawing = false; 
-            currentPath = null; 
-        });
-        
-        // Manual Wipe: Double Click Logo
-        logo.addEventListener('dblclick', () => {
-            if(confirm("DRAF. // CLEAR ALL MARKS?")) {
-                localStorage.removeItem(STORAGE_KEY);
-                location.reload();
-            }
-        });
-    }
-
-    function getCoordinates(e) {
-        const rect = svg.getBoundingClientRect();
-        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-    }
-
-    loadState();
-    setupDrawing();
-</script>
-
+    </script>
 </body>
 </html>
+
 
