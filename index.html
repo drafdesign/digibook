@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>DRAF. // VOLE. V2.4 REV-G</title>
+    <title>DRAF. // VOLE. V2.4 REV-I</title>
     <style>
         :root {
             --bone: #F5F2EB;
@@ -12,138 +12,135 @@
             --dot: rgba(15,15,13,0.05);
             --transition: 400ms cubic-bezier(0.4, 0, 0.2, 1);
             --nav-height: 80px;
+            --ribbon-w: 48px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; touch-action: none; }
-        body { background: var(--ink); font-family: 'Courier New', Courier, monospace; overflow: hidden; height: 100vh; }
+        body { background: var(--ink); font-family: 'Courier New', Courier, monospace; overflow: hidden; height: 100vh; transition: background 0.5s; }
 
-        /* --- COVER LAYER --- */
+        /* --- COVER --- */
         #screen-cover {
             position: fixed; inset: 0; z-index: 2000; background: var(--bone);
             display: flex; justify-content: center; align-items: center; transition: opacity var(--transition);
         }
-        #cover-image { width: 100%; height: 100%; object-fit: contain; }
-        .ribbon-cover { 
-            position: absolute; bottom: 48px; left: 50%; width: 32px; height: 120px; 
-            background: var(--spring-pink); transform: translateX(-50%); z-index: 2100; 
-        }
+        #cover-image { width: 100%; height: 100%; object-fit: contain; background: var(--bone); }
+        .ribbon-cover { position: absolute; bottom: 48px; left: 50%; width: var(--ribbon-w); height: 120px; background: var(--spring-pink); transform: translateX(-50%); z-index: 2100; }
 
-        /* --- FIXED UI LAYER (Hard Cut) --- */
-        #ui-layer { position: fixed; inset: 0; z-index: 1000; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; }
-        .nav-bar, .footer-bar { 
-            height: var(--nav-height); width: 100%; background: var(--bone); 
-            pointer-events: auto; display: flex; align-items: center; padding: 0 40px; 
-            font-size: 10px; border-bottom: 0.5px solid rgba(0,0,0,0.05); 
+        /* --- FIXED UI --- */
+        #ui-layer { position: fixed; inset: 0; z-index: 1000; pointer-events: none; }
+        .nav-bar, .footer-bar { position: absolute; width: 100%; height: var(--nav-height); background: var(--bone); pointer-events: auto; display: flex; align-items: center; padding: 0 40px; font-size: 10px; z-index: 1010; }
+        .nav-bar { top: 0; border-bottom: 0.5px solid rgba(0,0,0,0.05); }
+        .footer-bar { bottom: 0; border-top: 0.5px solid rgba(0,0,0,0.05); justify-content: space-between; }
+        
+        #ribbon { position: absolute; bottom: var(--nav-height); width: var(--ribbon-w); height: 120px; background: var(--spring-pink); z-index: 1005; transition: left 0.3s ease; }
+
+        /* --- PALETTE DRAWER --- */
+        #palette {
+            position: absolute; bottom: var(--nav-height); right: 40px; width: 120px; 
+            background: var(--bone); border: 0.5px solid var(--ink); display: none; grid-template-rows: 1fr 1fr; pointer-events: auto;
         }
-        .footer-bar { border-top: 0.5px solid rgba(0,0,0,0.05); justify-content: space-between; }
-        .ribbon-gutter { 
-            position: absolute; top: 0; bottom: var(--nav-height); left: 50%; width: 32px; 
-            background: var(--spring-pink); transform: translateX(-50%); 
-        }
+        .pal-row { display: grid; grid-template-columns: repeat(3, 1fr); height: 40px; }
+        .tool { border: 0.2px solid rgba(15,15,13,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 8px; }
+        .tool.active { background: var(--ink); color: var(--bone); }
 
         /* --- WORKSPACE --- */
-        #main-viewport { 
-            position: absolute; top: var(--nav-height); bottom: var(--nav-height); 
-            left: 0; right: 0; background: var(--bone); overflow: hidden; display: none; 
-        }
-        #canvas-container { 
-            width: 100%; height: 100%; display: grid; grid-template-columns: 1fr 1fr; 
-            transform-origin: center; transition: transform 0.2s ease-out; 
-        }
-        .page-surface { position: relative; height: 100%; border-right: 0.5px solid rgba(0,0,0,0.05); }
-        .dot-grid { 
-            position: absolute; inset: 0; pointer-events: none; 
-            background-image: radial-gradient(var(--dot) 0.5px, transparent 0.5px); 
-            background-size: 15.1px 15.1px; 
-        }
+        #main-viewport { position: absolute; top: var(--nav-height); bottom: var(--nav-height); left: 0; right: 0; background: var(--bone); overflow: hidden; display: none; }
+        #canvas-container { width: 100%; height: 100%; display: grid; grid-template-columns: 1fr 1fr; transform-origin: center; }
+        .page-surface { position: relative; height: 100%; overflow: hidden; background: var(--bone); }
+        .dot-grid { position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(var(--dot) 0.5px, transparent 0.5px); background-size: 15.1px 15.1px; }
+        canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 
-        /* --- PORTRAIT ADAPTATION --- */
+        /* ORIENTATION LOGIC */
+        @media (orientation: landscape) { #ribbon { left: calc(50% - (var(--ribbon-w) / 2)); } }
         @media (orientation: portrait) {
             #canvas-container { grid-template-columns: 1fr; width: 200%; }
-            .ribbon-gutter { left: 0; transform: none; width: 16px; bottom: var(--nav-height); }
             #canvas-container.show-right { transform: translateX(-50%); }
+            .on-left #ribbon { left: calc(100% - var(--ribbon-w)); }
+            .on-right #ribbon { left: 0; }
         }
 
-        .show { display: flex !important; }
+        .show { display: block !important; }
         .hide { display: none !important; }
     </style>
 </head>
-<body>
+<body class="on-left">
 
     <section id="screen-cover" onclick="triggerHandshake()">
-        <img id="cover-image" src="https://i.postimg.cc/47N9h976/image.png" alt="Ryo Spring Cover">
+        <img id="cover-image" src="https://i.ibb.co/Lz0D79m/ryo-spring.png" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='">
         <div class="ribbon-cover"></div>
     </section>
 
-    <div id="threshold" style="position:fixed; inset:0; z-index:3000; background:var(--bone); display:none; justify-content:center; align-items:center; font-size:80px;">//|</div>
-
     <div id="ui-layer" class="hide">
-        <header class="nav-bar">DRAF. // REGISTRY</header>
-        <div class="ribbon-gutter"></div>
+        <header class="nav-bar">DRAF. // LABORATORY</header>
+        <div id="ribbon"></div>
+        <div id="palette">
+            <div class="pal-row"><div class="tool active" onclick="setTool(0.5)">0.5</div><div class="tool" onclick="setTool(1.2)">1.2</div><div class="tool" onclick="setTool(2.5)">2.5</div></div>
+            <div class="pal-row"><div class="tool" onclick="setTool(10, true)">E</div><div class="tool" onclick="clearCanvas()">CLR</div><div class="tool" onclick="togglePalette()">X</div></div>
+        </div>
         <footer class="footer-bar">
-            <div class="marker" onclick="togglePage('left')">[882]</div>
-            <div style="display:flex; gap:20px;"><span onclick="togglePage('left')">TOC</span><span onclick="togglePage('right')">INDEX</span></div>
-            <div class="marker" onclick="togglePage('right')">[883]</div>
+            <div class="marker" onclick="togglePage('left')">[002]</div>
+            <div onclick="togglePalette()" style="cursor:pointer">TOOLS</div>
+            <div class="marker" onclick="togglePage('right')">[003]</div>
         </footer>
     </div>
 
     <main id="main-viewport">
         <div id="canvas-container">
-            <article class="page-surface" id="left-page">
-                <div class="dot-grid"></div>
-                <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:20px; padding:60px; height:100%;">
-                    <div style="border:1px solid var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer;" onclick="location.reload()">//|</div>
-                    <div style="border:1px solid var(--ink);"></div><div style="border:1px solid var(--ink);"></div>
-                    <div style="border:1px solid var(--ink);"></div><div style="border:1px solid var(--ink);"></div>
-                    <div style="border:1px solid var(--ink);"></div><div style="border:1px solid var(--ink);"></div>
-                    <div style="background:#FCF59B; border:none; display:flex; align-items:center; justify-content:center; font-size:10px;">STICKY_INBOX</div>
-                </div>
-            </article>
-            <article class="page-surface" id="right-page">
-                <div class="dot-grid"></div>
-                <div style="padding:60px; font-size:10px;">
-                    <p style="border-bottom:1px solid #ddd; padding:12px 0;">[[20260323]] - [09:20] SYSTEM_AUDIT_PASS</p>
-                    <p style="border-bottom:1px solid #ddd; padding:12px 0;">[[20260323]] - [09:25] ORIENTATION_STABILITY_FIX</p>
-                </div>
-            </article>
+            <article class="page-surface" id="p_left"><div class="dot-grid"></div><canvas id="can_l"></canvas></article>
+            <article class="page-surface" id="p_right"><div class="dot-grid"></div><canvas id="can_r"></canvas></article>
         </div>
     </main>
 
     <script>
-        const cover = document.getElementById('screen-cover');
-        const thresh = document.getElementById('threshold');
-        const ui = document.getElementById('ui-layer');
-        const main = document.getElementById('main-viewport');
-        const container = document.getElementById('canvas-container');
-
-        window.oncontextmenu = (e) => e.preventDefault();
+        let inkColor = '#0F0F0D';
+        let strokeWidth = 0.5;
 
         function triggerHandshake() {
-            cover.style.opacity = '0';
-            thresh.style.display = 'flex';
-            setTimeout(() => {
-                cover.classList.add('hide');
-                thresh.style.display = 'none';
-                ui.classList.add('show');
-                main.style.display = 'block';
-            }, 400);
+            document.getElementById('screen-cover').classList.add('hide');
+            document.getElementById('ui-layer').classList.add('show');
+            document.getElementById('main-viewport').classList.add('show');
+            initCanvas('can_l'); initCanvas('can_r');
         }
+
+        function initCanvas(id) {
+            const canvas = document.getElementById(id);
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = canvas.offsetWidth * dpr;
+            canvas.height = canvas.offsetHeight * dpr;
+            ctx.scale(dpr, dpr);
+            
+            // Restore from Storage
+            const saved = localStorage.getItem(id);
+            if(saved) { let img = new Image(); img.onload = () => ctx.drawImage(img,0,0,canvas.width/dpr,canvas.height/dpr); img.src = saved; }
+
+            let drawing = false;
+            canvas.addEventListener('pointerdown', (e) => { if(e.pointerType==='pen'){ drawing=true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); }});
+            canvas.addEventListener('pointermove', (e) => { 
+                if(drawing && e.pointerType==='pen'){ 
+                    ctx.strokeStyle = inkColor; ctx.lineWidth = strokeWidth; ctx.lineCap='round';
+                    ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); 
+                }
+            });
+            window.addEventListener('pointerup', () => { if(drawing){ drawing=false; localStorage.setItem(id, canvas.toDataURL()); }});
+        }
+
+        function setTool(w, isEraser=false) {
+            strokeWidth = w; inkColor = isEraser ? '#F5F2EB' : '#0F0F0D';
+            togglePalette();
+        }
+
+        function togglePalette() { const p = document.getElementById('palette'); p.style.display = p.style.display === 'grid' ? 'none' : 'grid'; }
 
         function togglePage(side) {
             if (window.innerWidth < window.innerHeight) {
-                if (side === 'right') container.classList.add('show-right');
-                else container.classList.remove('show-right');
+                if (side === 'right') { container.classList.add('show-right'); document.body.className = 'on-right'; }
+                else { container.classList.remove('show-right'); document.body.className = 'on-left'; }
             }
         }
-
-        let scale = 1;
-        window.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            scale = Math.max(1, scale + e.deltaY * -0.01);
-            container.style.transform = `scale(${scale})`;
-        }, { passive: false });
     </script>
 </body>
 </html>
+
 
 
