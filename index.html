@@ -12,19 +12,22 @@
             --dot: rgba(15,15,13,0.05);
             --transition: 400ms cubic-bezier(0.4, 0, 0.2, 1);
             --nav-height: 80px;
-            --ribbon-w: 48px;
+            --ribbon-w: 48px; /* 1/2 inch approx */
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; touch-action: none; }
-        body { background: var(--ink); font-family: 'Courier New', Courier, monospace; overflow: hidden; height: 100vh; transition: background 0.5s; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; touch-action: none; -webkit-touch-callout: none; }
+        body { background: var(--ink); font-family: 'Courier New', Courier, monospace; overflow: hidden; height: 100vh; }
 
         /* --- COVER --- */
         #screen-cover {
             position: fixed; inset: 0; z-index: 2000; background: var(--bone);
             display: flex; justify-content: center; align-items: center; transition: opacity var(--transition);
         }
-        #cover-image { width: 100%; height: 100%; object-fit: contain; background: var(--bone); }
+        #cover-image { width: 100%; height: 100%; object-fit: contain; }
         .ribbon-cover { position: absolute; bottom: 48px; left: 50%; width: var(--ribbon-w); height: 120px; background: var(--spring-pink); transform: translateX(-50%); z-index: 2100; }
+
+        /* --- HANDSHAKE --- */
+        #threshold { position: fixed; inset: 0; z-index: 3000; background: var(--bone); display: none; justify-content: center; align-items: center; font-size: 80px; font-weight: 900; color: var(--ink); }
 
         /* --- FIXED UI --- */
         #ui-layer { position: fixed; inset: 0; z-index: 1000; pointer-events: none; }
@@ -32,25 +35,24 @@
         .nav-bar { top: 0; border-bottom: 0.5px solid rgba(0,0,0,0.05); }
         .footer-bar { bottom: 0; border-top: 0.5px solid rgba(0,0,0,0.05); justify-content: space-between; }
         
-        #ribbon { position: absolute; bottom: var(--nav-height); width: var(--ribbon-w); height: 120px; background: var(--spring-pink); z-index: 1005; transition: left 0.3s ease; }
+        #ribbon { position: absolute; bottom: var(--nav-height); width: var(--ribbon-w); height: 140px; background: var(--spring-pink); z-index: 1005; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        /* --- PALETTE DRAWER --- */
+        /* --- PALETTE --- */
         #palette {
-            position: absolute; bottom: var(--nav-height); right: 40px; width: 120px; 
-            background: var(--bone); border: 0.5px solid var(--ink); display: none; grid-template-rows: 1fr 1fr; pointer-events: auto;
+            position: absolute; bottom: calc(var(--nav-height) + 20px); right: 40px; width: 160px; 
+            background: var(--bone); border: 0.5px solid var(--ink); display: none; grid-template-rows: 1fr 1fr; pointer-events: auto; z-index: 1100;
         }
-        .pal-row { display: grid; grid-template-columns: repeat(3, 1fr); height: 40px; }
-        .tool { border: 0.2px solid rgba(15,15,13,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 8px; }
+        .pal-row { display: grid; grid-template-columns: repeat(3, 1fr); height: 44px; }
+        .tool { border: 0.2px solid rgba(15,15,13,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 9px; font-weight: 900; }
         .tool.active { background: var(--ink); color: var(--bone); }
 
         /* --- WORKSPACE --- */
         #main-viewport { position: absolute; top: var(--nav-height); bottom: var(--nav-height); left: 0; right: 0; background: var(--bone); overflow: hidden; display: none; }
-        #canvas-container { width: 100%; height: 100%; display: grid; grid-template-columns: 1fr 1fr; transform-origin: center; }
-        .page-surface { position: relative; height: 100%; overflow: hidden; background: var(--bone); }
+        #canvas-container { width: 100%; height: 100%; display: grid; grid-template-columns: 1fr 1fr; transform-origin: center; transition: transform 0.3s ease; }
+        .page-surface { position: relative; height: 100%; border-right: 0.5px solid rgba(0,0,0,0.02); }
         .dot-grid { position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(var(--dot) 0.5px, transparent 0.5px); background-size: 15.1px 15.1px; }
-        canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+        canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
 
-        /* ORIENTATION LOGIC */
         @media (orientation: landscape) { #ribbon { left: calc(50% - (var(--ribbon-w) / 2)); } }
         @media (orientation: portrait) {
             #canvas-container { grid-template-columns: 1fr; width: 200%; }
@@ -66,20 +68,30 @@
 <body class="on-left">
 
     <section id="screen-cover" onclick="triggerHandshake()">
-        <img id="cover-image" src="https://i.ibb.co/Lz0D79m/ryo-spring.png" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='">
+        <img id="cover-image" src="https://i.postimg.cc/47N9h976/image.png" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='">
         <div class="ribbon-cover"></div>
     </section>
+
+    <div id="threshold">//|</div>
 
     <div id="ui-layer" class="hide">
         <header class="nav-bar">DRAF. // LABORATORY</header>
         <div id="ribbon"></div>
         <div id="palette">
-            <div class="pal-row"><div class="tool active" onclick="setTool(0.5)">0.5</div><div class="tool" onclick="setTool(1.2)">1.2</div><div class="tool" onclick="setTool(2.5)">2.5</div></div>
-            <div class="pal-row"><div class="tool" onclick="setTool(10, true)">E</div><div class="tool" onclick="clearCanvas()">CLR</div><div class="tool" onclick="togglePalette()">X</div></div>
+            <div class="pal-row">
+                <div class="tool active" onclick="setTool(0.5, this)">0.5</div>
+                <div class="tool" onclick="setTool(1.2, this)">1.2</div>
+                <div class="tool" onclick="setTool(2.5, this)">2.5</div>
+            </div>
+            <div class="pal-row">
+                <div class="tool" onclick="setTool(20, this, true)">ERS</div>
+                <div class="tool" onclick="clearActiveCanvas()">CLR</div>
+                <div class="tool" onclick="togglePalette()">CLS</div>
+            </div>
         </div>
         <footer class="footer-bar">
             <div class="marker" onclick="togglePage('left')">[002]</div>
-            <div onclick="togglePalette()" style="cursor:pointer">TOOLS</div>
+            <div onclick="togglePalette()" style="cursor:pointer; font-weight:900;">TOOLS</div>
             <div class="marker" onclick="togglePage('right')">[003]</div>
         </footer>
     </div>
@@ -94,12 +106,20 @@
     <script>
         let inkColor = '#0F0F0D';
         let strokeWidth = 0.5;
+        let activePage = 'can_l';
 
         function triggerHandshake() {
-            document.getElementById('screen-cover').classList.add('hide');
-            document.getElementById('ui-layer').classList.add('show');
-            document.getElementById('main-viewport').classList.add('show');
-            initCanvas('can_l'); initCanvas('can_r');
+            const cover = document.getElementById('screen-cover');
+            const thresh = document.getElementById('threshold');
+            cover.style.opacity = '0';
+            thresh.style.display = 'flex';
+            setTimeout(() => {
+                cover.classList.add('hide');
+                thresh.style.display = 'none';
+                document.getElementById('ui-layer').classList.add('show');
+                document.getElementById('main-viewport').classList.add('show');
+                initCanvas('can_l'); initCanvas('can_r');
+            }, 400);
         }
 
         function initCanvas(id) {
@@ -110,37 +130,77 @@
             canvas.height = canvas.offsetHeight * dpr;
             ctx.scale(dpr, dpr);
             
-            // Restore from Storage
             const saved = localStorage.getItem(id);
-            if(saved) { let img = new Image(); img.onload = () => ctx.drawImage(img,0,0,canvas.width/dpr,canvas.height/dpr); img.src = saved; }
+            if(saved) {
+                const img = new Image();
+                img.onload = () => ctx.drawImage(img, 0, 0, canvas.width/dpr, canvas.height/dpr);
+                img.src = saved;
+            }
 
             let drawing = false;
-            canvas.addEventListener('pointerdown', (e) => { if(e.pointerType==='pen'){ drawing=true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); }});
-            canvas.addEventListener('pointermove', (e) => { 
-                if(drawing && e.pointerType==='pen'){ 
-                    ctx.strokeStyle = inkColor; ctx.lineWidth = strokeWidth; ctx.lineCap='round';
-                    ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); 
+            canvas.addEventListener('pointerdown', (e) => {
+                if(e.pointerType === 'pen') {
+                    drawing = true;
+                    activePage = id;
+                    ctx.beginPath();
+                    ctx.moveTo(e.offsetX, e.offsetY);
                 }
             });
-            window.addEventListener('pointerup', () => { if(drawing){ drawing=false; localStorage.setItem(id, canvas.toDataURL()); }});
+            canvas.addEventListener('pointermove', (e) => {
+                if(drawing && e.pointerType === 'pen') {
+                    ctx.strokeStyle = inkColor;
+                    ctx.lineWidth = strokeWidth;
+                    ctx.lineCap = 'round';
+                    ctx.lineTo(e.offsetX, e.offsetY);
+                    ctx.stroke();
+                }
+            });
+            window.addEventListener('pointerup', () => {
+                if(drawing) {
+                    drawing = false;
+                    localStorage.setItem(id, canvas.toDataURL());
+                }
+            });
         }
 
-        function setTool(w, isEraser=false) {
-            strokeWidth = w; inkColor = isEraser ? '#F5F2EB' : '#0F0F0D';
+        function setTool(w, el, isEraser = false) {
+            strokeWidth = w;
+            inkColor = isEraser ? '#F5F2EB' : '#0F0F0D';
+            document.querySelectorAll('.tool').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function togglePalette() {
+            const p = document.getElementById('palette');
+            p.style.display = p.style.display === 'grid' ? 'none' : 'grid';
+        }
+
+        function clearActiveCanvas() {
+            const canvas = document.getElementById(activePage);
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            localStorage.removeItem(activePage);
             togglePalette();
         }
 
-        function togglePalette() { const p = document.getElementById('palette'); p.style.display = p.style.display === 'grid' ? 'none' : 'grid'; }
-
         function togglePage(side) {
+            const container = document.getElementById('canvas-container');
             if (window.innerWidth < window.innerHeight) {
-                if (side === 'right') { container.classList.add('show-right'); document.body.className = 'on-right'; }
-                else { container.classList.remove('show-right'); document.body.className = 'on-left'; }
+                if (side === 'right') {
+                    container.classList.add('show-right');
+                    document.body.className = 'on-right';
+                    activePage = 'can_r';
+                } else {
+                    container.classList.remove('show-right');
+                    document.body.className = 'on-left';
+                    activePage = 'can_l';
+                }
             }
         }
     </script>
 </body>
 </html>
+
 
 
 
