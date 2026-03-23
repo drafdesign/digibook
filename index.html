@@ -31,7 +31,9 @@
             position: fixed; inset: 0; z-index: 4000; background: var(--bone);
             display: none; flex-direction: column; padding: 60px;
         }
-        .toc-entry { font-size: 24px; margin-bottom: 20px; cursor: pointer; border-bottom: 1px solid var(--ink); padding-bottom: 10px; width: fit-content; }
+        .toc-header { font-size: 12px; margin-bottom: 40px; border-bottom: 1px solid var(--ink); padding-bottom: 10px; }
+        .toc-entry { font-size: 24px; margin-bottom: 20px; cursor: pointer; width: fit-content; }
+        .toc-entry:hover { color: var(--pink); }
 
         /* STAGE 4: WORK PAGE (LAB) */
         #lab { position: fixed; inset: 0; z-index: 1000; display: none; flex-direction: column; }
@@ -43,18 +45,18 @@
         .registry-id { font-weight: bold; letter-spacing: 2px; }
 
         canvas { flex-grow: 1; touch-action: none; background-image: radial-gradient(var(--gray) 0.5px, transparent 0.5px); background-size: 20px 20px; }
-        .active-view { display: flex !important; }
     </style>
 </head>
 <body>
 
-    <div id="gate" class="active-view"><div class="ribbon" onclick="ignite()"></div></div>
+    <div id="gate"><div class="ribbon" onclick="ignite()"></div></div>
     
     <div id="bridge">//|</div>
 
     <div id="toc">
-        <div class="toc-entry" onclick="enterLab()">01. LABORATORY_SKETCHBOOK [ ACTIVE ]</div>
-        <div class="toc-entry" style="opacity: 0.3;">02. ARCHIVE_VOL_00 [ LOCKED ]</div>
+        <div class="toc-header">VOLE REGISTRY // INDEX_01</div>
+        <div class="toc-entry" onclick="enterLab()">[01] LABORATORY_SKETCHBOOK</div>
+        <div class="toc-entry" style="opacity: 0.2;">[02] SYSTEM_ARCHIVE_VOID</div>
     </div>
 
     <div id="lab">
@@ -71,18 +73,19 @@
             const bridge = document.getElementById('bridge');
             const toc = document.getElementById('toc');
 
-            gate.classList.remove('active-view');
+            // Force gate to disappear
+            gate.style.display = 'none';
             bridge.style.display = 'flex';
 
             setTimeout(() => {
                 bridge.style.display = 'none';
-                toc.classList.add('active-view');
+                toc.style.display = 'flex';
             }, 1000);
         }
 
         function enterLab() {
-            document.getElementById('toc').classList.remove('active-view');
-            document.getElementById('lab').classList.add('active-view');
+            document.getElementById('toc').style.display = 'none';
+            document.getElementById('lab').style.display = 'flex';
             initCanvas();
         }
 
@@ -97,7 +100,6 @@
             let drawing = false;
 
             c.onpointerdown = (e) => { 
-                // ONLY PENCIL ALLOWED
                 if(e.pointerType === 'pen') { 
                     drawing = true; 
                     ctx.beginPath(); 
@@ -107,7 +109,7 @@
 
             c.onpointermove = (e) => { 
                 if(drawing && e.pointerType === 'pen') { 
-                    ctx.strokeStyle = '#0F0F0D'; // INK ONLY
+                    ctx.strokeStyle = '#0F0F0D';
                     ctx.lineWidth = 1;
                     ctx.lineTo(e.offsetX, e.offsetY); 
                     ctx.stroke(); 
