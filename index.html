@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>DRAF. // VOLE. V2.4 REV-L</title>
+    <title>DRAF. // VOLE. V2.4 REV-P</title>
     <style>
         :root {
             --bone: #F5F2EB;
@@ -23,10 +23,10 @@
             position: fixed; inset: 0; z-index: 2000; background: var(--bone);
             display: flex; justify-content: center; align-items: center; transition: opacity var(--transition);
         }
-        #cover-image { width: 100%; height: 100%; object-fit: cover; object-position: right; }
+        #cover-image { width: 100%; height: 100%; object-fit: cover; object-position: center; }
         .ribbon-cover { position: absolute; bottom: 48px; left: 50%; width: var(--ribbon-w); height: 120px; background: var(--spring-pink); transform: translateX(-50%); z-index: 2100; }
 
-        /* --- EXTENDED HANDSHAKE --- */
+        /* --- HANDSHAKE --- */
         #threshold { position: fixed; inset: 0; z-index: 3000; background: var(--bone); display: none; justify-content: center; align-items: center; font-size: 80px; font-weight: 900; color: var(--ink); }
 
         /* --- UI --- */
@@ -36,7 +36,7 @@
         .footer-bar { bottom: 0; border-top: 0.5px solid rgba(0,0,0,0.05); justify-content: space-between; }
         #ribbon { position: absolute; bottom: var(--nav-height); width: var(--ribbon-w); height: 140px; background: var(--spring-pink); z-index: 1005; transition: left 0.3s ease; }
 
-        /* --- PALETTE (Simplified: No CLR/CLS) --- */
+        /* --- PALETTE --- */
         #palette {
             position: absolute; bottom: calc(var(--nav-height) + 20px); right: 40px; width: 140px; 
             background: var(--bone); border: 0.5px solid var(--ink); display: none; grid-template-rows: 1fr 1fr; pointer-events: auto; z-index: 1100;
@@ -44,7 +44,7 @@
         .pal-row { display: grid; grid-template-columns: repeat(3, 1fr); height: 44px; }
         .tool { border: 0.2px solid rgba(15,15,13,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 9px; }
         .tool.active { background: var(--ink); color: var(--bone); }
-        .tool.eraser { grid-column: span 3; } /* Eraser takes bottom row */
+        .tool.eraser { grid-column: span 3; }
 
         /* --- WORKSPACE --- */
         #main-viewport { position: absolute; top: var(--nav-height); bottom: var(--nav-height); left: 0; right: 0; background: var(--bone); overflow: hidden; display: none; }
@@ -66,7 +66,7 @@
 <body class="on-left">
 
     <section id="screen-cover" onclick="triggerHandshake()">
-        <img id="cover-image" src="https://i.ibb.co/Lz0D79m/ryo-spring.png">
+        <img id="cover-image" src="./cover.png" onerror="this.src='https://i.postimg.cc/47N9h976/image.png'">
         <div class="ribbon-cover"></div>
     </section>
 
@@ -81,14 +81,12 @@
                 <div class="tool" onclick="setTool(1.2, this)">1.2</div>
                 <div class="tool" onclick="setTool(2.5, this)">2.5</div>
             </div>
-            <div class="pal-row">
-                <div class="tool eraser" onclick="setTool(20, this, true)">ERASER</div>
-            </div>
+            <div class="pal-row"><div class="tool eraser" onclick="setTool(20, this, true)">ERASER</div></div>
         </div>
         <footer class="footer-bar">
-            <div onclick="togglePage('left')">[002]</div>
+            <div onclick="togglePage('left')" style="cursor:pointer">[002]</div>
             <div onclick="togglePalette()" style="cursor:pointer; font-weight:900;">TOOLS</div>
-            <div onclick="togglePage('right')">[003]</div>
+            <div onclick="togglePage('right')" style="cursor:pointer">[003]</div>
         </footer>
     </div>
 
@@ -107,14 +105,11 @@
             document.getElementById('screen-cover').style.opacity = '0';
             const thresh = document.getElementById('threshold');
             thresh.style.display = 'flex';
-            
-            // 1200ms Handshake for Screenshot window
             setTimeout(() => {
                 thresh.style.display = 'none';
                 document.getElementById('screen-cover').style.display = 'none';
                 document.getElementById('ui-layer').classList.add('visible');
                 document.getElementById('main-viewport').classList.add('visible');
-                
                 requestAnimationFrame(() => { initCanvas('can_l'); initCanvas('can_r'); });
             }, 1200);
         }
@@ -126,14 +121,12 @@
             canvas.width = canvas.offsetWidth * dpr;
             canvas.height = canvas.offsetHeight * dpr;
             ctx.scale(dpr, dpr);
-            
             const saved = localStorage.getItem(id);
             if(saved) {
                 const img = new Image();
                 img.onload = () => ctx.drawImage(img, 0, 0, canvas.width/dpr, canvas.height/dpr);
                 img.src = saved;
             }
-
             let drawing = false;
             canvas.onpointerdown = (e) => { if(e.pointerType === 'pen') { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); } };
             canvas.onpointermove = (e) => { if(drawing) { ctx.strokeStyle = inkColor; ctx.lineWidth = strokeWidth; ctx.lineCap = 'round'; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
@@ -162,6 +155,7 @@
     </script>
 </body>
 </html>
+
 
 
 
