@@ -9,19 +9,16 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; touch-action: none; }
         body { background: var(--bone); font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; }
 
-        /* THE GATE: Updated to point to your local cover.png */
+        /* STAGE 1: THE GATE */
         #gate {
             position: fixed; inset: 0; z-index: 5000;
-            background: var(--bone); 
-            background-image: url('cover.png'); 
-            background-size: cover; 
-            background-position: center;
+            background: var(--bone); background-image: url('cover.png'); 
+            background-size: cover; background-position: center;
             display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.5s ease;
         }
-        
         .ribbon { width: 48px; height: 120px; background: var(--pink); cursor: pointer; }
 
+        /* STAGE 2: THE BRIDGE */
         #bridge {
             position: fixed; inset: 0; z-index: 6000;
             background: var(--bone); display: none;
@@ -29,63 +26,67 @@
             font-size: 80px; font-weight: 900; color: var(--ink);
         }
 
-        #lab { position: fixed; inset: 0; z-index: 1000; opacity: 0; visibility: hidden; display: flex; flex-direction: column; }
+        /* STAGE 3: TABLE OF CONTENTS (TOC) */
+        #toc {
+            position: fixed; inset: 0; z-index: 4000; background: var(--bone);
+            display: none; flex-direction: column; padding: 60px;
+        }
+        .toc-entry { font-size: 24px; margin-bottom: 20px; cursor: pointer; border-bottom: 1px solid var(--ink); padding-bottom: 10px; width: fit-content; }
+
+        /* STAGE 4: WORK PAGE (LAB) */
+        #lab { position: fixed; inset: 0; z-index: 1000; display: none; flex-direction: column; }
         
         #drawer {
             height: 120px; width: 100%; border-top: 1px solid var(--ink);
             background: var(--bone); display: flex; align-items: center; padding: 0 40px; justify-content: space-between;
         }
-        .tool-group { display: flex; gap: 20px; align-items: center; }
-        .nib { width: 32px; height: 32px; border: 1px solid var(--ink); cursor: pointer; }
-        .nib.active { background: var(--ink); }
-        .dot { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--ink); }
         .registry-id { font-weight: bold; letter-spacing: 2px; }
 
         canvas { flex-grow: 1; touch-action: none; background-image: radial-gradient(var(--gray) 0.5px, transparent 0.5px); background-size: 20px 20px; }
-        .on { opacity: 1 !important; visibility: visible !important; }
+        .active-view { display: flex !important; }
     </style>
 </head>
 <body>
 
-    <div id="gate"><div class="ribbon" onclick="ignite()"></div></div>
+    <div id="gate" class="active-view"><div class="ribbon" onclick="ignite()"></div></div>
+    
     <div id="bridge">//|</div>
+
+    <div id="toc">
+        <div class="toc-entry" onclick="enterLab()">01. LABORATORY_SKETCHBOOK [ ACTIVE ]</div>
+        <div class="toc-entry" style="opacity: 0.3;">02. ARCHIVE_VOL_00 [ LOCKED ]</div>
+    </div>
 
     <div id="lab">
         <canvas id="cvs"></canvas>
         <div id="drawer">
-            <div class="tool-group">
-                <div class="nib active" id="penBtn" onclick="setTool('pen')"></div>
-                <div class="nib" id="eraseBtn" onclick="setTool('erase')"></div>
-                <div class="dot" style="background: var(--ink)"></div>
-                <div class="dot" style="background: var(--pink)"></div>
-            </div>
             <div class="registry-id">[ VOLE-2026-X ]</div>
-            <div class="tool-group">
-                <div style="font-size: 24px;">☰</div>
-            </div>
+            <div style="font-size: 24px;">☰</div>
         </div>
     </div>
 
     <script>
-        let tool = 'pen';
-        function setTool(t) {
-            tool = t;
-            document.getElementById('penBtn').classList.toggle('active', t === 'pen');
-            document.getElementById('eraseBtn').classList.toggle('active', t === 'erase');
-        }
-
         function ignite() {
-            document.getElementById('gate').style.opacity = '0';
-            document.getElementById('bridge').style.display = 'flex';
+            const gate = document.getElementById('gate');
+            const bridge = document.getElementById('bridge');
+            const toc = document.getElementById('toc');
+
+            gate.classList.remove('active-view');
+            bridge.style.display = 'flex';
+
             setTimeout(() => {
-                document.getElementById('bridge').style.display = 'none';
-                document.getElementById('gate').style.display = 'none';
-                document.getElementById('lab').classList.add('on');
-                init();
+                bridge.style.display = 'none';
+                toc.classList.add('active-view');
             }, 1000);
         }
 
-        function init() {
+        function enterLab() {
+            document.getElementById('toc').classList.remove('active-view');
+            document.getElementById('lab').classList.add('active-view');
+            initCanvas();
+        }
+
+        function initCanvas() {
             const c = document.getElementById('cvs');
             const ctx = c.getContext('2d');
             const dpr = window.devicePixelRatio || 1;
@@ -94,18 +95,25 @@
             ctx.scale(dpr, dpr);
 
             let drawing = false;
+
             c.onpointerdown = (e) => { 
+                // ONLY PENCIL ALLOWED
                 if(e.pointerType === 'pen') { 
-                    drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); 
+                    drawing = true; 
+                    ctx.beginPath(); 
+                    ctx.moveTo(e.offsetX, e.offsetY); 
                 } 
             };
+
             c.onpointermove = (e) => { 
-                if(drawing) { 
-                    ctx.strokeStyle = tool === 'erase' ? '#F5F2EB' : '#0F0F0D';
-                    ctx.lineWidth = tool === 'erase' ? 20 : 1;
-                    ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); 
+                if(drawing && e.pointerType === 'pen') { 
+                    ctx.strokeStyle = '#0F0F0D'; // INK ONLY
+                    ctx.lineWidth = 1;
+                    ctx.lineTo(e.offsetX, e.offsetY); 
+                    ctx.stroke(); 
                 } 
             };
+
             window.onpointerup = () => { drawing = false; };
         }
     </script>
