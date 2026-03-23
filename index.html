@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>DRAF. // VOLE. V2.4</title>
+    <title>DRAF. // VOLE. V2.4 REV-B</title>
     <style>
         :root {
             --bone: #F5F2EB;
             --ink: #0F0F0D;
             --fired: #D4500A;
-            --spring-pink: #FDEEF4; /* Ryo's Spring Base */
+            --spring-pink: #FDEEF4;
             --spring-ribbon: #F48FB1;
             --dot: rgba(15,15,13,0.08);
             --transition: 400ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -18,47 +18,50 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; touch-action: none; }
         body { background: var(--ink); font-family: 'Courier New', Courier, monospace; overflow: hidden; height: 100vh; }
 
-        /* --- COVER: RYO SPRING --- */
+        /* --- 00 COVER: RYO SPRING --- */
         #screen-cover {
             position: fixed; inset: 0; z-index: 1000;
             background: radial-gradient(circle at center, #FFF5F7 0%, var(--spring-pink) 100%);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             transition: opacity var(--transition);
+            cursor: pointer;
         }
         .ribbon-placeholder {
             position: absolute; bottom: 0; left: 12%; width: 40px; height: 80px;
             background: var(--spring-ribbon); box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            border-radius: 2px 2px 0 0;
         }
         .draf-mark { font-size: 24px; letter-spacing: 12px; font-weight: 100; color: var(--ink); opacity: 0.8; }
-        .cover-stats { position: absolute; bottom: 40px; right: 40px; font-size: 9px; opacity: 0.3; }
+        .cover-stats { position: absolute; bottom: 40px; right: 40px; font-size: 9px; opacity: 0.3; letter-spacing: 2px; }
 
-        /* --- THE HANDSHAKE --- */
+        /* --- 01 THE HANDSHAKE --- */
         #threshold {
             position: fixed; inset: 0; z-index: 2000; background: var(--bone);
             display: none; justify-content: center; align-items: center;
             font-size: 80px; font-weight: 900; letter-spacing: -8px; color: var(--ink);
         }
 
-        /* --- INTERIOR: TOC & WORKSPACE --- */
+        /* --- 02 INTERIOR: TOC & WORKSPACE --- */
         #screen-interior {
             position: fixed; inset: 0; background: var(--bone);
             display: none; grid-template-columns: 1fr 1fr;
             z-index: 500;
         }
 
-        .page { position: relative; height: 100vh; border-right: 1px solid rgba(0,0,0,0.03); padding: 60px; }
+        .page { position: relative; height: 100vh; border-right: 1px solid rgba(0,0,0,0.03); padding: 80px; }
         .dot-grid { position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(var(--dot) 0.5px, transparent 0.5px); background-size: 15.1px 15.1px; }
 
         /* --- TOC GRID (LEFT) --- */
-        .toc-grid { display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 1fr); gap: 20px; height: 100%; z-index: 10; }
-        .cell { border: 1px solid var(--ink); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; aspect-ratio: 1/1; }
+        .toc-grid { display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 1fr); gap: 24px; height: 80%; z-index: 10; position: relative; }
+        .cell { border: 1px solid var(--ink); display: flex; align-items: center; justify-content: center; cursor: pointer; aspect-ratio: 1/1; transition: background 0.2s; }
+        .cell:active { background: rgba(0,0,0,0.05); }
         .cell-trigger { font-size: 32px; font-weight: 900; color: var(--fired); }
-        .inbox { background: #FCF59B; border: none; font-size: 10px; font-weight: 900; }
+        .inbox { background: #FCF59B; border: none; font-size: 10px; font-weight: 900; color: var(--ink); text-align: center; padding: 10px; }
 
         /* --- INDEX LEDGER (RIGHT) --- */
-        .ledger { display: flex; flex-direction: column; z-index: 10; padding-left: 40px; }
-        .ledger-header { font-size: 12px; font-weight: 900; letter-spacing: 4px; margin-bottom: 40px; }
-        .entry { font-size: 9px; padding: 10px 0; border-bottom: 0.5px solid rgba(0,0,0,0.1); display: flex; justify-content: space-between; }
+        .ledger { display: flex; flex-direction: column; z-index: 10; padding-left: 60px; position: relative; }
+        .ledger-header { font-size: 12px; font-weight: 900; letter-spacing: 4px; margin-bottom: 40px; color: var(--ink); }
+        .entry { font-size: 9px; padding: 12px 0; border-bottom: 0.5px solid rgba(0,0,0,0.1); display: flex; justify-content: space-between; color: var(--ink); opacity: 0.7; }
 
         /* --- UTILS --- */
         .show { display: flex !important; }
@@ -84,7 +87,7 @@
         <article class="page">
             <div class="dot-grid"></div>
             <div class="toc-grid">
-                <div class="cell cell-trigger" onclick="goToWork()">//|</div>
+                <div class="cell cell-trigger" onclick="alert('Laboratory Loaded.')">//|</div>
                 <div class="cell"></div><div class="cell"></div><div class="cell"></div>
                 <div class="cell"></div><div class="cell"></div><div class="cell"></div>
                 <div class="cell inbox">STICKY_INBOX</div>
@@ -95,6 +98,7 @@
             <div class="ledger">
                 <div class="ledger-header">INDEX_CHRONO</div>
                 <div class="entry"><span>[[20260322]] - [20:42]</span> <b>BOOT_REV_B</b></div>
+                <div class="entry"><span>[[20260322]] - [21:05]</span> <b>ARCHIVE_STAGED</b></div>
             </div>
         </article>
     </main>
@@ -105,24 +109,18 @@
         const interior = document.getElementById('screen-interior');
 
         function triggerThreshold() {
-            // Start the handshake
             cover.classList.add('hide');
             thresh.classList.add('show');
             
-            // Hold for 400ms then show TOC
             setTimeout(() => {
                 thresh.classList.remove('show');
                 interior.classList.add('show');
             }, 400);
         }
-
-        function goToWork() {
-            // This will handle the jump from TOC to active page
-            alert("New Page Generated: Redirecting to Workspace Laboratory...");
-        }
     </script>
 </body>
 </html>
+
 
 
 
