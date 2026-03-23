@@ -3,113 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>VOLE // REV-U</title>
+    <title>VOLE // REGISTRY 0.0</title>
     <style>
         :root {
             --bone: #F5F2EB;
             --ink: #0F0F0D;
-            --spring-pink: #F48FB1;
-            --ribbon-w: 48px;
+            --pink: #F48FB1;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; touch-action: none; }
         body { background: var(--bone); font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; }
 
-        /* --- THE COVER (EMBEDDED DATA) --- */
-        #screen-cover {
-            position: fixed; inset: 0; z-index: 2000; background: var(--bone);
-            display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease;
-        }
-        #cover-image { 
-            width: 100%; height: 100%; 
-            object-fit: cover; 
-            object-position: center;
-        }
-        .ribbon-cover { 
-            position: absolute; bottom: 48px; left: 50%; 
-            width: var(--ribbon-w); height: 120px; 
-            background: var(--spring-pink); 
-            transform: translateX(-50%); z-index: 2100; cursor: pointer; 
+        /* --- THE NEW FOUNDATION: CSS-DRIVEN COVER --- */
+        #gatekeeper {
+            position: fixed; inset: 0; z-index: 5000;
+            background-color: var(--bone);
+            background-image: url('https://i.ibb.co/Lz0D79m/ryo-spring.png'); /* High-Reliability Render */
+            background-size: cover;
+            background-position: center;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* --- HANDSHAKE --- */
-        #threshold { 
-            position: fixed; inset: 0; z-index: 3000; background: var(--bone); 
-            display: none; justify-content: center; align-items: center; 
-            font-size: 80px; font-weight: 900; color: var(--ink); 
+        .datum-ribbon {
+            position: absolute; bottom: 48px; width: 48px; height: 120px;
+            background: var(--pink); cursor: pointer;
         }
 
-        /* --- WORKSPACE --- */
-        #ui-layer { position: fixed; inset: 0; z-index: 1000; opacity: 0; visibility: hidden; }
-        #main-viewport { position: absolute; inset: 80px 0; background: var(--bone); display: none; }
-        #canvas-container { width: 100%; height: 100%; display: grid; grid-template-columns: 1fr 1fr; }
-        .page-surface { position: relative; height: 100%; border-right: 0.5px solid rgba(0,0,0,0.02); }
-        .dot-grid { position: absolute; inset: 0; background-image: radial-gradient(rgba(15,15,13,0.08) 0.5px, transparent 0.5px); background-size: 16px 16px; }
+        /* --- THE HANDSHAKE BRIDGE --- */
+        #bridge {
+            position: fixed; inset: 0; z-index: 6000;
+            background: var(--bone); display: none;
+            justify-content: center; align-items: center;
+            font-size: 80px; font-weight: 900; color: var(--ink);
+        }
+
+        /* --- THE LABORATORY --- */
+        #lab { 
+            position: fixed; inset: 0; z-index: 1000; 
+            opacity: 0; visibility: hidden; 
+        }
+        .canvas-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            width: 100vw; height: calc(100vh - 160px);
+            margin-top: 80px;
+        }
+        .page { 
+            position: relative; background: var(--bone); 
+            background-image: radial-gradient(rgba(15,15,13,0.1) 0.5px, transparent 0.5px);
+            background-size: 16px 16px;
+        }
         canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 
-        .active-view { opacity: 1 !important; visibility: visible !important; display: block !important; }
+        .on { opacity: 1 !important; visibility: visible !important; }
 
-        @media (orientation: portrait) { #canvas-container { grid-template-columns: 1fr; width: 200%; } }
+        @media (orientation: portrait) { .canvas-grid { grid-template-columns: 1fr; width: 200vw; } }
     </style>
 </head>
 <body>
 
-    <section id="screen-cover" onclick="triggerHandshake()">
-        <img id="cover-image" src="https://i.ibb.co/FBTjM4J/ryo-placeholder.png" alt="VOLE COVER">
-        <div class="ribbon-cover"></div>
-    </section>
+    <div id="gatekeeper">
+        <div class="datum-ribbon" onclick="ignite()"></div>
+    </div>
 
-    <div id="threshold">//|</div>
+    <div id="bridge">//|</div>
 
-    <div id="ui-layer">
-        <main id="main-viewport">
-            <div id="canvas-container">
-                <article class="page-surface"><div class="dot-grid"></div><canvas id="cl"></canvas></article>
-                <article class="page-surface"><div class="dot-grid"></div><canvas id="cr"></canvas></article>
-            </div>
-        </main>
+    <div id="lab">
+        <div class="canvas-grid" id="grid">
+            <div class="page"><canvas id="L"></canvas></div>
+            <div class="page"><canvas id="R"></canvas></div>
+        </div>
     </div>
 
     <script>
-        function triggerHandshake() {
-            const cover = document.getElementById('screen-cover');
-            const thresh = document.getElementById('threshold');
-            
-            cover.style.opacity = '0';
-            thresh.style.display = 'flex';
-            
+        function ignite() {
+            const gate = document.getElementById('gatekeeper');
+            const bridge = document.getElementById('bridge');
+            const lab = document.getElementById('lab');
+
+            gate.style.opacity = '0';
+            bridge.style.display = 'flex';
+
             setTimeout(() => {
-                thresh.style.display = 'none';
-                cover.style.display = 'none';
-                document.getElementById('ui-layer').classList.add('active-view');
-                document.getElementById('main-viewport').classList.add('active-view');
-                requestAnimationFrame(() => { initCanvas('cl'); initCanvas('cr'); });
+                bridge.style.display = 'none';
+                gate.style.display = 'none';
+                lab.classList.add('on');
+                init('L'); init('R');
             }, 1200);
         }
 
-        function initCanvas(id) {
-            const canvas = document.getElementById(id);
-            const ctx = canvas.getContext('2d');
+        function init(id) {
+            const c = document.getElementById(id);
+            const ctx = c.getContext('2d');
             const dpr = window.devicePixelRatio || 1;
-            canvas.width = canvas.offsetWidth * dpr;
-            canvas.height = canvas.offsetHeight * dpr;
+            c.width = c.offsetWidth * dpr;
+            c.height = c.offsetHeight * dpr;
             ctx.scale(dpr, dpr);
-            
-            const saved = localStorage.getItem(id);
-            if(saved) {
-                const img = new Image();
-                img.onload = () => ctx.drawImage(img, 0, 0, canvas.width/dpr, canvas.height/dpr);
-                img.src = saved;
-            }
 
             let drawing = false;
-            canvas.onpointerdown = (e) => { if(e.pointerType === 'pen') { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); } };
-            canvas.onpointermove = (e) => { if(drawing) { ctx.strokeStyle = '#0F0F0D'; ctx.lineWidth = 0.5; ctx.lineCap = 'round'; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
-            window.onpointerup = () => { if(drawing) { drawing = false; localStorage.setItem(id, canvas.toDataURL()); } };
+            c.onpointerdown = (e) => { if(e.pointerType === 'pen') { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); } };
+            c.onpointermove = (e) => { if(drawing) { 
+                ctx.strokeStyle = '#0F0F0D'; ctx.lineWidth = 0.5; ctx.lineCap = 'round';
+                ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); 
+            } };
+            window.onpointerup = () => { drawing = false; };
         }
     </script>
 </body>
 </html>
+
 
 
 
