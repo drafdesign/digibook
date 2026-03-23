@@ -3,30 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>VOLE // RECON</title>
+    <title>VOLE // REGISTRY</title>
     <style>
-        :root { --bone: #F5F2EB; --ink: #0F0F0D; --pink: #F48FB1; }
+        :root { --bone: #F5F2EB; --ink: #0F0F0D; --pink: #F48FB1; --gray: #D1CDC4; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; touch-action: none; }
         body { background: var(--bone); font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; }
 
-        /* THE GATE: No external fetch dependencies */
         #gate {
             position: fixed; inset: 0; z-index: 5000;
-            background-color: var(--bone);
-            background-image: url('https://lh3.googleusercontent.com/d/1X5X8vVj1S8j_T_P3_B0q5-D9_zX9v_v_'); 
-            background-size: cover; background-position: center;
-            display: flex; justify-content: center; align-items: center;
+            background: var(--bone); display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.5s ease;
         }
-
-        .ribbon {
-            position: absolute; bottom: 48px; width: 48px; height: 120px;
-            background: var(--pink); cursor: pointer;
-        }
-
-        .version {
-            position: absolute; bottom: 12px; right: 12px; 
-            font-size: 9px; color: var(--ink); opacity: 0.4;
-        }
+        /* Pink Ribbon from your sketch */
+        .ribbon { width: 48px; height: 120px; background: var(--pink); cursor: pointer; }
 
         #bridge {
             position: fixed; inset: 0; z-index: 6000;
@@ -35,26 +24,52 @@
             font-size: 80px; font-weight: 900; color: var(--ink);
         }
 
-        #lab { position: fixed; inset: 0; z-index: 1000; opacity: 0; visibility: hidden; }
-        .canvas-container { display: flex; width: 100vw; height: 100vh; background: var(--bone); }
-        canvas { width: 100%; height: 100%; touch-action: none; }
+        #lab { position: fixed; inset: 0; z-index: 1000; opacity: 0; visibility: hidden; display: flex; flex-direction: column; }
+        
+        /* THE DRAWER: Based on your Sketch */
+        #drawer {
+            height: 120px; width: 100%; border-top: 1px solid var(--ink);
+            background: var(--bone); display: flex; align-items: center; padding: 0 40px; justify-content: space-between;
+        }
+        .tool-group { display: flex; gap: 20px; align-items: center; }
+        .nib { width: 32px; height: 32px; border: 1px solid var(--ink); cursor: pointer; }
+        .nib.active { background: var(--ink); }
+        .dot { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--ink); }
+        .registry-id { font-weight: bold; letter-spacing: 2px; }
+
+        canvas { flex-grow: 1; touch-action: none; background-image: radial-gradient(var(--gray) 0.5px, transparent 0.5px); background-size: 20px 20px; }
         .on { opacity: 1 !important; visibility: visible !important; }
     </style>
 </head>
 <body>
 
-    <div id="gate">
-        <div class="ribbon" onclick="ignite()"></div>
-        <div class="version">V.0.6 // RECON</div>
-    </div>
-
+    <div id="gate"><div class="ribbon" onclick="ignite()"></div></div>
     <div id="bridge">//|</div>
 
     <div id="lab">
-        <div class="canvas-container"><canvas id="cvs"></canvas></div>
+        <canvas id="cvs"></canvas>
+        <div id="drawer">
+            <div class="tool-group">
+                <div class="nib active" id="penBtn" onclick="setTool('pen')"></div>
+                <div class="nib" id="eraseBtn" onclick="setTool('erase')"></div>
+                <div class="dot" style="background: var(--ink)"></div>
+                <div class="dot" style="background: var(--pink)"></div>
+            </div>
+            <div class="registry-id">[ VOLE-2026-X ]</div>
+            <div class="tool-group">
+                <div style="font-size: 24px;">☰</div>
+            </div>
+        </div>
     </div>
 
     <script>
+        let tool = 'pen';
+        function setTool(t) {
+            tool = t;
+            document.getElementById('penBtn').classList.toggle('active', t === 'pen');
+            document.getElementById('eraseBtn').classList.toggle('active', t === 'erase');
+        }
+
         function ignite() {
             document.getElementById('gate').style.opacity = '0';
             document.getElementById('bridge').style.display = 'flex';
@@ -63,20 +78,30 @@
                 document.getElementById('gate').style.display = 'none';
                 document.getElementById('lab').classList.add('on');
                 init();
-            }, 1200);
+            }, 1000);
         }
 
         function init() {
             const c = document.getElementById('cvs');
             const ctx = c.getContext('2d');
             const dpr = window.devicePixelRatio || 1;
-            c.width = window.innerWidth * dpr;
-            c.height = window.innerHeight * dpr;
+            c.width = c.offsetWidth * dpr;
+            c.height = c.offsetHeight * dpr;
             ctx.scale(dpr, dpr);
 
             let drawing = false;
-            c.onpointerdown = (e) => { if(e.pointerType === 'pen') { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); } };
-            c.onpointermove = (e) => { if(drawing) { ctx.strokeStyle = '#0F0F0D'; ctx.lineWidth = 1; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
+            c.onpointerdown = (e) => { 
+                if(e.pointerType === 'pen') { 
+                    drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); 
+                } 
+            };
+            c.onpointermove = (e) => { 
+                if(drawing) { 
+                    ctx.strokeStyle = tool === 'erase' ? '#F5F2EB' : '#0F0F0D';
+                    ctx.lineWidth = tool === 'erase' ? 20 : 1;
+                    ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); 
+                } 
+            };
             window.onpointerup = () => { drawing = false; };
         }
     </script>
