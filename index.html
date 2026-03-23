@@ -3,31 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>VOLE // OFFICIAL</title>
+    <title>VOLE // RECON</title>
     <style>
         :root { --bone: #F5F2EB; --ink: #0F0F0D; --pink: #F48FB1; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; touch-action: none; }
         body { background: var(--bone); font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; }
 
-        /* --- THE VOLE GATEKEEPER --- */
-        #gatekeeper {
+        /* THE GATE: No external fetch dependencies */
+        #gate {
             position: fixed; inset: 0; z-index: 5000;
             background-color: var(--bone);
-            /* Using a high-stability cloud link for the portrait cover */
-            background-image: url('https://i.ibb.co/Lz0D79m/ryo-spring.png'); 
+            background-image: url('https://lh3.googleusercontent.com/d/1X5X8vVj1S8j_T_P3_B0q5-D9_zX9v_v_'); 
             background-size: cover; background-position: center;
             display: flex; justify-content: center; align-items: center;
         }
 
-        .datum-ribbon {
+        .ribbon {
             position: absolute; bottom: 48px; width: 48px; height: 120px;
             background: var(--pink); cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .version-tag {
-            position: absolute; bottom: 10px; right: 10px; 
-            font-size: 8px; color: var(--ink); opacity: 0.3;
+        .version {
+            position: absolute; bottom: 12px; right: 12px; 
+            font-size: 9px; color: var(--ink); opacity: 0.4;
         }
 
         #bridge {
@@ -38,35 +36,31 @@
         }
 
         #lab { position: fixed; inset: 0; z-index: 1000; opacity: 0; visibility: hidden; }
-        .canvas-grid { display: grid; grid-template-columns: 1fr; width: 100vw; height: calc(100vh - 160px); margin-top: 80px; }
-        .page { position: relative; background: var(--bone); border: 1px solid rgba(0,0,0,0.05); }
-        canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .canvas-container { display: flex; width: 100vw; height: 100vh; background: var(--bone); }
+        canvas { width: 100%; height: 100%; touch-action: none; }
         .on { opacity: 1 !important; visibility: visible !important; }
     </style>
 </head>
 <body>
 
-    <div id="gatekeeper">
-        <div class="datum-ribbon" onclick="ignite()"></div>
-        <div class="version-tag">VOLE.V.0.5</div>
+    <div id="gate">
+        <div class="ribbon" onclick="ignite()"></div>
+        <div class="version">V.0.6 // RECON</div>
     </div>
 
     <div id="bridge">//|</div>
 
     <div id="lab">
-        <div class="canvas-grid"><div class="page"><canvas id="cvs"></canvas></div></div>
+        <div class="canvas-container"><canvas id="cvs"></canvas></div>
     </div>
 
     <script>
-        // FORCING A CACHE CLEAR ON REFRESH
-        console.log("VOLE VERSION 0.5 LOADED");
-
         function ignite() {
-            document.getElementById('gatekeeper').style.opacity = '0';
+            document.getElementById('gate').style.opacity = '0';
             document.getElementById('bridge').style.display = 'flex';
             setTimeout(() => {
                 document.getElementById('bridge').style.display = 'none';
-                document.getElementById('gatekeeper').style.display = 'none';
+                document.getElementById('gate').style.display = 'none';
                 document.getElementById('lab').classList.add('on');
                 init();
             }, 1200);
@@ -76,8 +70,8 @@
             const c = document.getElementById('cvs');
             const ctx = c.getContext('2d');
             const dpr = window.devicePixelRatio || 1;
-            c.width = c.offsetWidth * dpr;
-            c.height = c.offsetHeight * dpr;
+            c.width = window.innerWidth * dpr;
+            c.height = window.innerHeight * dpr;
             ctx.scale(dpr, dpr);
 
             let drawing = false;
@@ -88,15 +82,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
