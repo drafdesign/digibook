@@ -3,62 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>DRAF. // VOLE. V2.4 REV-S</title>
+    <title>VOLE // REV-T</title>
     <style>
         :root {
             --bone: #F5F2EB;
             --ink: #0F0F0D;
             --spring-pink: #F48FB1;
-            --dot: rgba(15,15,13,0.05);
-            --nav-height: 80px;
             --ribbon-w: 48px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; touch-action: none; }
-        body { background: var(--bone); font-family: 'Courier New', Courier, monospace; overflow: hidden; height: 100vh; }
+        body { background: var(--bone); font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; }
 
-        /* --- COVER: DIRECT INJECTION --- */
+        /* --- THE COVER (RESOLVED) --- */
         #screen-cover {
             position: fixed; inset: 0; z-index: 2000; background: var(--bone);
-            display: flex; justify-content: center; align-items: center; transition: opacity 0.4s;
+            display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease;
         }
-        #cover-image { width: 100%; height: 100%; object-fit: cover; object-position: center; }
-        .ribbon-cover { position: absolute; bottom: 48px; left: 50%; width: var(--ribbon-w); height: 120px; background: var(--spring-pink); transform: translateX(-50%); z-index: 2100; cursor: pointer; }
+        #cover-image { 
+            width: 100%; height: 100%; 
+            object-fit: cover; 
+            object-position: center;
+        }
+        .ribbon-cover { 
+            position: absolute; bottom: 48px; left: 50%; 
+            width: var(--ribbon-w); height: 120px; 
+            background: var(--spring-pink); 
+            transform: translateX(-50%); z-index: 2100; cursor: pointer; 
+        }
 
         /* --- HANDSHAKE --- */
-        #threshold { position: fixed; inset: 0; z-index: 3000; background: var(--bone); display: none; justify-content: center; align-items: center; font-size: 80px; font-weight: 900; color: var(--ink); }
+        #threshold { 
+            position: fixed; inset: 0; z-index: 3000; background: var(--bone); 
+            display: none; justify-content: center; align-items: center; 
+            font-size: 80px; font-weight: 900; color: var(--ink); 
+        }
 
         /* --- WORKSPACE --- */
-        #ui-layer { position: fixed; inset: 0; z-index: 1000; pointer-events: none; opacity: 0; visibility: hidden; }
-        #main-viewport { position: absolute; top: var(--nav-height); bottom: var(--nav-height); left: 0; right: 0; background: var(--bone); overflow: hidden; display: none; }
+        #ui-layer { position: fixed; inset: 0; z-index: 1000; opacity: 0; visibility: hidden; }
+        #main-viewport { position: absolute; inset: 80px 0; background: var(--bone); display: none; }
         #canvas-container { width: 100%; height: 100%; display: grid; grid-template-columns: 1fr 1fr; }
         .page-surface { position: relative; height: 100%; border-right: 0.5px solid rgba(0,0,0,0.02); }
-        .dot-grid { position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(var(--dot) 0.5px, transparent 0.5px); background-size: 16px 16px; }
-        canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+        .dot-grid { position: absolute; inset: 0; background-image: radial-gradient(rgba(15,15,13,0.08) 0.5px, transparent 0.5px); background-size: 16px 16px; }
+        canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 
         .active-view { opacity: 1 !important; visibility: visible !important; display: block !important; }
 
-        @media (orientation: portrait) {
-            #canvas-container { grid-template-columns: 1fr; width: 200%; }
-        }
+        @media (orientation: portrait) { #canvas-container { grid-template-columns: 1fr; width: 200%; } }
     </style>
 </head>
 <body>
 
     <section id="screen-cover" onclick="triggerHandshake()">
-        <img id="cover-image" src="https://i.postimg.cc/47N9h976/image.png">
+        <img id="cover-image" src="./cover.png" onerror="this.src='https://i.ibb.co/Lz0D79m/ryo-spring.png'">
         <div class="ribbon-cover"></div>
     </section>
 
     <div id="threshold">//|</div>
 
     <div id="ui-layer">
-        <div id="main-viewport">
+        <main id="main-viewport">
             <div id="canvas-container">
                 <article class="page-surface"><div class="dot-grid"></div><canvas id="cl"></canvas></article>
                 <article class="page-surface"><div class="dot-grid"></div><canvas id="cr"></canvas></article>
             </div>
-        </div>
+        </main>
     </div>
 
     <script>
@@ -72,7 +81,6 @@
                 document.getElementById('screen-cover').style.display = 'none';
                 document.getElementById('ui-layer').classList.add('active-view');
                 document.getElementById('main-viewport').classList.add('active-view');
-                
                 requestAnimationFrame(() => { initCanvas('cl'); initCanvas('cr'); });
             }, 1200);
         }
@@ -100,6 +108,7 @@
     </script>
 </body>
 </html>
+
 
 
 
