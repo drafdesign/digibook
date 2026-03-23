@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>DRAF. // VOLE. V2.4 REV-K</title>
+    <title>DRAF. // VOLE. V2.4 REV-L</title>
     <style>
         :root {
             --bone: #F5F2EB;
@@ -18,29 +18,35 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; touch-action: none; }
         body { background: var(--bone); font-family: 'Courier New', Courier, monospace; overflow: hidden; height: 100vh; }
 
-        /* --- COVER: SPREAD-AWARE CROP --- */
+        /* --- COVER --- */
         #screen-cover {
             position: fixed; inset: 0; z-index: 2000; background: var(--bone);
             display: flex; justify-content: center; align-items: center; transition: opacity var(--transition);
         }
-        #cover-image { 
-            width: 100%; height: 100%; 
-            object-fit: cover; 
-            object-position: right; /* Pinned to Front Cover of the spread */
-        }
+        #cover-image { width: 100%; height: 100%; object-fit: cover; object-position: right; }
         .ribbon-cover { position: absolute; bottom: 48px; left: 50%; width: var(--ribbon-w); height: 120px; background: var(--spring-pink); transform: translateX(-50%); z-index: 2100; }
 
-        /* --- HANDSHAKE --- */
+        /* --- EXTENDED HANDSHAKE --- */
         #threshold { position: fixed; inset: 0; z-index: 3000; background: var(--bone); display: none; justify-content: center; align-items: center; font-size: 80px; font-weight: 900; color: var(--ink); }
 
-        /* --- UI & VIEWPORT --- */
+        /* --- UI --- */
         #ui-layer { position: fixed; inset: 0; z-index: 1000; pointer-events: none; opacity: 0; }
         .nav-bar, .footer-bar { position: absolute; width: 100%; height: var(--nav-height); background: var(--bone); pointer-events: auto; display: flex; align-items: center; padding: 0 40px; font-size: 10px; z-index: 1010; }
         .nav-bar { top: 0; border-bottom: 0.5px solid rgba(0,0,0,0.05); }
         .footer-bar { bottom: 0; border-top: 0.5px solid rgba(0,0,0,0.05); justify-content: space-between; }
-        
         #ribbon { position: absolute; bottom: var(--nav-height); width: var(--ribbon-w); height: 140px; background: var(--spring-pink); z-index: 1005; transition: left 0.3s ease; }
 
+        /* --- PALETTE (Simplified: No CLR/CLS) --- */
+        #palette {
+            position: absolute; bottom: calc(var(--nav-height) + 20px); right: 40px; width: 140px; 
+            background: var(--bone); border: 0.5px solid var(--ink); display: none; grid-template-rows: 1fr 1fr; pointer-events: auto; z-index: 1100;
+        }
+        .pal-row { display: grid; grid-template-columns: repeat(3, 1fr); height: 44px; }
+        .tool { border: 0.2px solid rgba(15,15,13,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 9px; }
+        .tool.active { background: var(--ink); color: var(--bone); }
+        .tool.eraser { grid-column: span 3; } /* Eraser takes bottom row */
+
+        /* --- WORKSPACE --- */
         #main-viewport { position: absolute; top: var(--nav-height); bottom: var(--nav-height); left: 0; right: 0; background: var(--bone); overflow: hidden; display: none; }
         #canvas-container { width: 100%; height: 100%; display: grid; grid-template-columns: 1fr 1fr; }
         .page-surface { position: relative; height: 100%; }
@@ -69,38 +75,48 @@
     <div id="ui-layer">
         <header class="nav-bar">DRAF. // LABORATORY</header>
         <div id="ribbon"></div>
+        <div id="palette">
+            <div class="pal-row">
+                <div class="tool active" onclick="setTool(0.5, this)">0.5</div>
+                <div class="tool" onclick="setTool(1.2, this)">1.2</div>
+                <div class="tool" onclick="setTool(2.5, this)">2.5</div>
+            </div>
+            <div class="pal-row">
+                <div class="tool eraser" onclick="setTool(20, this, true)">ERASER</div>
+            </div>
+        </div>
         <footer class="footer-bar">
             <div onclick="togglePage('left')">[002]</div>
-            <div style="font-weight:900;">TOC // WORK</div>
+            <div onclick="togglePalette()" style="cursor:pointer; font-weight:900;">TOOLS</div>
             <div onclick="togglePage('right')">[003]</div>
         </footer>
     </div>
 
     <main id="main-viewport">
         <div id="canvas-container">
-            <article class="page-surface" id="p_left"><div class="dot-grid"></div><canvas id="can_l"></canvas></article>
-            <article class="page-surface" id="p_right"><div class="dot-grid"></div><canvas id="can_r"></canvas></article>
+            <article class="page-surface" id="p_l"><div class="dot-grid"></div><canvas id="can_l"></canvas></article>
+            <article class="page-surface" id="p_r"><div class="dot-grid"></div><canvas id="can_r"></canvas></article>
         </div>
     </main>
 
     <script>
+        let inkColor = '#0F0F0D';
+        let strokeWidth = 0.5;
+
         function triggerHandshake() {
             document.getElementById('screen-cover').style.opacity = '0';
             const thresh = document.getElementById('threshold');
             thresh.style.display = 'flex';
             
+            // 1200ms Handshake for Screenshot window
             setTimeout(() => {
                 thresh.style.display = 'none';
                 document.getElementById('screen-cover').style.display = 'none';
                 document.getElementById('ui-layer').classList.add('visible');
                 document.getElementById('main-viewport').classList.add('visible');
                 
-                // Force a layout recalculation before initializing canvas
-                requestAnimationFrame(() => {
-                    initCanvas('can_l');
-                    initCanvas('can_r');
-                });
-            }, 400);
+                requestAnimationFrame(() => { initCanvas('can_l'); initCanvas('can_r'); });
+            }, 1200);
         }
 
         function initCanvas(id) {
@@ -120,8 +136,20 @@
 
             let drawing = false;
             canvas.onpointerdown = (e) => { if(e.pointerType === 'pen') { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); } };
-            canvas.onpointermove = (e) => { if(drawing) { ctx.strokeStyle = '#0F0F0D'; ctx.lineWidth = 0.5; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
+            canvas.onpointermove = (e) => { if(drawing) { ctx.strokeStyle = inkColor; ctx.lineWidth = strokeWidth; ctx.lineCap = 'round'; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
             window.onpointerup = () => { if(drawing) { drawing = false; localStorage.setItem(id, canvas.toDataURL()); } };
+        }
+
+        function setTool(w, el, erase=false) {
+            strokeWidth = w;
+            inkColor = erase ? '#F5F2EB' : '#0F0F0D';
+            document.querySelectorAll('.tool').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function togglePalette() {
+            const p = document.getElementById('palette');
+            p.style.display = p.style.display === 'grid' ? 'none' : 'grid';
         }
 
         function togglePage(side) {
@@ -134,6 +162,7 @@
     </script>
 </body>
 </html>
+
 
 
 
