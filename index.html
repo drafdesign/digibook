@@ -3,138 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>DRAF. // VOLE.</title>
+    <title>DRAF. // VOLE. V2.4</title>
     <style>
         :root {
             --bone: #F5F2EB;
             --ink: #0F0F0D;
             --fired: #D4500A;
-            --spring: #FCE4EC;
-            --dot: rgba(15,15,13,0.12);
+            --blueprint: #1A3A5C;
+            --spring-pink: #FCE4EC;
+            --spring-ribbon: #F48FB1;
+            --dot: rgba(15,15,13,0.08);
             --transition: 400ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; touch-action: none; }
-        
-        body { background: var(--ink); font-family: 'Courier New', Courier, monospace; overflow: hidden; }
+        body { background: var(--ink); font-family: 'Courier New', Courier, monospace; overflow: hidden; height: 100vh; }
 
-        /* --- STAGE: COVER (RYO SPRING) --- */
+        /* --- STAGE 0: THE COVER (SPRING) --- */
         #screen-cover {
             position: fixed; inset: 0; z-index: 1000;
-            background: linear-gradient(135deg, var(--spring) 0%, #FFF5F7 100%);
+            background: linear-gradient(135deg, var(--spring-pink) 0%, #FFF5F7 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity var(--transition), transform var(--transition);
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.03); /* Stage 2 Wear */
+        }
+        .cover-ribbon {
+            position: absolute; top: 0; right: 15%; width: 42px; height: 120px;
+            background: var(--spring-ribbon); box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .draf-mark { font-size: 24px; letter-spacing: 12px; font-weight: 100; color: var(--ink); margin-bottom: 20px; }
+        .cover-hint { font-size: 8px; letter-spacing: 4px; color: rgba(0,0,0,0.2); position: absolute; bottom: 15%; }
+        .cover-stats { position: absolute; bottom: 40px; right: 40px; font-size: 9px; letter-spacing: 2px; opacity: 0.4; }
+
+        /* --- STAGE 1: THE THRESHOLD --- */
+        #threshold {
+            position: fixed; inset: 0; z-index: 999; background: var(--bone);
             display: flex; justify-content: center; align-items: center;
-            cursor: pointer; transition: opacity var(--transition), transform var(--transition);
-            /* Stage 2 Wear Engine: Exterior Only */
-            box-shadow: inset 0 0 80px rgba(0,0,0,0.05);
-        }
-        .cover-content { text-align: center; pointer-events: none; }
-        .cover-content h1 { font-weight: 100; letter-spacing: 12px; color: var(--fired); font-size: 2rem; }
-        .cover-content p { font-size: 9px; margin-top: 15px; letter-spacing: 2px; opacity: 0.4; }
-
-        /* --- STAGE: //| THRESHOLD --- */
-        #screen-threshold {
-            position: fixed; inset: 0; z-index: 900;
-            background: var(--bone); display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 200ms ease;
-            font-size: 80px; font-weight: 900; letter-spacing: -10px; color: var(--ink);
+            font-size: 120px; font-weight: 900; letter-spacing: -15px;
         }
 
-        /* --- STAGE: TOC SPREAD (PRISTINE) --- */
-        #screen-toc {
+        /* --- STAGE 2: THE LABORATORY (WORKSPACE) --- */
+        #screen-workspace {
             width: 100vw; height: 100vh; background: var(--bone);
             display: grid; grid-template-columns: 1fr 1fr;
-            padding: 80px; gap: 100px; position: relative;
             opacity: 0; pointer-events: none; transition: opacity var(--transition);
         }
 
-        .grid-bg {
+        .page { position: relative; width: 100%; height: 100%; border-right: 1px solid rgba(0,0,0,0.02); overflow: hidden; }
+        .dot-grid {
             position: absolute; inset: 0; pointer-events: none;
             background-image: radial-gradient(var(--dot) 0.5px, transparent 0.5px);
-            background-size: 11.34px 11.34px; z-index: 1;
+            background-size: 15.1px 15.1px;
         }
 
-        .ribbon {
-            position: absolute; top: 0; right: 15%; width: 42px; height: 64px;
-            background: var(--fired); z-index: 100; cursor: pointer;
+        /* --- INTERIOR UI --- */
+        .page-num { position: absolute; font-size: 10px; font-weight: 900; opacity: 0.5; }
+        .ribbon-fired {
+            position: absolute; bottom: 0; width: 30px; height: 50px;
+            background: var(--fired); z-index: 50; cursor: pointer;
         }
 
-        /* LEFT PAGE: 2x4 GRID */
-        .toc-left { display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 1fr); gap: 20px; z-index: 10; }
-        .cell { border: 1px solid var(--ink); aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; }
-        .cell-new { color: var(--fired); font-weight: 900; font-size: 32px; }
-        .cell-label { position: absolute; bottom: 8px; left: 8px; font-size: 8px; letter-spacing: 1px; }
-
-        /* RIGHT PAGE: INDEX */
-        .toc-right { z-index: 10; display: flex; flex-direction: column; border-left: 0.5px solid rgba(15,15,13,0.1); padding-left: 60px; }
-        .ledger-header { font-size: 11px; font-weight: 900; margin-bottom: 40px; letter-spacing: 3px; display: flex; justify-content: space-between; }
-        .ledger-entry { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 0.5px solid rgba(15,15,13,0.08); font-size: 9px; letter-spacing: 1.5px; }
-        .inbox-cell { background: #FCF59B; border: none; font-size: 9px; font-weight: 900; }
+        /* Footer Nav (Shared Landscape, Full Portrait) */
+        .nav-footer {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 80px;
+            display: flex; align-items: center; padding: 0 40px; z-index: 100;
+        }
+        .palette-trigger {
+            width: 40px; height: 40px; border: 1.5px solid var(--ink);
+            display: flex; justify-content: center; align-items: center;
+            font-weight: 900; cursor: pointer;
+        }
 
         /* STATES */
         body.is-threshold #screen-cover { opacity: 0; transform: scale(1.05); }
-        body.is-threshold #screen-threshold { opacity: 1; }
-        body.is-toc #screen-threshold { opacity: 0; }
-        body.is-toc #screen-toc { opacity: 1; pointer-events: auto; }
+        body.is-threshold #threshold { opacity: 1; }
+        body.is-work #threshold { opacity: 0; }
+        body.is-work #screen-workspace { opacity: 1; pointer-events: auto; }
+
+        @media (orientation: portrait) {
+            #screen-workspace { grid-template-columns: 1fr; }
+            .page:last-child { display: none; }
+        }
     </style>
 </head>
 <body class="is-cover">
 
-    <section id="screen-cover">
-        <div class="cover-content">
-            <h1>SPRING</h1>
-            <p>DRAF. STUDIO // VOLE.</p>
-        </div>
+    <section id="screen-cover" onclick="openBook()">
+        <div class="cover-ribbon"></div>
+        <div class="draf-mark">DRAF.</div>
+        <div class="cover-hint">TAP TO OPEN</div>
+        <div class="cover-stats">WE 001/100</div>
     </section>
 
-    <section id="screen-threshold">//|</section>
+    <div id="threshold">//|</div>
 
-    <main id="screen-toc">
-        <div class="grid-bg"></div>
-        <div class="ribbon"></div>
-
-        <div class="toc-left">
-            <div class="cell cell-new" id="btn-new">//| <span class="cell-label">NEW_SESSION</span></div>
-            <div class="cell"><span class="cell-label">01 // MOD_A</span></div>
-            <div class="cell"><span class="cell-label">02 // MOD_B</span></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell inbox-cell">STICKY_INBOX</div>
-        </div>
-
-        <div class="toc-right">
-            <div class="ledger-header"><span>INDEX_CHRONO</span><span style="color:var(--fired)">VOL_01</span></div>
-            <div id="ledger">
-                <div class="ledger-entry"><span>[20260322] 12:00</span> <b>SYSTEM_BOOT</b></div>
+    <main id="screen-workspace">
+        <article class="page" id="page-left">
+            <div class="dot-grid"></div>
+            <div class="page-num" style="bottom: 85px; left: 40px;">[002]</div>
+            <div class="ribbon-fired" style="right: 0; border-radius: 4px 0 0 0;"></div>
+            <div class="nav-footer">
+                <div class="palette-trigger">//|</div>
+                <div style="margin-left: 20px; font-size: 10px; opacity: 0.5;">// PRIVATE</div>
             </div>
-        </div>
+        </article>
+
+        <article class="page" id="page-right">
+            <div class="dot-grid"></div>
+            <div class="page-num" style="bottom: 40px; right: 40px;">[003]</div>
+            <div class="ribbon-fired" style="left: 0; border-radius: 0 4px 0 0;"></div>
+        </article>
     </main>
 
     <script>
-        const cover = document.getElementById('screen-cover');
-        const btnNew = document.getElementById('btn-new');
-        const ledger = document.getElementById('ledger');
-
-        // GESTURE: ENTER BOOK
-        cover.addEventListener('pointerdown', () => {
+        function openBook() {
             document.body.className = 'is-threshold';
             setTimeout(() => {
-                document.body.className = 'is-toc';
-            }, 400); // The 400ms animation
-        });
+                document.body.className = 'is-work';
+            }, 400);
+        }
 
-        // GESTURE: NEW PAGE
-        btnNew.addEventListener('pointerdown', () => {
-            const now = new Date();
-            const dateStr = now.toISOString().split('T')[0].replace(/-/g, '');
-            const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-            
-            const entry = document.createElement('div');
-            entry.className = 'ledger-entry';
-            entry.innerHTML = `<span>[${dateStr}] ${timeStr}</span> <b>AUTOSPY_INIT</b>`;
-            ledger.appendChild(entry);
-        });
+        // Kieran's Gesture Engine Placeholder
+        window.addEventListener('touchstart', (e) => {
+            if (e.touches.length > 1) {
+                // Navigate Logic
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>
+
 
 
 
