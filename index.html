@@ -9,7 +9,8 @@
             --bone: #F5F2EB;
             --ink: #0F0F0D;
             --fired: #D4500A;
-            --dot: rgba(15,15,13,0.12); /* 3mm Register */
+            --spring: #FCE4EC;
+            --dot: rgba(15,15,13,0.12);
             --transition: 400ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -17,85 +18,111 @@
         
         body { background: var(--ink); font-family: 'Courier New', Courier, monospace; overflow: hidden; }
 
-        /* --- THE PRISTINE SPREAD --- */
-        #toc-layer {
-            width: 100vw; height: 100vh;
-            background: var(--bone); /* No wear engine artifacts here */
+        /* --- STAGE: COVER (RYO SPRING) --- */
+        #screen-cover {
+            position: fixed; inset: 0; z-index: 1000;
+            background: linear-gradient(135deg, var(--spring) 0%, #FFF5F7 100%);
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; transition: opacity var(--transition), transform var(--transition);
+            /* Stage 2 Wear Engine: Exterior Only */
+            box-shadow: inset 0 0 80px rgba(0,0,0,0.05);
+        }
+        .cover-content { text-align: center; pointer-events: none; }
+        .cover-content h1 { font-weight: 100; letter-spacing: 12px; color: var(--fired); font-size: 2rem; }
+        .cover-content p { font-size: 9px; margin-top: 15px; letter-spacing: 2px; opacity: 0.4; }
+
+        /* --- STAGE: //| THRESHOLD --- */
+        #screen-threshold {
+            position: fixed; inset: 0; z-index: 900;
+            background: var(--bone); display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 200ms ease;
+            font-size: 80px; font-weight: 900; letter-spacing: -10px; color: var(--ink);
+        }
+
+        /* --- STAGE: TOC SPREAD (PRISTINE) --- */
+        #screen-toc {
+            width: 100vw; height: 100vh; background: var(--bone);
             display: grid; grid-template-columns: 1fr 1fr;
             padding: 80px; gap: 100px; position: relative;
-            opacity: 1; /* Interior is clinical and bright */
+            opacity: 0; pointer-events: none; transition: opacity var(--transition);
         }
 
         .grid-bg {
             position: absolute; inset: 0; pointer-events: none;
             background-image: radial-gradient(var(--dot) 0.5px, transparent 0.5px);
-            background-size: 11.34px 11.34px; /* Locked 3mm Register */
-            z-index: 1;
+            background-size: 11.34px 11.34px; z-index: 1;
         }
 
-        /* --- THE RIBBON --- */
         .ribbon {
             position: absolute; top: 0; right: 15%; width: 42px; height: 64px;
             background: var(--fired); z-index: 100; cursor: pointer;
-            transition: transform 0.2s ease;
         }
-        .ribbon:active { transform: translateY(4px); }
 
-        /* --- LEFT: 2x4 GRID --- */
+        /* LEFT PAGE: 2x4 GRID */
         .toc-left { display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 1fr); gap: 20px; z-index: 10; }
-        .cell { 
-            border: 1px solid var(--ink); aspect-ratio: 1/1; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: transparent; position: relative; cursor: pointer;
-        }
+        .cell { border: 1px solid var(--ink); aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; }
         .cell-new { color: var(--fired); font-weight: 900; font-size: 32px; }
         .cell-label { position: absolute; bottom: 8px; left: 8px; font-size: 8px; letter-spacing: 1px; }
 
-        /* --- RIGHT: THE LEDGER --- */
-        .toc-right { 
-            z-index: 10; display: flex; flex-direction: column; 
-            border-left: 0.5px solid rgba(15,15,13,0.1); padding-left: 60px; 
-        }
+        /* RIGHT PAGE: INDEX */
+        .toc-right { z-index: 10; display: flex; flex-direction: column; border-left: 0.5px solid rgba(15,15,13,0.1); padding-left: 60px; }
         .ledger-header { font-size: 11px; font-weight: 900; margin-bottom: 40px; letter-spacing: 3px; display: flex; justify-content: space-between; }
-        .ledger-entry { 
-            display: flex; justify-content: space-between; padding: 12px 0; 
-            border-bottom: 0.5px solid rgba(15,15,13,0.08); font-size: 9px; letter-spacing: 1.5px;
-        }
-        .ledger-entry b { color: var(--ink); font-weight: 900; }
-
+        .ledger-entry { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 0.5px solid rgba(15,15,13,0.08); font-size: 9px; letter-spacing: 1.5px; }
         .inbox-cell { background: #FCF59B; border: none; font-size: 9px; font-weight: 900; }
+
+        /* STATES */
+        body.is-threshold #screen-cover { opacity: 0; transform: scale(1.05); }
+        body.is-threshold #screen-threshold { opacity: 1; }
+        body.is-toc #screen-threshold { opacity: 0; }
+        body.is-toc #screen-toc { opacity: 1; pointer-events: auto; }
     </style>
 </head>
-<body>
+<body class="is-cover">
 
-    <main id="toc-layer">
+    <section id="screen-cover">
+        <div class="cover-content">
+            <h1>SPRING</h1>
+            <p>DRAF. STUDIO // VOLE.</p>
+        </div>
+    </section>
+
+    <section id="screen-threshold">//|</section>
+
+    <main id="screen-toc">
         <div class="grid-bg"></div>
-        <div class="ribbon" title="Snap to last edit"></div>
+        <div class="ribbon"></div>
 
         <div class="toc-left">
-            <div class="cell cell-new" id="new-page-trigger">//| <span class="cell-label">NEW_SESSION</span></div>
-            <div class="cell"><span class="cell-label">01 // AT_COST</span></div>
-            <div class="cell"><span class="cell-label">02 // VOLE_UX</span></div>
-            <div class="cell"><span class="cell-label">03 // STRADE_B</span></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell cell-new" id="btn-new">//| <span class="cell-label">NEW_SESSION</span></div>
+            <div class="cell"><span class="cell-label">01 // MOD_A</span></div>
+            <div class="cell"><span class="cell-label">02 // MOD_B</span></div>
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
             <div class="cell inbox-cell">STICKY_INBOX</div>
         </div>
 
         <div class="toc-right">
-            <div class="ledger-header">
-                <span>INDEX_CHRONO</span>
-                <span style="color:var(--fired)">VOL_01</span>
+            <div class="ledger-header"><span>INDEX_CHRONO</span><span style="color:var(--fired)">VOL_01</span></div>
+            <div id="ledger">
+                <div class="ledger-entry"><span>[20260322] 12:00</span> <b>SYSTEM_BOOT</b></div>
             </div>
-            <div id="ledger-list">
-                </div>
         </div>
     </main>
 
     <script>
-        const trigger = document.getElementById('new-page-trigger');
-        const ledger = document.getElementById('ledger-list');
+        const cover = document.getElementById('screen-cover');
+        const btnNew = document.getElementById('btn-new');
+        const ledger = document.getElementById('ledger');
 
-        trigger.addEventListener('pointerdown', () => {
+        // GESTURE: ENTER BOOK
+        cover.addEventListener('pointerdown', () => {
+            document.body.className = 'is-threshold';
+            setTimeout(() => {
+                document.body.className = 'is-toc';
+            }, 400); // The 400ms animation
+        });
+
+        // GESTURE: NEW PAGE
+        btnNew.addEventListener('pointerdown', () => {
             const now = new Date();
             const dateStr = now.toISOString().split('T')[0].replace(/-/g, '');
             const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
@@ -108,5 +135,6 @@
     </script>
 </body>
 </html>
+
 
 
