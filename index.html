@@ -9,12 +9,17 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; touch-action: none; }
         body { background: var(--bone); font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; }
 
+        /* THE GATE: Updated to point to your local cover.png */
         #gate {
             position: fixed; inset: 0; z-index: 5000;
-            background: var(--bone); display: flex; justify-content: center; align-items: center;
+            background: var(--bone); 
+            background-image: url('cover.png'); 
+            background-size: cover; 
+            background-position: center;
+            display: flex; justify-content: center; align-items: center;
             transition: opacity 0.5s ease;
         }
-        /* Pink Ribbon from your sketch */
+        
         .ribbon { width: 48px; height: 120px; background: var(--pink); cursor: pointer; }
 
         #bridge {
@@ -26,7 +31,6 @@
 
         #lab { position: fixed; inset: 0; z-index: 1000; opacity: 0; visibility: hidden; display: flex; flex-direction: column; }
         
-        /* THE DRAWER: Based on your Sketch */
         #drawer {
             height: 120px; width: 100%; border-top: 1px solid var(--ink);
             background: var(--bone); display: flex; align-items: center; padding: 0 40px; justify-content: space-between;
