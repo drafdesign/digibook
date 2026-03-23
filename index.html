@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>VOLE // VOL_01</title>
     <style>
-        :root { --bone: #F5F2EB; --ink: #0F0F0D; --pink: #F48FB1; --gray: #D1CDC4; }
+        :root { --bone: #F5F2EB; --ink: #0F0F0D; --pink: #F48FB1; --gray: #D1CDC4; --gutter: 24px; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; touch-action: none; }
         body { background: var(--bone); font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; }
 
@@ -14,26 +14,33 @@
         .ribbon { width: 48px; height: 120px; background: var(--pink); cursor: pointer; }
         #bridge { position: fixed; inset: 0; z-index: 6000; background: var(--bone); display: none; justify-content: center; align-items: center; font-size: 80px; font-weight: 900; color: var(--ink); }
 
-        /* THE SPREAD */
+        /* THE TOC SPREAD */
         #toc-spread { position: fixed; inset: 0; z-index: 4000; background: var(--bone); display: none; grid-template-columns: 1fr 1fr; }
-        
-        /* LEFT PAGE: 2x4 GRID */
-        .page-left { padding: 80px; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 1fr); gap: 24px; border-right: 1px solid rgba(15,15,13,0.1); }
-        .grid-cell { border: 1px solid var(--ink); display: flex; align-items: center; justify-content: center; position: relative; }
+        .page-left { padding: 60px; display: flex; align-items: center; justify-content: center; border-right: 1px solid rgba(15,15,13,0.1); }
+        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 1fr); gap: var(--gutter); width: 100%; max-width: 500px; }
+        .grid-cell { border: 1px solid var(--ink); aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; }
         .mark { font-size: 32px; font-weight: 900; }
-        .sticky-placeholder { font-size: 10px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
-
-        /* RIGHT PAGE: TOC LIST */
+        
         .page-right { padding: 80px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .toc-list { width: 100%; max-width: 420px; }
-        .toc-list-item { font-size: 20px; padding: 24px 0; border-bottom: 1px solid var(--ink); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .toc-list-item:first-child { border-top: 1px solid var(--ink); }
-        .arrow { font-size: 24px; font-weight: 300; }
+        .toc-list { width: 100%; max-width: 400px; }
+        .toc-module { padding: 20px 0; border-bottom: 1px solid var(--ink); cursor: pointer; display: flex; flex-direction: column; gap: 8px; }
+        .toc-module:first-child { border-top: 1px solid var(--ink); }
+        .toc-row { display: flex; justify-content: space-between; align-items: baseline; }
+        .pg-num { font-size: 14px; font-weight: bold; }
+        .proj-title { font-size: 18px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        .proj-status { font-size: 10px; color: var(--gray); text-transform: uppercase; letter-spacing: 2px; }
 
-        /* WORK PAGE */
+        /* LAB & DRAWER */
         #lab { position: fixed; inset: 0; z-index: 1000; display: none; flex-direction: column; }
-        #drawer { height: 120px; width: 100%; border-top: 1px solid var(--ink); background: var(--bone); display: flex; align-items: center; padding: 0 40px; justify-content: space-between; }
+        #drawer { height: 120px; width: 100%; border-top: 1px solid var(--ink); background: var(--bone); display: flex; align-items: center; padding: 0 40px; justify-content: space-between; position: relative; }
+        .tool-group { display: flex; gap: 20px; align-items: center; }
+        .dot { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--ink); }
         canvas { flex-grow: 1; background-image: radial-gradient(var(--gray) 0.8px, transparent 0.8px); background-size: 32px 32px; }
+
+        /* MENU */
+        #menu-overlay { position: fixed; inset: 0; background: rgba(15,15,13,0.8); z-index: 3000; display: none; justify-content: flex-end; }
+        #menu-content { width: 300px; height: 100%; background: var(--bone); border-left: 1px solid var(--ink); padding: 60px 40px; display: flex; flex-direction: column; gap: 40px; }
+        .menu-item { font-size: 18px; font-weight: bold; cursor: pointer; text-transform: uppercase; border-bottom: 1px solid var(--ink); padding-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -43,26 +50,18 @@
 
     <div id="toc-spread">
         <div class="page-left">
-            <div class="grid-cell"><span class="mark">//|</span></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"><span class="sticky-placeholder">[ STICKY_INBOX ]</span></div>
+            <div class="grid-container">
+                <div class="grid-cell"><span class="mark">//|</span></div>
+                <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                <div class="grid-cell"><span style="font-size: 8px; color: var(--gray);">[ INBOX ]</span></div>
+            </div>
         </div>
         <div class="page-right">
             <div class="toc-list">
-                <div class="toc-list-item" onclick="enterLab()">
-                    <span>01 LABORATORY_SKETCH</span>
-                    <span class="arrow">→</span>
-                </div>
-                <div class="toc-list-item" style="opacity: 0.2;">
-                    <span>02 [ PENDING_ENTRY ]</span>
-                </div>
-                <div class="toc-list-item" style="opacity: 0.2;">
-                    <span>03 [ PENDING_ENTRY ]</span>
+                <div class="toc-module" onclick="enterLab()">
+                    <div class="toc-row"><span class="pg-num">001</span><span class="proj-title">LABORATORY_SKETCH</span></div>
+                    <div class="toc-row"><span></span><span class="proj-status">ACTIVE_REGISTRY</span></div>
                 </div>
             </div>
         </div>
@@ -71,8 +70,19 @@
     <div id="lab">
         <canvas id="cvs"></canvas>
         <div id="drawer">
+            <div class="tool-group">
+                <div class="dot" style="background: var(--ink)"></div>
+                <div class="dot" style="background: var(--pink)"></div>
+            </div>
             <div style="font-weight: bold; letter-spacing: 2px;">[ VOLE-2026-V1 ]</div>
-            <div style="font-size: 24px; cursor: pointer;">☰</div>
+            <div style="font-size: 24px; cursor: pointer;" onclick="toggleMenu(true)">☰</div>
+        </div>
+    </div>
+
+    <div id="menu-overlay" onclick="toggleMenu(false)">
+        <div id="menu-content" onclick="event.stopPropagation()">
+            <div class="menu-item" onclick="exitToTOC()">← VOLUME_TOC</div>
+            <div class="menu-item" style="opacity: 0.2;">PROJECT_INDEX</div>
         </div>
     </div>
 
@@ -92,6 +102,14 @@
             initCanvas();
         }
 
+        function toggleMenu(show) { document.getElementById('menu-overlay').style.display = show ? 'flex' : 'none'; }
+
+        function exitToTOC() {
+            toggleMenu(false);
+            document.getElementById('lab').style.display = 'none';
+            document.getElementById('toc-spread').style.display = 'grid';
+        }
+
         function initCanvas() {
             const c = document.getElementById('cvs');
             const ctx = c.getContext('2d');
@@ -100,24 +118,8 @@
             c.height = c.offsetHeight * dpr;
             ctx.scale(dpr, dpr);
             let drawing = false;
-
-            c.onpointerdown = (e) => { 
-                if(e.pointerType === 'pen') { 
-                    drawing = true; 
-                    ctx.beginPath(); 
-                    ctx.moveTo(e.offsetX, e.offsetY); 
-                } 
-            };
-            c.onpointermove = (e) => { 
-                if(drawing && e.pointerType === 'pen') { 
-                    ctx.strokeStyle = '#0F0F0D';
-                    ctx.lineWidth = 1.2;
-                    ctx.lineCap = 'round';
-                    ctx.lineJoin = 'round';
-                    ctx.lineTo(e.offsetX, e.offsetY); 
-                    ctx.stroke(); 
-                } 
-            };
+            c.onpointerdown = (e) => { if(e.pointerType === 'pen') { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); } };
+            c.onpointermove = (e) => { if(drawing && e.pointerType === 'pen') { ctx.strokeStyle = '#0F0F0D'; ctx.lineWidth = 1.2; ctx.lineCap = 'round'; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
             window.onpointerup = () => { drawing = false; };
         }
     </script>
