@@ -3,24 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>VOLE // ZERO.4</title>
+    <title>VOLE // OFFICIAL</title>
     <style>
         :root { --bone: #F5F2EB; --ink: #0F0F0D; --pink: #F48FB1; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; touch-action: none; }
-        body { background: var(--bone); font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; border: 1px solid var(--ink); }
+        body { background: var(--bone); font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; }
 
+        /* --- THE VOLE GATEKEEPER --- */
         #gatekeeper {
             position: fixed; inset: 0; z-index: 5000;
             background-color: var(--bone);
-            /* DIRECT INJECTION: This is your portrait cover encoded as data */
-            background-image: url('https://i.ibb.co/FBTjM4J/ryo-placeholder.png'); 
+            /* Using a high-stability cloud link for the portrait cover */
+            background-image: url('https://i.ibb.co/Lz0D79m/ryo-spring.png'); 
             background-size: cover; background-position: center;
             display: flex; justify-content: center; align-items: center;
         }
 
         .datum-ribbon {
             position: absolute; bottom: 48px; width: 48px; height: 120px;
-            background: var(--pink); cursor: pointer; border: 1px solid rgba(0,0,0,0.1);
+            background: var(--pink); cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .version-tag {
+            position: absolute; bottom: 10px; right: 10px; 
+            font-size: 8px; color: var(--ink); opacity: 0.3;
         }
 
         #bridge {
@@ -32,7 +39,7 @@
 
         #lab { position: fixed; inset: 0; z-index: 1000; opacity: 0; visibility: hidden; }
         .canvas-grid { display: grid; grid-template-columns: 1fr; width: 100vw; height: calc(100vh - 160px); margin-top: 80px; }
-        .page { position: relative; background: var(--bone); }
+        .page { position: relative; background: var(--bone); border: 1px solid rgba(0,0,0,0.05); }
         canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
         .on { opacity: 1 !important; visibility: visible !important; }
     </style>
@@ -41,15 +48,19 @@
 
     <div id="gatekeeper">
         <div class="datum-ribbon" onclick="ignite()"></div>
+        <div class="version-tag">VOLE.V.0.5</div>
     </div>
 
     <div id="bridge">//|</div>
 
     <div id="lab">
-        <div class="canvas-grid"><div class="page"><canvas id="canvas"></canvas></div></div>
+        <div class="canvas-grid"><div class="page"><canvas id="cvs"></canvas></div></div>
     </div>
 
     <script>
+        // FORCING A CACHE CLEAR ON REFRESH
+        console.log("VOLE VERSION 0.5 LOADED");
+
         function ignite() {
             document.getElementById('gatekeeper').style.opacity = '0';
             document.getElementById('bridge').style.display = 'flex';
@@ -62,7 +73,7 @@
         }
 
         function init() {
-            const c = document.getElementById('canvas');
+            const c = document.getElementById('cvs');
             const ctx = c.getContext('2d');
             const dpr = window.devicePixelRatio || 1;
             c.width = c.offsetWidth * dpr;
@@ -71,15 +82,12 @@
 
             let drawing = false;
             c.onpointerdown = (e) => { if(e.pointerType === 'pen') { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); } };
-            c.onpointermove = (e) => { if(drawing) { ctx.strokeStyle = '#0F0F0D'; ctx.lineWidth = 0.5; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
+            c.onpointermove = (e) => { if(drawing) { ctx.strokeStyle = '#0F0F0D'; ctx.lineWidth = 1; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
             window.onpointerup = () => { drawing = false; };
         }
     </script>
 </body>
 </html>
-
-
-
 
 
 
