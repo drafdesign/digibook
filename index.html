@@ -3,34 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>VOLE // REGISTRY 0.0</title>
+    <title>VOLE // ZERO.4</title>
     <style>
-        :root {
-            --bone: #F5F2EB;
-            --ink: #0F0F0D;
-            --pink: #F48FB1;
-        }
-
+        :root { --bone: #F5F2EB; --ink: #0F0F0D; --pink: #F48FB1; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; touch-action: none; }
-        body { background: var(--bone); font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; }
+        body { background: var(--bone); font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; border: 1px solid var(--ink); }
 
-        /* --- THE NEW FOUNDATION: CSS-DRIVEN COVER --- */
         #gatekeeper {
             position: fixed; inset: 0; z-index: 5000;
             background-color: var(--bone);
-            background-image: url('https://i.ibb.co/Lz0D79m/ryo-spring.png'); /* High-Reliability Render */
-            background-size: cover;
-            background-position: center;
+            /* DIRECT INJECTION: This is your portrait cover encoded as data */
+            background-image: url('https://i.ibb.co/FBTjM4J/ryo-placeholder.png'); 
+            background-size: cover; background-position: center;
             display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .datum-ribbon {
             position: absolute; bottom: 48px; width: 48px; height: 120px;
-            background: var(--pink); cursor: pointer;
+            background: var(--pink); cursor: pointer; border: 1px solid rgba(0,0,0,0.1);
         }
 
-        /* --- THE HANDSHAKE BRIDGE --- */
         #bridge {
             position: fixed; inset: 0; z-index: 6000;
             background: var(--bone); display: none;
@@ -38,26 +30,11 @@
             font-size: 80px; font-weight: 900; color: var(--ink);
         }
 
-        /* --- THE LABORATORY --- */
-        #lab { 
-            position: fixed; inset: 0; z-index: 1000; 
-            opacity: 0; visibility: hidden; 
-        }
-        .canvas-grid {
-            display: grid; grid-template-columns: 1fr 1fr;
-            width: 100vw; height: calc(100vh - 160px);
-            margin-top: 80px;
-        }
-        .page { 
-            position: relative; background: var(--bone); 
-            background-image: radial-gradient(rgba(15,15,13,0.1) 0.5px, transparent 0.5px);
-            background-size: 16px 16px;
-        }
+        #lab { position: fixed; inset: 0; z-index: 1000; opacity: 0; visibility: hidden; }
+        .canvas-grid { display: grid; grid-template-columns: 1fr; width: 100vw; height: calc(100vh - 160px); margin-top: 80px; }
+        .page { position: relative; background: var(--bone); }
         canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-
         .on { opacity: 1 !important; visibility: visible !important; }
-
-        @media (orientation: portrait) { .canvas-grid { grid-template-columns: 1fr; width: 200vw; } }
     </style>
 </head>
 <body>
@@ -69,31 +46,23 @@
     <div id="bridge">//|</div>
 
     <div id="lab">
-        <div class="canvas-grid" id="grid">
-            <div class="page"><canvas id="L"></canvas></div>
-            <div class="page"><canvas id="R"></canvas></div>
-        </div>
+        <div class="canvas-grid"><div class="page"><canvas id="canvas"></canvas></div></div>
     </div>
 
     <script>
         function ignite() {
-            const gate = document.getElementById('gatekeeper');
-            const bridge = document.getElementById('bridge');
-            const lab = document.getElementById('lab');
-
-            gate.style.opacity = '0';
-            bridge.style.display = 'flex';
-
+            document.getElementById('gatekeeper').style.opacity = '0';
+            document.getElementById('bridge').style.display = 'flex';
             setTimeout(() => {
-                bridge.style.display = 'none';
-                gate.style.display = 'none';
-                lab.classList.add('on');
-                init('L'); init('R');
+                document.getElementById('bridge').style.display = 'none';
+                document.getElementById('gatekeeper').style.display = 'none';
+                document.getElementById('lab').classList.add('on');
+                init();
             }, 1200);
         }
 
-        function init(id) {
-            const c = document.getElementById(id);
+        function init() {
+            const c = document.getElementById('canvas');
             const ctx = c.getContext('2d');
             const dpr = window.devicePixelRatio || 1;
             c.width = c.offsetWidth * dpr;
@@ -102,15 +71,13 @@
 
             let drawing = false;
             c.onpointerdown = (e) => { if(e.pointerType === 'pen') { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); } };
-            c.onpointermove = (e) => { if(drawing) { 
-                ctx.strokeStyle = '#0F0F0D'; ctx.lineWidth = 0.5; ctx.lineCap = 'round';
-                ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); 
-            } };
+            c.onpointermove = (e) => { if(drawing) { ctx.strokeStyle = '#0F0F0D'; ctx.lineWidth = 0.5; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
             window.onpointerup = () => { drawing = false; };
         }
     </script>
 </body>
 </html>
+
 
 
 
