@@ -2,125 +2,115 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>VOLE // VOL_01</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VOLE V2.01</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { --bone: #F5F2EB; --ink: #0F0F0D; --pink: #F48FB1; --gray: #D1CDC4; --gutter: 24px; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; touch-action: none; }
-        body { background: var(--bone); font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; }
-
-        /* GATE & BRIDGE */
-        #gate { position: fixed; inset: 0; z-index: 5000; background: var(--bone); background-image: url('cover.png'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; }
-        .ribbon { width: 48px; height: 120px; background: var(--pink); cursor: pointer; }
-        #bridge { position: fixed; inset: 0; z-index: 6000; background: var(--bone); display: none; justify-content: center; align-items: center; font-size: 80px; font-weight: 900; color: var(--ink); }
-
-        /* THE TOC SPREAD */
-        #toc-spread { position: fixed; inset: 0; z-index: 4000; background: var(--bone); display: none; grid-template-columns: 1fr 1fr; }
-        .page-left { padding: 60px; display: flex; align-items: center; justify-content: center; border-right: 1px solid rgba(15,15,13,0.1); }
-        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 1fr); gap: var(--gutter); width: 100%; max-width: 500px; }
-        .grid-cell { border: 1px solid var(--ink); aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; }
-        .mark { font-size: 32px; font-weight: 900; }
-        
-        .page-right { padding: 80px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .toc-list { width: 100%; max-width: 400px; }
-        .toc-module { padding: 20px 0; border-bottom: 1px solid var(--ink); cursor: pointer; display: flex; flex-direction: column; gap: 8px; }
-        .toc-module:first-child { border-top: 1px solid var(--ink); }
-        .toc-row { display: flex; justify-content: space-between; align-items: baseline; }
-        .pg-num { font-size: 14px; font-weight: bold; }
-        .proj-title { font-size: 18px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-        .proj-status { font-size: 10px; color: var(--gray); text-transform: uppercase; letter-spacing: 2px; }
-
-        /* LAB & DRAWER */
-        #lab { position: fixed; inset: 0; z-index: 1000; display: none; flex-direction: column; }
-        #drawer { height: 120px; width: 100%; border-top: 1px solid var(--ink); background: var(--bone); display: flex; align-items: center; padding: 0 40px; justify-content: space-between; position: relative; }
-        .tool-group { display: flex; gap: 20px; align-items: center; }
-        .dot { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--ink); }
-        canvas { flex-grow: 1; background-image: radial-gradient(var(--gray) 0.8px, transparent 0.8px); background-size: 32px 32px; }
-
-        /* MENU */
-        #menu-overlay { position: fixed; inset: 0; background: rgba(15,15,13,0.8); z-index: 3000; display: none; justify-content: flex-end; }
-        #menu-content { width: 300px; height: 100%; background: var(--bone); border-left: 1px solid var(--ink); padding: 60px 40px; display: flex; flex-direction: column; gap: 40px; }
-        .menu-item { font-size: 18px; font-weight: bold; cursor: pointer; text-transform: uppercase; border-bottom: 1px solid var(--ink); padding-bottom: 10px; }
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+        body { font-family: 'Space Mono', monospace; background-color: #E3DAC9; color: #1A1A1A; overflow: hidden; }
+        .dot-grid { background-image: radial-gradient(#4A4A4A26 1px, transparent 0); background-size: 24px 24px; }
+        .shutter-zoom { animation: zoom 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        @keyframes zoom { from { transform: translate(-50%, -50%) scale(0); opacity: 1; } to { transform: translate(-50%, -50%) scale(100); opacity: 0; } }
     </style>
 </head>
 <body>
-
-    <div id="gate"><div class="ribbon" onclick="ignite()"></div></div>
-    <div id="bridge">//|</div>
-
-    <div id="toc-spread">
-        <div class="page-left">
-            <div class="grid-container">
-                <div class="grid-cell"><span class="mark">//|</span></div>
-                <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-                <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-                <div class="grid-cell"><span style="font-size: 8px; color: var(--gray);">[ INBOX ]</span></div>
-            </div>
+    <div id="app" class="fixed inset-0 flex flex-col select-none">
+        <div id="cover" class="absolute inset-0 z-[100] bg-black cursor-pointer flex items-center justify-center" onclick="startShutter(event)">
+            <img src="cover.png" class="min-w-full min-h-full object-cover">
         </div>
-        <div class="page-right">
-            <div class="toc-list">
-                <div class="toc-module" onclick="enterLab()">
-                    <div class="toc-row"><span class="pg-num">001</span><span class="proj-title">LABORATORY_SKETCH</span></div>
-                    <div class="toc-row"><span></span><span class="proj-status">ACTIVE_REGISTRY</span></div>
+        <div id="shutter" class="fixed z-[101] text-9xl font-bold pointer-events-none hidden text-black" style="transform: translate(-50%, -50%); tracking-tighter;">//|</div>
+        <main id="workspace" class="relative flex-grow hidden">
+            <div id="toc" class="hidden grid grid-cols-2 w-full h-full p-16 gap-16">
+                <div class="grid grid-cols-2 grid-rows-4 gap-4">
+                    <div onclick="openPage(2)" class="border border-black flex items-center justify-center text-2xl font-bold cursor-pointer hover:bg-black/5 transition-colors">//|</div>
+                    <div class="border border-black/10 bg-black/5 flex items-center justify-center text-[10px] opacity-30 italic">RECENT_1</div>
+                    <div class="border border-black/10 bg-black/5 flex items-center justify-center text-[10px] opacity-30 italic">RECENT_2</div>
+                    <div class="border border-black/10 bg-black/5 flex items-center justify-center text-[10px] opacity-30 italic">RECENT_3</div>
+                    <div class="border border-black/10 bg-black/5 flex items-center justify-center text-[10px] opacity-30 italic">RECENT_4</div>
+                    <div class="border border-black/10 bg-black/5 flex items-center justify-center text-[10px] opacity-30 italic">RECENT_5</div>
+                    <div class="border border-black/10 bg-black/5 flex items-center justify-center text-[10px] opacity-30 italic">RECENT_6</div>
+                    <div class="border border-black/10 border-dashed flex items-center justify-center text-[10px] opacity-20 italic">INBOX</div>
+                </div>
+                <div class="flex flex-col gap-2 overflow-y-auto pr-4">
+                    <div class="border-b border-black/10 py-3 flex justify-between text-[11px] font-bold"><span>[VOLE-BHRONGS-PDLETX-P002]</span><span class="opacity-40">MOD_NOW</span></div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div id="lab">
-        <canvas id="cvs"></canvas>
-        <div id="drawer">
-            <div class="tool-group">
-                <div class="dot" style="background: var(--ink)"></div>
-                <div class="dot" style="background: var(--pink)"></div>
+            <div id="canvas" class="hidden w-full h-full dot-grid relative">
+                <div class="absolute top-8 left-8 text-[10px] opacity-40">[002]</div>
+                <div class="absolute top-8 right-8 text-[10px] opacity-40">[004]</div>
             </div>
-            <div style="font-weight: bold; letter-spacing: 2px;">[ VOLE-2026-V1 ]</div>
-            <div style="font-size: 24px; cursor: pointer;" onclick="toggleMenu(true)">☰</div>
-        </div>
+        </main>
+        <footer id="hud" class="h-24 w-full flex flex-col justify-end p-6 hidden">
+            <div id="dock" class="absolute bottom-28 left-6 w-56 bg-white/90 backdrop-blur-md border border-black p-4 shadow-2xl">
+                <div class="grid grid-cols-4 gap-2 mb-3">
+                    <div class="aspect-square border border-black/20"></div><div class="aspect-square border border-black/20"></div><div class="aspect-square border border-black/20"></div>
+                    <div class="aspect-square border border-black bg-black/10 flex items-center justify-center text-[8px]">▼</div>
+                </div>
+                <div class="grid grid-cols-5 gap-2">
+                    <div class="aspect-square rounded-full border border-black bg-[#1A1A1A]"></div>
+                    <div class="aspect-square rounded-full border border-black bg-[#D32F2F]"></div>
+                    <div class="aspect-square rounded-full border border-black bg-[#2962FF]"></div>
+                    <div class="aspect-square rounded-full border border-black bg-[#E3DAC9]"></div>
+                    <div class="aspect-square rounded-full border border-black bg-[#FFB6C1]"></div>
+                </div>
+                <div class="mt-4 flex justify-end">
+                    <div onclick="toggleTriage()" id="triage-btn" class="w-10 h-10 flex items-center justify-center border border-black cursor-pointer">
+                        <div id="triage-icon" class="w-5 h-5 rounded-full bg-black"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between w-full h-12 border-t border-black/10 pt-4">
+                <div class="flex items-center gap-8">
+                    <div onclick="showTOC()" class="text-xl font-bold cursor-pointer hover:opacity-50 transition-opacity">//|</div>
+                    <div class="text-[11px] font-bold tracking-tighter">
+                        <span class="px-2 border-x border-black/5">[VOLE-BHRONGS-PDLETX-V2.01]</span>
+                    </div>
+                </div>
+                <div class="w-6 h-6 rounded-full border border-black flex items-center justify-center text-[8px] font-bold">O</div>
+                <div class="flex items-center gap-8 relative">
+                    <div class="flex flex-col gap-1 cursor-pointer">
+                        <div class="w-5 h-[1.5px] bg-black"></div><div class="w-5 h-[1.5px] bg-black"></div><div class="w-5 h-[1.5px] bg-black"></div>
+                    </div>
+                    <div class="w-4 h-12 bg-black absolute -top-14 right-0 shadow-lg"></div>
+                </div>
+            </div>
+        </footer>
     </div>
-
-    <div id="menu-overlay" onclick="toggleMenu(false)">
-        <div id="menu-content" onclick="event.stopPropagation()">
-            <div class="menu-item" onclick="exitToTOC()">← VOLUME_TOC</div>
-            <div class="menu-item" style="opacity: 0.2;">PROJECT_INDEX</div>
-        </div>
-    </div>
-
     <script>
-        function ignite() {
-            document.getElementById('gate').style.display = 'none';
-            document.getElementById('bridge').style.display = 'flex';
+        let currentState = 'Ø';
+        function startShutter(e) {
+            const s = document.getElementById('shutter');
+            s.style.left = e.clientX + 'px';
+            s.style.top = e.clientY + 'px';
+            s.classList.remove('hidden');
+            s.classList.add('shutter-zoom');
             setTimeout(() => {
-                document.getElementById('bridge').style.display = 'none';
-                document.getElementById('toc-spread').style.display = 'grid';
-            }, 1000);
+                document.getElementById('cover').classList.add('hidden');
+                document.getElementById('workspace').classList.remove('hidden');
+                document.getElementById('hud').classList.remove('hidden');
+                showTOC();
+            }, 600);
         }
-
-        function enterLab() {
-            document.getElementById('toc-spread').style.display = 'none';
-            document.getElementById('lab').style.display = 'flex';
-            initCanvas();
+        function showTOC() {
+            document.getElementById('canvas').classList.add('hidden');
+            document.getElementById('toc').classList.remove('hidden');
         }
-
-        function toggleMenu(show) { document.getElementById('menu-overlay').style.display = show ? 'flex' : 'none'; }
-
-        function exitToTOC() {
-            toggleMenu(false);
-            document.getElementById('lab').style.display = 'none';
-            document.getElementById('toc-spread').style.display = 'grid';
+        function openPage(num) {
+            document.getElementById('toc').classList.add('hidden');
+            document.getElementById('canvas').classList.remove('hidden');
         }
-
-        function initCanvas() {
-            const c = document.getElementById('cvs');
-            const ctx = c.getContext('2d');
-            const dpr = window.devicePixelRatio || 1;
-            c.width = c.offsetWidth * dpr;
-            c.height = c.offsetHeight * dpr;
-            ctx.scale(dpr, dpr);
-            let drawing = false;
-            c.onpointerdown = (e) => { if(e.pointerType === 'pen') { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); } };
-            c.onpointermove = (e) => { if(drawing && e.pointerType === 'pen') { ctx.strokeStyle = '#0F0F0D'; ctx.lineWidth = 1.2; ctx.lineCap = 'round'; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
-            window.onpointerup = () => { drawing = false; };
+        function toggleTriage() {
+            const icon = document.getElementById('triage-icon');
+            if(currentState === 'Ø') { 
+                currentState = 'U'; 
+                icon.className = 'w-5 h-5 rounded-full border-2 border-black border-r-transparent rotate-45'; 
+            } else if(currentState === 'U') { 
+                currentState = 'O'; 
+                icon.className = 'w-5 h-5 rounded-full border-2 border-black'; 
+            } else { 
+                currentState = 'Ø'; 
+                icon.className = 'w-5 h-5 rounded-full bg-black'; 
+            }
         }
     </script>
 </body>
