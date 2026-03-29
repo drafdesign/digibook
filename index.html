@@ -2,116 +2,515 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VOLE V2.01</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>VOLE // VOL_01</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
-        body { font-family: 'Space Mono', monospace; background-color: #E3DAC9; color: #1A1A1A; overflow: hidden; }
-        .dot-grid { background-image: radial-gradient(#4A4A4A26 1px, transparent 0); background-size: 24px 24px; }
-        .shutter-zoom { animation: zoom 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-        @keyframes zoom { from { transform: translate(-50%, -50%) scale(0); opacity: 1; } to { transform: translate(-50%, -50%) scale(100); opacity: 0; } }
+        :root {
+            --bone: #F5F2EB;
+            --ink:  #0F0F0D;
+            --fired: #D4500A;
+            --blueprint: #1A3A5C;
+            --pink: #F48FB1;
+            --gray: #D1CDC4;
+            --gutter: 24px;
+        }
+
+        * {
+            margin: 0; padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: none;
+        }
+
+        html, body {
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background: var(--bone);
+            font-family: 'Courier New', monospace;
+            color: var(--ink);
+        }
+
+        /* ─────────────────────────────────────────
+           COVER
+        ───────────────────────────────────────── */
+        #gate {
+            position: fixed; inset: 0; z-index: 5000;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+        }
+
+        #gate svg {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+        }
+
+        /* ─────────────────────────────────────────
+           BRIDGE
+        ───────────────────────────────────────── */
+        #bridge {
+            position: fixed; inset: 0; z-index: 6000;
+            display: none;
+            align-items: center; justify-content: center;
+            background: var(--bone);
+            font-size: 80px; font-weight: 900;
+            letter-spacing: -2px;
+        }
+
+        /* ─────────────────────────────────────────
+           TOC SPREAD
+        ───────────────────────────────────────── */
+        #toc-spread {
+            position: fixed; inset: 0; z-index: 4000;
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            background: var(--bone);
+        }
+
+        .page-left {
+            border-right: 1px solid rgba(15,15,13,0.15);
+            display: flex; align-items: center; justify-content: center;
+            padding: 60px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 22vw);
+            grid-template-rows:    repeat(4, 22vw);
+            gap: var(--gutter);
+        }
+
+        @media (max-height: 900px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 20vw);
+                grid-template-rows:    repeat(4, 20vw);
+            }
+        }
+
+        .grid-cell {
+            border: 1px solid var(--ink);
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .grid-cell.sticky { background: #FFFDE7; }
+
+        .mark { font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+
+        .page-right {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 80px 60px; overflow: hidden;
+        }
+
+        .toc-list { width: 100%; max-width: 400px; }
+
+        .toc-module {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--ink);
+            cursor: pointer;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .toc-module:first-child { border-top: 1px solid var(--ink); }
+        .toc-module:hover .proj-title { text-decoration: underline; }
+
+        .toc-row { display: flex; justify-content: space-between; align-items: baseline; }
+
+        .pg-num      { font-size: 14px; font-weight: bold; }
+        .proj-title  { font-size: 18px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        .proj-status { font-size: 10px; color: var(--gray); text-transform: uppercase; letter-spacing: 2px; }
+
+        /* ─────────────────────────────────────────
+           LAB
+        ───────────────────────────────────────── */
+        #lab {
+            position: fixed; inset: 0; z-index: 1000;
+            display: none; flex-direction: column;
+        }
+
+        #lab-nav {
+            height: 48px; flex-shrink: 0;
+            border-bottom: 1px solid var(--ink);
+            background: var(--bone);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 24px;
+            position: relative; z-index: 10;
+        }
+        .nav-draf   { font-size: 14px; font-weight: 900; letter-spacing: 2px; }
+        .nav-stamp  {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            font-size: 10px; letter-spacing: 2px; color: var(--gray);
+        }
+        .nav-burger { font-size: 20px; cursor: pointer; line-height: 1; }
+
+        #page-area {
+            flex-grow: 1; position: relative; overflow: hidden;
+        }
+
+        /* Layer 1 — dot grid */
+        #dot-grid {
+            position: absolute; inset: 0; z-index: 1; pointer-events: none;
+            background-image: radial-gradient(var(--ink) 0.5px, transparent 0.5px);
+            background-size: 15.1px 15.1px;
+            opacity: 0.08;
+        }
+
+        /* Layer 2 — ink canvas, always on top */
+        #cvs {
+            position: absolute; inset: 0; z-index: 2;
+            display: block; width: 100%; height: 100%;
+            cursor: crosshair;
+        }
+
+        /* Privacy toggle — bottom left */
+        #privacy-toggle {
+            position: absolute; bottom: 16px; left: 16px; z-index: 5;
+            font-size: 10px; font-weight: bold; letter-spacing: 2px;
+            border: 1px solid var(--gray); color: var(--gray);
+            padding: 4px 8px; cursor: pointer;
+        }
+        #privacy-toggle.private { border-color: var(--ink); color: var(--ink); }
+
+        /* Palette trigger — hold 400ms */
+        #pal-trigger {
+            position: absolute; bottom: 16px; left: 108px; z-index: 5;
+            font-size: 11px; font-weight: bold; letter-spacing: 1px;
+            border: 1px solid var(--gray); color: var(--gray);
+            padding: 4px 8px; cursor: pointer;
+        }
+
+        /* Palette panel — opens upward */
+        #palette {
+            position: absolute; bottom: 52px; left: 108px; z-index: 6;
+            background: var(--bone); border: 1px solid var(--ink);
+            padding: 16px; display: none; flex-direction: column; gap: 16px;
+            min-width: 120px;
+        }
+
+        .pal-label {
+            font-size: 8px; letter-spacing: 3px; color: var(--gray);
+            text-transform: uppercase; margin-bottom: 6px;
+        }
+
+        .nib-row { display: flex; gap: 14px; align-items: center; }
+        .nib-btn {
+            font-size: 9px; font-weight: bold; letter-spacing: 1px;
+            color: var(--gray); border-bottom: 1px solid transparent;
+            padding-bottom: 2px; cursor: pointer;
+        }
+        .nib-btn.active { color: var(--fired); border-color: var(--fired); }
+
+        .swatch-row { display: flex; gap: 8px; align-items: center; }
+        .swatch {
+            width: 20px; height: 20px; border-radius: 50%;
+            border: 1px solid rgba(15,15,13,0.25); cursor: pointer;
+            flex-shrink: 0;
+        }
+        .swatch.active { outline: 2px solid var(--fired); outline-offset: 2px; }
+
+        .eraser-btn {
+            width: 20px; height: 20px; flex-shrink: 0;
+            border: 1px solid var(--ink);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 8px; font-weight: bold; cursor: pointer;
+        }
+        .eraser-btn.active { background: var(--ink); color: var(--bone); }
+
+        /* Page status — bottom right */
+        #page-status {
+            position: absolute; bottom: 16px; right: 16px; z-index: 5;
+            font-size: 9px; letter-spacing: 2px; color: var(--gray);
+            text-transform: uppercase; pointer-events: none;
+        }
+
+        /* ─────────────────────────────────────────
+           MENU
+        ───────────────────────────────────────── */
+        #menu-overlay {
+            position: fixed; inset: 0; z-index: 7000;
+            background: rgba(15,15,13,0.8);
+            display: none; justify-content: flex-end;
+        }
+        #menu-content {
+            width: 300px; height: 100%;
+            background: var(--bone);
+            border-left: 1px solid var(--ink);
+            padding: 60px 40px;
+            display: flex; flex-direction: column; gap: 40px;
+        }
+        .menu-item {
+            font-size: 18px; font-weight: bold;
+            text-transform: uppercase; letter-spacing: 1px;
+            border-bottom: 1px solid var(--ink);
+            padding-bottom: 10px; cursor: pointer;
+        }
+        .menu-item:hover { text-decoration: underline; }
+        .menu-item.dim { opacity: 0.2; cursor: default; }
+        .menu-item.dim:hover { text-decoration: none; }
     </style>
 </head>
 <body>
-    <div id="app" class="fixed inset-0 flex flex-col select-none">
-        <div id="cover" class="absolute inset-0 z-[100] bg-black cursor-pointer flex items-center justify-center" onclick="startShutter(event)">
-            <img src="cover.png" class="min-w-full min-h-full object-cover">
+
+<!-- ── COVER ── -->
+<div id="gate" onclick="ignite()">
+    <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <rect width="100%" height="100%" fill="#F0EDE6"/>
+        <line x1="0"   y1="20%" x2="100%" y2="20%" stroke="#D1CDC4" stroke-width="0.5"/>
+        <line x1="0"   y1="40%" x2="100%" y2="40%" stroke="#D1CDC4" stroke-width="0.5"/>
+        <line x1="0"   y1="60%" x2="100%" y2="60%" stroke="#D1CDC4" stroke-width="0.5"/>
+        <line x1="0"   y1="80%" x2="100%" y2="80%" stroke="#D1CDC4" stroke-width="0.5"/>
+        <line x1="20%" y1="0"   x2="20%" y2="100%" stroke="#D1CDC4" stroke-width="0.5"/>
+        <line x1="40%" y1="0"   x2="40%" y2="100%" stroke="#D1CDC4" stroke-width="0.5"/>
+        <line x1="60%" y1="0"   x2="60%" y2="100%" stroke="#D1CDC4" stroke-width="0.5"/>
+        <line x1="80%" y1="0"   x2="80%" y2="100%" stroke="#D1CDC4" stroke-width="0.5"/>
+        <!-- DRAF. mark only. No Vole. text on cover. -->
+        <text x="50%" y="47%"
+              text-anchor="middle"
+              font-family="Courier New, monospace"
+              font-size="36" font-weight="900"
+              fill="#0F0F0D" letter-spacing="4">DRAF.</text>
+        <!-- TAP TO OPEN — very faint -->
+        <text x="50%" y="56%"
+              text-anchor="middle"
+              font-family="Courier New, monospace"
+              font-size="10" fill="#D1CDC4" letter-spacing="6">TAP TO OPEN</text>
+        <!-- Pink spine -->
+        <rect x="0" y="0" width="8" height="100%" fill="#F48FB1"/>
+    </svg>
+</div>
+
+<!-- ── BRIDGE ── -->
+<div id="bridge">//|</div>
+
+<!-- ── TOC SPREAD ── -->
+<div id="toc-spread">
+    <div class="page-left">
+        <div class="grid-container">
+            <div class="grid-cell"><span class="mark">//|</span></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell sticky">
+                <span style="font-size:7px;color:var(--gray);text-align:center;padding:4px;line-height:1.6;">[ STICKY_INBOX ]</span>
+            </div>
         </div>
-        <div id="shutter" class="fixed z-[101] text-9xl font-bold pointer-events-none hidden text-black" style="transform: translate(-50%, -50%); tracking-tighter;">//|</div>
-        <main id="workspace" class="relative flex-grow hidden">
-            <div id="toc" class="hidden grid grid-cols-2 w-full h-full p-16 gap-16">
-                <div class="grid grid-cols-2 grid-rows-4 gap-4">
-                    <div onclick="openPage(2)" class="border border-black flex items-center justify-center text-2xl font-bold cursor-pointer hover:bg-black/5 transition-colors">//|</div>
-                    <div class="border border-black/10 bg-black/5 flex items-center justify-center text-[10px] opacity-30 italic">RECENT_1</div>
-                    <div class="border border-black/10 bg-black/5 flex items-center justify-center text-[10px] opacity-30 italic">RECENT_2</div>
-                    <div class="border border-black/10 bg-black/5 flex items-center justify-center text-[10px] opacity-30 italic">RECENT_3</div>
-                    <div class="border border-black/10 bg-black/5 flex items-center justify-center text-[10px] opacity-30 italic">RECENT_4</div>
-                    <div class="border border-black/10 bg-black/5 flex items-center justify-center text-[10px] opacity-30 italic">RECENT_5</div>
-                    <div class="border border-black/10 bg-black/5 flex items-center justify-center text-[10px] opacity-30 italic">RECENT_6</div>
-                    <div class="border border-black/10 border-dashed flex items-center justify-center text-[10px] opacity-20 italic">INBOX</div>
-                </div>
-                <div class="flex flex-col gap-2 overflow-y-auto pr-4">
-                    <div class="border-b border-black/10 py-3 flex justify-between text-[11px] font-bold"><span>[VOLE-BHRONGS-PDLETX-P002]</span><span class="opacity-40">MOD_NOW</span></div>
-                </div>
-            </div>
-            <div id="canvas" class="hidden w-full h-full dot-grid relative">
-                <div class="absolute top-8 left-8 text-[10px] opacity-40">[002]</div>
-                <div class="absolute top-8 right-8 text-[10px] opacity-40">[004]</div>
-            </div>
-        </main>
-        <footer id="hud" class="h-24 w-full flex flex-col justify-end p-6 hidden">
-            <div id="dock" class="absolute bottom-28 left-6 w-56 bg-white/90 backdrop-blur-md border border-black p-4 shadow-2xl">
-                <div class="grid grid-cols-4 gap-2 mb-3">
-                    <div class="aspect-square border border-black/20"></div><div class="aspect-square border border-black/20"></div><div class="aspect-square border border-black/20"></div>
-                    <div class="aspect-square border border-black bg-black/10 flex items-center justify-center text-[8px]">▼</div>
-                </div>
-                <div class="grid grid-cols-5 gap-2">
-                    <div class="aspect-square rounded-full border border-black bg-[#1A1A1A]"></div>
-                    <div class="aspect-square rounded-full border border-black bg-[#D32F2F]"></div>
-                    <div class="aspect-square rounded-full border border-black bg-[#2962FF]"></div>
-                    <div class="aspect-square rounded-full border border-black bg-[#E3DAC9]"></div>
-                    <div class="aspect-square rounded-full border border-black bg-[#FFB6C1]"></div>
-                </div>
-                <div class="mt-4 flex justify-end">
-                    <div onclick="toggleTriage()" id="triage-btn" class="w-10 h-10 flex items-center justify-center border border-black cursor-pointer">
-                        <div id="triage-icon" class="w-5 h-5 rounded-full bg-black"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex items-center justify-between w-full h-12 border-t border-black/10 pt-4">
-                <div class="flex items-center gap-8">
-                    <div onclick="showTOC()" class="text-xl font-bold cursor-pointer hover:opacity-50 transition-opacity">//|</div>
-                    <div class="text-[11px] font-bold tracking-tighter">
-                        <span class="px-2 border-x border-black/5">[VOLE-BHRONGS-PDLETX-V2.01]</span>
-                    </div>
-                </div>
-                <div class="w-6 h-6 rounded-full border border-black flex items-center justify-center text-[8px] font-bold">O</div>
-                <div class="flex items-center gap-8 relative">
-                    <div class="flex flex-col gap-1 cursor-pointer">
-                        <div class="w-5 h-[1.5px] bg-black"></div><div class="w-5 h-[1.5px] bg-black"></div><div class="w-5 h-[1.5px] bg-black"></div>
-                    </div>
-                    <div class="w-4 h-12 bg-black absolute -top-14 right-0 shadow-lg"></div>
-                </div>
-            </div>
-        </footer>
     </div>
-    <script>
-        let currentState = 'Ø';
-        function startShutter(e) {
-            const s = document.getElementById('shutter');
-            s.style.left = e.clientX + 'px';
-            s.style.top = e.clientY + 'px';
-            s.classList.remove('hidden');
-            s.classList.add('shutter-zoom');
-            setTimeout(() => {
-                document.getElementById('cover').classList.add('hidden');
-                document.getElementById('workspace').classList.remove('hidden');
-                document.getElementById('hud').classList.remove('hidden');
-                showTOC();
-            }, 600);
-        }
-        function showTOC() {
-            document.getElementById('canvas').classList.add('hidden');
-            document.getElementById('toc').classList.remove('hidden');
-        }
-        function openPage(num) {
-            document.getElementById('toc').classList.add('hidden');
-            document.getElementById('canvas').classList.remove('hidden');
-        }
-        function toggleTriage() {
-            const icon = document.getElementById('triage-icon');
-            if(currentState === 'Ø') { 
-                currentState = 'U'; 
-                icon.className = 'w-5 h-5 rounded-full border-2 border-black border-r-transparent rotate-45'; 
-            } else if(currentState === 'U') { 
-                currentState = 'O'; 
-                icon.className = 'w-5 h-5 rounded-full border-2 border-black'; 
-            } else { 
-                currentState = 'Ø'; 
-                icon.className = 'w-5 h-5 rounded-full bg-black'; 
-            }
-        }
-    </script>
+    <div class="page-right">
+        <div class="toc-list">
+            <div class="toc-module" onclick="enterLab()">
+                <div class="toc-row">
+                    <span class="pg-num">001</span>
+                    <span class="proj-title">LABORATORY_SKETCH</span>
+                </div>
+                <div class="toc-row">
+                    <span></span>
+                    <span class="proj-status">ACTIVE_REGISTRY</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── LAB ── -->
+<div id="lab">
+    <div id="lab-nav">
+        <span class="nav-draf">DRAF.</span>
+        <span class="nav-stamp">VOL_01 &middot; 001</span>
+        <span class="nav-burger" onclick="toggleMenu(true)">&#9776;</span>
+    </div>
+    <div id="page-area">
+        <div id="dot-grid"></div>
+        <canvas id="cvs"></canvas>
+        <div id="privacy-toggle" class="private" onclick="togglePrivacy()">// PRIVATE</div>
+        <div id="pal-trigger"
+             onpointerdown="startHold()"
+             onpointerup="cancelHold()"
+             onpointerleave="cancelHold()">//|</div>
+        <div id="palette">
+            <div>
+                <div class="pal-label">NIB</div>
+                <div class="nib-row">
+                    <span class="nib-btn" data-nib="02" onclick="setNib('02')">02</span>
+                    <span class="nib-btn active" data-nib="05" onclick="setNib('05')">05</span>
+                    <span class="nib-btn" data-nib="08" onclick="setNib('08')">08</span>
+                </div>
+            </div>
+            <div>
+                <div class="pal-label">INK</div>
+                <div class="swatch-row">
+                    <div class="swatch active" data-color="#0F0F0D" style="background:#0F0F0D" onclick="setColor('#0F0F0D')"></div>
+                    <div class="swatch" data-color="#F48FB1" style="background:#F48FB1" onclick="setColor('#F48FB1')"></div>
+                    <div class="swatch" data-color="#D4500A" style="background:#D4500A" onclick="setColor('#D4500A')"></div>
+                    <div class="swatch" data-color="#1A3A5C" style="background:#1A3A5C" onclick="setColor('#1A3A5C')"></div>
+                    <div class="eraser-btn" id="eraser-btn" onclick="setEraser()">E</div>
+                </div>
+            </div>
+        </div>
+        <div id="page-status">PRIVATE &middot; VOL_01 &middot; 001</div>
+    </div>
+</div>
+
+<!-- ── MENU ── -->
+<div id="menu-overlay" onclick="toggleMenu(false)">
+    <div id="menu-content" onclick="event.stopPropagation()">
+        <div class="menu-item" onclick="exitToTOC()">&#8592; VOLUME_TOC</div>
+        <div class="menu-item dim">PROJECT_INDEX</div>
+        <div class="menu-item dim">WORK</div>
+        <div class="menu-item dim">FORCE_SYNC</div>
+        <div class="menu-item dim">IMPORT</div>
+        <div class="menu-item" onclick="toggleMenu(false)">CLOSE_BOOK</div>
+    </div>
+</div>
+
+<script>
+/* ── STATE ── */
+let tool        = 'ink';
+let inkColor    = '#0F0F0D';
+let nibKey      = '05';
+let drawing     = false;
+let canvasReady = false;
+let isPrivate   = true;
+let holdTimer   = null;
+let paletteOpen = false;
+
+const NIBS = { '02': 0.30 * 3.78, '05': 0.45 * 3.78, '08': 0.50 * 3.78 };
+
+/* ── NAVIGATION ── */
+function ignite() {
+    document.getElementById('gate').style.display = 'none';
+    const br = document.getElementById('bridge');
+    br.style.display = 'flex';
+    setTimeout(() => {
+        br.style.display = 'none';
+        document.getElementById('toc-spread').style.display = 'grid';
+    }, 900);
+}
+
+function enterLab() {
+    document.getElementById('toc-spread').style.display = 'none';
+    document.getElementById('lab').style.display = 'flex';
+    requestAnimationFrame(() => requestAnimationFrame(initCanvas));
+}
+
+function exitToTOC() {
+    toggleMenu(false);
+    document.getElementById('lab').style.display = 'none';
+    document.getElementById('toc-spread').style.display = 'grid';
+}
+
+/* ── PRIVACY ── */
+function togglePrivacy() {
+    isPrivate = !isPrivate;
+    const tog = document.getElementById('privacy-toggle');
+    const sta = document.getElementById('page-status');
+    if (isPrivate) {
+        tog.textContent = '// PRIVATE';
+        tog.classList.add('private');
+        sta.innerHTML = 'PRIVATE &middot; VOL_01 &middot; 001';
+    } else {
+        tog.textContent = '// OPEN';
+        tog.classList.remove('private');
+        sta.innerHTML = 'OPEN &middot; VOL_01 &middot; 001';
+    }
+}
+
+/* ── PALETTE ── */
+function startHold() {
+    holdTimer = setTimeout(() => {
+        paletteOpen = !paletteOpen;
+        document.getElementById('palette').style.display = paletteOpen ? 'flex' : 'none';
+    }, 400);
+}
+function cancelHold() { clearTimeout(holdTimer); }
+
+function setNib(n) {
+    nibKey = n;
+    document.querySelectorAll('.nib-btn').forEach(el => el.classList.remove('active'));
+    document.querySelector(`.nib-btn[data-nib="${n}"]`).classList.add('active');
+}
+
+function setColor(c) {
+    tool = 'ink';
+    inkColor = c;
+    document.querySelectorAll('.swatch').forEach(el => el.classList.remove('active'));
+    document.querySelector(`.swatch[data-color="${c}"]`).classList.add('active');
+    document.getElementById('eraser-btn').classList.remove('active');
+}
+
+function setEraser() {
+    tool = 'eraser';
+    document.querySelectorAll('.swatch').forEach(el => el.classList.remove('active'));
+    document.getElementById('eraser-btn').classList.add('active');
+}
+
+/* ── MENU ── */
+function toggleMenu(open) {
+    document.getElementById('menu-overlay').style.display = open ? 'flex' : 'none';
+}
+
+/* ── CANVAS ── */
+function initCanvas() {
+    if (canvasReady) return;
+    canvasReady = true;
+
+    const cvs = document.getElementById('cvs');
+    const ctx = cvs.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+
+    function resize() {
+        const r = cvs.getBoundingClientRect();
+        cvs.width  = r.width  * dpr;
+        cvs.height = r.height * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        /* Fill bone on init — eraser paints bone, not transparency */
+        ctx.fillStyle = '#F5F2EB';
+        ctx.fillRect(0, 0, r.width, r.height);
+    }
+    resize();
+
+    cvs.addEventListener('pointerdown', e => {
+        e.preventDefault();
+        drawing = true;
+        const p = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+    });
+
+    cvs.addEventListener('pointermove', e => {
+        e.preventDefault();
+        if (!drawing) return;
+        const p = getPos(e);
+        applyStroke(ctx, p.x, p.y);
+    });
+
+    window.addEventListener('pointerup',     () => { drawing = false; });
+    window.addEventListener('pointercancel', () => { drawing = false; });
+
+    function getPos(e) {
+        const r = cvs.getBoundingClientRect();
+        return { x: e.clientX - r.left, y: e.clientY - r.top };
+    }
+}
+
+function applyStroke(ctx, x, y) {
+    ctx.globalCompositeOperation = 'source-over';
+    if (tool === 'eraser') {
+        ctx.strokeStyle = '#F5F2EB';  /* paint bone, not transparent */
+        ctx.lineWidth = 24;
+    } else {
+        ctx.strokeStyle = inkColor;
+        ctx.lineWidth = NIBS[nibKey] || 1.7;
+    }
+    ctx.lineCap  = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+}
+</script>
+
 </body>
 </html>
