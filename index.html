@@ -22,13 +22,11 @@
             user-select: none;
         }
 
-        #cvs { touch-action: none; }
+        #cvs, #cvs-r { touch-action: none; }
 
         #gate, .toc-module, .grid-cell, .menu-item,
-        #privacy-toggle, #pal-trigger, .nib-slot-btn,
-        .swatch, #eraser-mode-btn, #nav-burger,
-        #nav-burger-top, #ribbon,
-        .page-prev, .page-next { touch-action: manipulation; }
+        #privacy-toggle, #pal-trigger, .nib-btn,
+        .swatch, .eraser-btn, .nav-burger { touch-action: manipulation; }
 
         html, body {
             width: 100%; height: 100%;
@@ -38,22 +36,17 @@
             color: var(--ink);
         }
 
-        /* ─────────────────────────────────────────
-           COVER
-        ───────────────────────────────────────── */
         #gate {
             position: fixed; inset: 0; z-index: 5000;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
         }
+
         #gate svg {
             position: absolute; inset: 0;
             width: 100%; height: 100%;
         }
 
-        /* ─────────────────────────────────────────
-           BRIDGE
-        ───────────────────────────────────────── */
         #bridge {
             position: fixed; inset: 0; z-index: 6000;
             display: none;
@@ -63,44 +56,49 @@
             letter-spacing: -2px;
         }
 
-        /* ─────────────────────────────────────────
-           TOC SPREAD
-        ───────────────────────────────────────── */
         #toc-spread {
             position: fixed; inset: 0; z-index: 4000;
             display: none;
             grid-template-columns: 1fr 1fr;
             background: var(--bone);
         }
+
         .page-left {
             border-right: 1px solid rgba(15,15,13,0.15);
             display: flex; align-items: center; justify-content: center;
             padding: 60px;
         }
+
         .grid-container {
             display: grid;
             grid-template-columns: repeat(2, 22vw);
             grid-template-rows:    repeat(4, 22vw);
             gap: var(--gutter);
         }
+
         @media (max-height: 900px) {
             .grid-container {
                 grid-template-columns: repeat(2, 20vw);
                 grid-template-rows:    repeat(4, 20vw);
             }
         }
+
         .grid-cell {
             border: 1px solid var(--ink);
             display: flex; align-items: center; justify-content: center;
         }
+
         .grid-cell.sticky { background: #FFFDE7; }
         .mark { font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+
         .page-right {
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             padding: 80px 60px; overflow: hidden;
         }
+
         .toc-list { width: 100%; max-width: 400px; }
+
         .toc-module {
             padding: 20px 0;
             border-bottom: 1px solid var(--ink);
@@ -109,14 +107,14 @@
         }
         .toc-module:first-child { border-top: 1px solid var(--ink); }
         .toc-module:hover .proj-title { text-decoration: underline; }
+
         .toc-row { display: flex; justify-content: space-between; align-items: baseline; }
+
         .pg-num      { font-size: 14px; font-weight: bold; }
         .proj-title  { font-size: 18px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
         .proj-status { font-size: 10px; color: var(--gray); text-transform: uppercase; letter-spacing: 2px; }
 
-        /* ─────────────────────────────────────────
-           LAB
-        ───────────────────────────────────────── */
+        /* LAB */
         #lab {
             position: fixed; inset: 0; z-index: 1000;
             display: none; flex-direction: column;
@@ -130,90 +128,90 @@
             padding: 0 24px;
             position: relative; z-index: 10;
         }
-        .nav-draf { font-size: 14px; font-weight: 900; letter-spacing: 2px; }
-        .nav-stamp {
+        .nav-draf   { font-size: 14px; font-weight: 900; letter-spacing: 2px; }
+        .nav-stamp  {
             position: absolute; left: 50%; transform: translateX(-50%);
             font-size: 10px; letter-spacing: 2px; color: var(--ink);
             opacity: 0.4;
         }
-        #nav-burger-top { font-size: 20px; cursor: pointer; line-height: 1; }
+        .nav-burger { font-size: 20px; cursor: pointer; line-height: 1; }
 
+        /* PAGE AREA — holds one or two page panels */
         #page-area {
             flex-grow: 1; position: relative; overflow: hidden;
+            display: flex;
         }
 
-        #dot-grid {
+        /* A single page panel: portrait or one half of a spread */
+        .page-panel {
+            position: relative;
+            flex: 1;
+            overflow: hidden;
+        }
+        .page-panel + .page-panel {
+            border-left: 2px solid rgba(15,15,13,0.18);
+        }
+
+        .dot-grid {
             position: absolute; inset: 0; z-index: 1; pointer-events: none;
             background-image: radial-gradient(var(--ink) 0.5px, transparent 0.5px);
             background-size: 15.1px 15.1px;
             opacity: 0.08;
         }
 
-        #cvs {
+        .page-canvas {
             position: absolute; inset: 0; z-index: 2;
             display: block; width: 100%; height: 100%;
             cursor: crosshair;
+            touch-action: none;
         }
 
-        /* ─────────────────────────────────────────
-           TOOL DRAWER — opens upward from toolbar left
-        ───────────────────────────────────────── */
-        #tool-drawer {
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 228px;
-            background: var(--bone);
-            border: 1px solid var(--ink);
-            border-bottom: none;
-            z-index: 20;
-            display: none;
-            flex-direction: column;
+        /* Zoom indicator — top right of each panel, fades out */
+        .zoom-badge {
+            position: absolute; top: 12px; right: 12px; z-index: 8;
+            font-size: 9px; letter-spacing: 2px; color: var(--gray);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .zoom-badge.show { opacity: 1; }
+
+        #privacy-toggle {
+            position: absolute; bottom: 16px; left: 16px; z-index: 5;
+            font-size: 10px; font-weight: bold; letter-spacing: 2px;
+            border: 1px solid var(--gray); color: var(--gray);
+            padding: 4px 8px; cursor: pointer;
+        }
+        #privacy-toggle.private { border-color: var(--ink); color: var(--ink); }
+
+        #pal-trigger {
+            position: absolute; bottom: 16px; left: 120px; z-index: 5;
+            font-size: 11px; font-weight: bold; letter-spacing: 1px;
+            border: 1px solid var(--gray); color: var(--gray);
+            padding: 4px 8px; cursor: pointer;
+            touch-action: none;
+            -webkit-touch-callout: none;
         }
 
-        .drawer-section {
-            border-bottom: 1px solid var(--ink);
-            padding: 12px 14px;
-        }
-        .drawer-section:last-child { border-bottom: none; }
-
-        .drawer-label {
-            font-size: 7px; letter-spacing: 3px; color: var(--gray);
-            text-transform: uppercase; margin-bottom: 10px;
+        #palette {
+            position: absolute; bottom: 52px; left: 120px; z-index: 6;
+            background: var(--bone); border: 1px solid var(--ink);
+            padding: 16px; display: none; flex-direction: column; gap: 16px;
+            min-width: 120px;
         }
 
-        .nib-slots {
-            display: flex; gap: 6px;
+        .pal-label {
+            font-size: 8px; letter-spacing: 3px; color: var(--gray);
+            text-transform: uppercase; margin-bottom: 6px;
         }
-        .nib-slot {
-            flex: 1;
-            display: flex; flex-direction: column; gap: 4px;
-            align-items: stretch;
+
+        .nib-row { display: flex; gap: 14px; align-items: center; }
+        .nib-btn {
+            font-size: 9px; font-weight: bold; letter-spacing: 1px;
+            color: var(--gray); border-bottom: 1px solid transparent;
+            padding-bottom: 2px; cursor: pointer;
         }
-        .nib-slot-btn {
-            padding: 5px 0;
-            border: 1px solid var(--gray);
-            font-family: 'Courier New', monospace;
-            font-size: 9px; font-weight: bold; letter-spacing: 0.5px;
-            text-align: center; cursor: pointer; color: var(--gray);
-            background: var(--bone);
-        }
-        .nib-slot-btn.active {
-            border-color: var(--fired);
-            color: var(--fired);
-        }
-        .nib-slot-select {
-            width: 100%;
-            font-family: 'Courier New', monospace;
-            font-size: 8px;
-            border: none; border-bottom: 1px solid var(--gray);
-            background: transparent; color: var(--gray);
-            cursor: pointer;
-            padding: 2px 0;
-            -webkit-appearance: none;
-            appearance: none;
-            text-align: center;
-        }
-        .nib-slot-select:focus { outline: none; border-color: var(--ink); color: var(--ink); }
+        .nib-btn.active { color: var(--fired); border-color: var(--fired); }
 
         .swatch-row { display: flex; gap: 8px; align-items: center; }
         .swatch {
@@ -222,93 +220,21 @@
             flex-shrink: 0;
         }
         .swatch.active { outline: 2px solid var(--fired); outline-offset: 2px; }
-        #eraser-mode-btn {
+
+        .eraser-btn {
             width: 20px; height: 20px; flex-shrink: 0;
             border: 1px solid var(--ink);
             display: flex; align-items: center; justify-content: center;
             font-size: 8px; font-weight: bold; cursor: pointer;
         }
-        #eraser-mode-btn.active { background: var(--ink); color: var(--bone); }
+        .eraser-btn.active { background: var(--ink); color: var(--bone); }
 
-        /* ─────────────────────────────────────────
-           BOTTOM TOOLBAR
-        ───────────────────────────────────────── */
-        #toolbar {
-            height: 48px; flex-shrink: 0;
-            border-top: 1px solid var(--ink);
-            background: var(--bone);
-            display: flex; align-items: stretch;
-            position: relative; z-index: 10;
+        #page-status {
+            position: absolute; bottom: 16px; right: 16px; z-index: 5;
+            font-size: 9px; letter-spacing: 2px; color: var(--gray);
+            text-transform: uppercase; pointer-events: none;
         }
 
-        #pal-trigger {
-            width: 56px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 11px; font-weight: bold; letter-spacing: 1px;
-            border-right: 1px solid var(--ink);
-            color: var(--gray); cursor: pointer;
-            touch-action: none;
-            -webkit-touch-callout: none;
-            flex-shrink: 0;
-        }
-        #pal-trigger.drawer-open { color: var(--fired); }
-
-        #privacy-toggle {
-            width: 44px;
-            display: flex; align-items: center; justify-content: center;
-            border-right: 1px solid var(--ink);
-            font-size: 11px; font-weight: bold; letter-spacing: 1px;
-            cursor: pointer; color: var(--gray);
-            flex-shrink: 0;
-        }
-        #privacy-toggle.private { color: var(--ink); }
-
-        #page-nav {
-            flex-grow: 1;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .page-prev, .page-next {
-            width: 32px; height: 100%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 18px; cursor: pointer; color: var(--gray);
-            flex-shrink: 0;
-        }
-        .page-prev:active, .page-next:active { color: var(--ink); }
-        #page-stamp {
-            flex-grow: 1; text-align: center;
-            font-size: 9px; letter-spacing: 2px;
-            color: var(--ink); opacity: 0.45;
-            text-transform: uppercase;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-
-        #toolbar-right {
-            width: 48px;
-            display: flex; flex-direction: column; align-items: stretch;
-            border-left: 1px solid var(--ink);
-            flex-shrink: 0;
-        }
-
-        #ribbon {
-            flex: 1;
-            display: flex; align-items: center; justify-content: center;
-            border-bottom: 1px solid var(--ink);
-            cursor: pointer;
-        }
-        #ribbon-mark {
-            width: 5px; height: 16px;
-            background: var(--fired);
-        }
-
-        #nav-burger {
-            flex: 1;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 16px; cursor: pointer;
-        }
-
-        /* ─────────────────────────────────────────
-           MENU
-        ───────────────────────────────────────── */
         #menu-overlay {
             position: fixed; inset: 0; z-index: 7000;
             background: rgba(15,15,13,0.8);
@@ -334,7 +260,7 @@
 </head>
 <body>
 
-<!-- ── COVER ── -->
+<!-- COVER -->
 <div id="gate">
     <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
         <rect width="100%" height="100%" fill="#F0EDE6"/>
@@ -346,23 +272,18 @@
         <line x1="40%" y1="0"   x2="40%" y2="100%" stroke="#D1CDC4" stroke-width="0.5"/>
         <line x1="60%" y1="0"   x2="60%" y2="100%" stroke="#D1CDC4" stroke-width="0.5"/>
         <line x1="80%" y1="0"   x2="80%" y2="100%" stroke="#D1CDC4" stroke-width="0.5"/>
-        <text x="50%" y="47%"
-              text-anchor="middle"
-              font-family="Courier New, monospace"
-              font-size="36" font-weight="900"
-              fill="#0F0F0D" letter-spacing="4">DRAF.</text>
-        <text x="50%" y="56%"
-              text-anchor="middle"
-              font-family="Courier New, monospace"
+        <text x="50%" y="47%" text-anchor="middle" font-family="Courier New, monospace"
+              font-size="36" font-weight="900" fill="#0F0F0D" letter-spacing="4">DRAF.</text>
+        <text x="50%" y="56%" text-anchor="middle" font-family="Courier New, monospace"
               font-size="10" fill="#D1CDC4" letter-spacing="6">TAP TO OPEN</text>
         <rect x="0" y="0" width="8" height="100%" fill="#F48FB1"/>
     </svg>
 </div>
 
-<!-- ── BRIDGE ── -->
+<!-- BRIDGE -->
 <div id="bridge">//|</div>
 
-<!-- ── TOC SPREAD ── -->
+<!-- TOC SPREAD -->
 <div id="toc-spread">
     <div class="page-left">
         <div class="grid-container">
@@ -380,7 +301,7 @@
     </div>
     <div class="page-right">
         <div class="toc-list">
-            <div class="toc-module">
+            <div class="toc-module" onclick="enterLab()">
                 <div class="toc-row">
                     <span class="pg-num">001</span>
                     <span class="proj-title">LABORATORY_SKETCH</span>
@@ -394,55 +315,43 @@
     </div>
 </div>
 
-<!-- ── LAB ── -->
+<!-- LAB -->
 <div id="lab">
     <div id="lab-nav">
         <span class="nav-draf">DRAF.</span>
-        <span class="nav-stamp">VOL_01 &middot; 001</span>
-        <span id="nav-burger-top">&#9776;</span>
+        <span class="nav-stamp" id="nav-stamp">VOL_01 &middot; 001</span>
+        <span class="nav-burger" onclick="toggleMenu(true)">&#9776;</span>
     </div>
     <div id="page-area">
-        <div id="dot-grid"></div>
-        <canvas id="cvs"></canvas>
-        <!-- TOOL DRAWER — anchored to bottom of page-area -->
-        <div id="tool-drawer">
-            <div class="drawer-section">
-                <div class="drawer-label">PENCIL NIB</div>
-                <div class="nib-slots" id="pencil-slots"></div>
+        <!-- panels injected by JS based on orientation -->
+    </div>
+    <!-- UI overlays live outside panels so they don't split -->
+    <div id="privacy-toggle" class="private" onclick="togglePrivacy()">// PRIVATE</div>
+    <div id="pal-trigger">//|</div>
+    <div id="palette">
+        <div>
+            <div class="pal-label">NIB</div>
+            <div class="nib-row">
+                <span class="nib-btn" data-nib="02">02</span>
+                <span class="nib-btn active" data-nib="05">05</span>
+                <span class="nib-btn" data-nib="08">08</span>
             </div>
-            <div class="drawer-section">
-                <div class="drawer-label">ERASER NIB</div>
-                <div class="nib-slots" id="eraser-slots"></div>
-            </div>
-            <div class="drawer-section">
-                <div class="drawer-label">INK</div>
-                <div class="swatch-row">
-                    <div class="swatch active" data-color="#0F0F0D" style="background:#0F0F0D"></div>
-                    <div class="swatch" data-color="#F48FB1" style="background:#F48FB1"></div>
-                    <div class="swatch" data-color="#D4500A" style="background:#D4500A"></div>
-                    <div class="swatch" data-color="#1A3A5C" style="background:#1A3A5C"></div>
-                    <div id="eraser-mode-btn">E</div>
-                </div>
+        </div>
+        <div>
+            <div class="pal-label">INK</div>
+            <div class="swatch-row">
+                <div class="swatch active" data-color="#0F0F0D" style="background:#0F0F0D"></div>
+                <div class="swatch" data-color="#F48FB1" style="background:#F48FB1"></div>
+                <div class="swatch" data-color="#D4500A" style="background:#D4500A"></div>
+                <div class="swatch" data-color="#1A3A5C" style="background:#1A3A5C"></div>
+                <div class="eraser-btn" id="eraser-btn">E</div>
             </div>
         </div>
     </div>
-    <!-- BOTTOM TOOLBAR -->
-    <div id="toolbar">
-        <div id="pal-trigger">//|</div>
-        <div id="privacy-toggle" class="private">//</div>
-        <div id="page-nav">
-            <div class="page-prev">&#8249;</div>
-            <div id="page-stamp">PRIVATE &middot; VOL_01 &middot; 001</div>
-            <div class="page-next">&#8250;</div>
-        </div>
-        <div id="toolbar-right">
-            <div id="ribbon"><div id="ribbon-mark"></div></div>
-            <div id="nav-burger">&#9776;</div>
-        </div>
-    </div>
+    <div id="page-status">PRIVATE &middot; VOL_01 &middot; 001</div>
 </div>
 
-<!-- ── MENU ── -->
+<!-- MENU -->
 <div id="menu-overlay" onclick="toggleMenu(false)">
     <div id="menu-content" onclick="event.stopPropagation()" ontouchstart="event.stopPropagation()">
         <div class="menu-item" onclick="exitToTOC()" ontouchend="exitToTOC()">&#8592; VOLUME_TOC</div>
@@ -455,102 +364,29 @@
 </div>
 
 <script>
-/* ── NIB DEFINITIONS ── */
-const NIB_SIZES = [
-    { key: '005',  mm: 0.20 },
-    { key: '01',   mm: 0.25 },
-    { key: '02',   mm: 0.30 },
-    { key: '03',   mm: 0.35 },
-    { key: '05',   mm: 0.45 },
-    { key: '08',   mm: 0.50 },
-    { key: '1',    mm: 0.65 },
-    { key: '5mm',  mm: 5.00 },
-    { key: '7mm',  mm: 7.00 },
-    { key: '10mm', mm: 10.0 },
-];
+// ─── CONSTANTS ───────────────────────────────────────────────────────────────
+const NIBS     = { '02': 0.30 * 3.78, '05': 0.45 * 3.78, '08': 0.50 * 3.78 };
+const STORE_L  = 'vole_vol01_001_L';
+const STORE_R  = 'vole_vol01_001_R';
 
-function nibPx(mm) { return mm * 3.78; }
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let tool        = 'ink';
+let inkColor    = '#0F0F0D';
+let nibKey      = '05';
+let isPrivate   = true;
+let holdTimer   = null;
+let paletteOpen = false;
+let isSpread    = false;   // landscape = two panels
 
-/* ── STATE ── */
-let tool             = 'ink';
-let inkColor         = '#0F0F0D';
-let drawing          = false;
-let canvasReady      = false;
-let isPrivate        = true;
-let holdTimer        = null;
-let drawerOpen       = false;
+// Per-panel state
+// panels: { el, cvs, ctx, dpr, zoom, panX, panY, drawing, lastX, lastY }
+let panels = [];
 
-// Quick-swap slots: 3 per tool type
-let pencilSlots      = ['02', '05', '08'];
-let eraserSlots      = ['02', '05', '08'];
-let activePencilSlot = 1;  // default: 05
-let activeEraserSlot = 1;
+// Active pointer tracking for pinch/pan gesture (per panel)
+// panelGesture[panelIdx] = { pointers: Map<id, {x,y}>, mode: 'idle'|'pan'|'pinch', initDist, initZoom, initMidX, initMidY, initPanX, initPanY }
+let panelGesture = [];
 
-function activePencilMm() {
-    const found = NIB_SIZES.find(n => n.key === pencilSlots[activePencilSlot]);
-    return found ? found.mm : 0.45;
-}
-function activeEraserMm() {
-    const found = NIB_SIZES.find(n => n.key === eraserSlots[activeEraserSlot]);
-    return found ? found.mm : 0.45;
-}
-
-/* ── BUILD DRAWER ── */
-function buildSlots() {
-    buildSlotGroup('pencil-slots', pencilSlots, activePencilSlot, 'pencil');
-    buildSlotGroup('eraser-slots', eraserSlots, activeEraserSlot, 'eraser');
-}
-
-function buildSlotGroup(containerId, slots, activeIdx, type) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-    slots.forEach((nibKey, i) => {
-        const slot = document.createElement('div');
-        slot.className = 'nib-slot';
-
-        const btn = document.createElement('div');
-        btn.className = 'nib-slot-btn' + (i === activeIdx ? ' active' : '');
-        btn.textContent = nibKey;
-        btn.addEventListener('touchend', e => { e.preventDefault(); activateSlot(type, i); });
-        btn.addEventListener('click', () => activateSlot(type, i));
-
-        const sel = document.createElement('select');
-        sel.className = 'nib-slot-select';
-        NIB_SIZES.forEach(n => {
-            const opt = document.createElement('option');
-            opt.value = n.key;
-            opt.textContent = n.key;
-            if (n.key === nibKey) opt.selected = true;
-            sel.appendChild(opt);
-        });
-        sel.addEventListener('change', () => { assignSlot(type, i, sel.value); });
-
-        slot.appendChild(btn);
-        slot.appendChild(sel);
-        container.appendChild(slot);
-    });
-}
-
-function activateSlot(type, idx) {
-    if (type === 'pencil') {
-        activePencilSlot = idx;
-        tool = 'ink';
-        document.getElementById('eraser-mode-btn').classList.remove('active');
-    } else {
-        activeEraserSlot = idx;
-        tool = 'eraser';
-        document.getElementById('eraser-mode-btn').classList.remove('active');
-    }
-    buildSlots();
-}
-
-function assignSlot(type, idx, nibKey) {
-    if (type === 'pencil') pencilSlots[idx] = nibKey;
-    else eraserSlots[idx] = nibKey;
-    buildSlots();
-}
-
-/* ── NAVIGATION ── */
+// ─── BOOT ─────────────────────────────────────────────────────────────────────
 function ignite() {
     document.getElementById('gate').style.display = 'none';
     const br = document.getElementById('bridge');
@@ -564,79 +400,414 @@ function ignite() {
 function enterLab() {
     document.getElementById('toc-spread').style.display = 'none';
     document.getElementById('lab').style.display = 'flex';
-    buildSlots();
-    requestAnimationFrame(() => requestAnimationFrame(initCanvas));
+    buildPanels();
 }
 
 function exitToTOC() {
     toggleMenu(false);
-    closeDrawer();
+    teardownPanels();
     document.getElementById('lab').style.display = 'none';
     document.getElementById('toc-spread').style.display = 'grid';
 }
 
-/* ── PRIVACY ── */
-function togglePrivacy() {
-    isPrivate = !isPrivate;
-    const tog   = document.getElementById('privacy-toggle');
-    const stamp = document.getElementById('page-stamp');
-    if (isPrivate) {
-        tog.classList.add('private');
-        stamp.textContent = 'PRIVATE \u00B7 VOL_01 \u00B7 001';
-    } else {
-        tog.classList.remove('private');
-        stamp.textContent = 'OPEN \u00B7 VOL_01 \u00B7 001';
-    }
-}
-
-/* ── DRAWER ── */
-function startHold() {
-    holdTimer = setTimeout(() => {
-        drawerOpen = !drawerOpen;
-        const drawer  = document.getElementById('tool-drawer');
-        const trigger = document.getElementById('pal-trigger');
-        drawer.style.display  = drawerOpen ? 'flex' : 'none';
-        trigger.classList.toggle('drawer-open', drawerOpen);
-    }, 400);
-}
-function cancelHold() { clearTimeout(holdTimer); }
-
-function closeDrawer() {
-    drawerOpen = false;
-    document.getElementById('tool-drawer').style.display = 'none';
-    document.getElementById('pal-trigger').classList.remove('drawer-open');
-}
-
-/* ── COLOR ── */
-function setColor(c) {
-    tool = 'ink';
-    inkColor = c;
-    document.querySelectorAll('.swatch').forEach(el => el.classList.remove('active'));
-    const target = document.querySelector(`.swatch[data-color="${c}"]`);
-    if (target) target.classList.add('active');
-    document.getElementById('eraser-mode-btn').classList.remove('active');
-}
-
-function setEraserMode() {
-    tool = 'eraser';
-    document.querySelectorAll('.swatch').forEach(el => el.classList.remove('active'));
-    document.getElementById('eraser-mode-btn').classList.add('active');
-}
-
-/* ── MENU ── */
-function toggleMenu(open) {
-    document.getElementById('menu-overlay').style.display = open ? 'flex' : 'none';
-}
-
 function closeBook() {
     toggleMenu(false);
-    closeDrawer();
+    teardownPanels();
     document.getElementById('lab').style.display = 'none';
     document.getElementById('toc-spread').style.display = 'none';
     document.getElementById('gate').style.display = 'flex';
 }
 
-/* ── TOUCH WIRING ── */
+// ─── PANEL LIFECYCLE ─────────────────────────────────────────────────────────
+
+function buildPanels() {
+    const area = document.getElementById('page-area');
+    area.innerHTML = '';
+    panels = [];
+    panelGesture = [];
+
+    isSpread = window.innerWidth > window.innerHeight;
+    const count = isSpread ? 2 : 1;
+    const storageKeys = [STORE_L, STORE_R];
+
+    for (let i = 0; i < count; i++) {
+        const panel = document.createElement('div');
+        panel.className = 'page-panel';
+
+        const grid = document.createElement('div');
+        grid.className = 'dot-grid';
+
+        const cvs = document.createElement('canvas');
+        cvs.className = 'page-canvas';
+        cvs.id = i === 0 ? 'cvs' : 'cvs-r';
+
+        const badge = document.createElement('div');
+        badge.className = 'zoom-badge';
+        badge.id = 'zoom-badge-' + i;
+
+        panel.appendChild(grid);
+        panel.appendChild(cvs);
+        panel.appendChild(badge);
+        area.appendChild(panel);
+
+        const dpr = window.devicePixelRatio || 1;
+        const state = {
+            idx: i,
+            el: panel,
+            cvs,
+            ctx: null,
+            dpr,
+            zoom: 1,
+            panX: 0,
+            panY: 0,
+            drawing: false,
+            lastX: 0,
+            lastY: 0,
+            storageKey: storageKeys[i],
+            badge,
+            zoomTimer: null
+        };
+        panels.push(state);
+        panelGesture.push({ pointers: new Map(), mode: 'idle' });
+
+        initPanel(state);
+        attachPanelEvents(state);
+    }
+
+    // Orientation change
+    window.addEventListener('orientationchange', onOrientationChange);
+    window.addEventListener('resize', onOrientationChange);
+}
+
+let orientationDebounce = null;
+function onOrientationChange() {
+    clearTimeout(orientationDebounce);
+    orientationDebounce = setTimeout(() => {
+        if (document.getElementById('lab').style.display !== 'none') {
+            saveAll();
+            buildPanels();
+        }
+    }, 300);
+}
+
+function teardownPanels() {
+    saveAll();
+    window.removeEventListener('orientationchange', onOrientationChange);
+    window.removeEventListener('resize', onOrientationChange);
+    document.getElementById('page-area').innerHTML = '';
+    panels = [];
+    panelGesture = [];
+}
+
+function saveAll() {
+    panels.forEach(p => savePanel(p));
+}
+
+// ─── CANVAS INIT & PERSISTENCE ───────────────────────────────────────────────
+
+function initPanel(p) {
+    const r  = p.cvs.getBoundingClientRect();
+    p.cvs.width  = r.width  * p.dpr;
+    p.cvs.height = r.height * p.dpr;
+    p.ctx = p.cvs.getContext('2d');
+    p.ctx.setTransform(p.dpr, 0, 0, p.dpr, 0, 0);
+
+    // Fill bone
+    p.ctx.fillStyle = '#F5F2EB';
+    p.ctx.fillRect(0, 0, r.width, r.height);
+
+    // Restore saved drawing
+    const saved = localStorage.getItem(p.storageKey);
+    if (saved) {
+        const img = new Image();
+        img.onload = () => {
+            applyTransform(p);
+            p.ctx.drawImage(img, 0, 0, r.width, r.height);
+        };
+        img.src = saved;
+    }
+}
+
+function savePanel(p) {
+    try {
+        const data = p.cvs.toDataURL('image/png');
+        localStorage.setItem(p.storageKey, data);
+    } catch (e) {
+        // localStorage full or unavailable — silent fail
+    }
+}
+
+// ─── TRANSFORM HELPERS ───────────────────────────────────────────────────────
+
+function applyTransform(p) {
+    p.ctx.setTransform(p.dpr * p.zoom, 0, 0, p.dpr * p.zoom, p.panX * p.dpr, p.panY * p.dpr);
+}
+
+function clampPan(p) {
+    const w = p.cvs.getBoundingClientRect().width;
+    const h = p.cvs.getBoundingClientRect().height;
+    const maxPanX = 0;
+    const minPanX = w * (1 - p.zoom);
+    const maxPanY = 0;
+    const minPanY = h * (1 - p.zoom);
+    p.panX = Math.min(maxPanX, Math.max(minPanX, p.panX));
+    p.panY = Math.min(maxPanY, Math.max(minPanY, p.panY));
+}
+
+function canvasToClient(p, cx, cy) {
+    // Convert canvas coords (in page space) back to client coords
+    return {
+        x: (cx - p.panX) * p.zoom,
+        y: (cy - p.panY) * p.zoom
+    };
+}
+
+function clientToCanvas(p, clientX, clientY) {
+    const r = p.cvs.getBoundingClientRect();
+    const lx = clientX - r.left;
+    const ly = clientY - r.top;
+    return {
+        x: lx / p.zoom - p.panX / p.zoom,
+        y: ly / p.zoom - p.panY / p.zoom
+    };
+    // Simpler: canvas coords = (client - pan) / zoom
+    // Actually with transform: ctx coord = (client / zoom) - panX... let's be precise.
+    // ctx.setTransform(dpr*zoom, 0, 0, dpr*zoom, panX*dpr, panY*dpr)
+    // So: screen_x = canvas_x * dpr * zoom + panX * dpr  =>  canvas_x = (screen_x/dpr - panX) / zoom
+    // But we work in CSS pixels (no dpr), so:
+    //   css_screen_x = canvas_x * zoom + panX  =>  canvas_x = (css_screen_x - panX) / zoom
+}
+
+// Correct version used everywhere:
+function getCanvasPos(p, clientX, clientY) {
+    const r = p.cvs.getBoundingClientRect();
+    const lx = clientX - r.left;
+    const ly = clientY - r.top;
+    return {
+        x: (lx - p.panX) / p.zoom,
+        y: (ly - p.panY) / p.zoom
+    };
+}
+
+function showZoomBadge(p) {
+    p.badge.textContent = Math.round(p.zoom * 100) + '%';
+    p.badge.classList.add('show');
+    clearTimeout(p.zoomTimer);
+    p.zoomTimer = setTimeout(() => p.badge.classList.remove('show'), 1200);
+}
+
+// ─── REDRAW ───────────────────────────────────────────────────────────────────
+// After pan/zoom we need to re-apply the transform. The canvas content stays
+// in page space; we move it with the transform, then clip.
+// This means the backing canvas IS page-space, always 1:1 in page units.
+// We just set the transform and redraw from saved image for a clean frame.
+
+function redrawPanel(p) {
+    const r = p.cvs.getBoundingClientRect();
+    const w = r.width, h = r.height;
+
+    // Save current canvas content
+    const saved = p.cvs.toDataURL('image/png');
+    const img = new Image();
+    img.onload = () => {
+        // Reset to identity, fill bone
+        p.ctx.setTransform(p.dpr, 0, 0, p.dpr, 0, 0);
+        p.ctx.fillStyle = '#F5F2EB';
+        p.ctx.fillRect(0, 0, w, h);
+        // Apply zoom/pan transform, draw content
+        applyTransform(p);
+        p.ctx.drawImage(img, 0, 0, w, h);
+    };
+    img.src = saved;
+}
+
+// ─── POINTER EVENTS ───────────────────────────────────────────────────────────
+
+function attachPanelEvents(p) {
+    const cvs = p.cvs;
+    const idx = p.idx;
+
+    cvs.addEventListener('pointerdown', e => {
+        e.preventDefault();
+        const g = panelGesture[idx];
+        g.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+        if (e.pointerType === 'pen') {
+            // Draw
+            p.drawing = true;
+            const pos = getCanvasPos(p, e.clientX, e.clientY);
+            p.lastX = pos.x; p.lastY = pos.y;
+            p.ctx.beginPath();
+            p.ctx.moveTo(pos.x, pos.y);
+        } else {
+            // Touch / finger — navigate
+            if (g.pointers.size === 2) {
+                // Transition to pinch
+                const pts = [...g.pointers.values()];
+                const dx = pts[1].x - pts[0].x;
+                const dy = pts[1].y - pts[0].y;
+                g.initDist  = Math.hypot(dx, dy);
+                g.initZoom  = p.zoom;
+                g.initMidX  = (pts[0].x + pts[1].x) / 2;
+                g.initMidY  = (pts[0].y + pts[1].y) / 2;
+                g.initPanX  = p.panX;
+                g.initPanY  = p.panY;
+                g.mode = 'pinch';
+            } else if (g.pointers.size === 1) {
+                g.mode = 'pan';
+                g.initPanX = p.panX;
+                g.initPanY = p.panY;
+                g.startX = e.clientX;
+                g.startY = e.clientY;
+            }
+        }
+    }, { passive: false });
+
+    cvs.addEventListener('pointermove', e => {
+        e.preventDefault();
+        const g = panelGesture[idx];
+
+        if (e.pointerType === 'pen') {
+            if (!p.drawing) return;
+            const pos = getCanvasPos(p, e.clientX, e.clientY);
+            applyStroke(p, pos.x, pos.y);
+            p.lastX = pos.x; p.lastY = pos.y;
+            return;
+        }
+
+        // Finger move
+        if (!g.pointers.has(e.pointerId)) return;
+        g.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+        if (g.mode === 'pan' && g.pointers.size === 1) {
+            const dx = e.clientX - g.startX;
+            const dy = e.clientY - g.startY;
+            p.panX = g.initPanX + dx;
+            p.panY = g.initPanY + dy;
+            clampPan(p);
+            redrawPanel(p);
+            showZoomBadge(p);
+        } else if (g.mode === 'pinch' && g.pointers.size === 2) {
+            const pts = [...g.pointers.values()];
+            const dx = pts[1].x - pts[0].x;
+            const dy = pts[1].y - pts[0].y;
+            const dist = Math.hypot(dx, dy);
+            const scale = dist / g.initDist;
+            const newZoom = Math.min(8, Math.max(1, g.initZoom * scale));
+
+            const midX = (pts[0].x + pts[1].x) / 2;
+            const midY = (pts[0].y + pts[1].y) / 2;
+            const r = p.cvs.getBoundingClientRect();
+            const lmx = midX - r.left;
+            const lmy = midY - r.top;
+
+            // Zoom around midpoint
+            p.panX = lmx - (lmx - g.initPanX) * (newZoom / g.initZoom);
+            p.panY = lmy - (lmy - g.initPanY) * (newZoom / g.initZoom);
+            p.zoom = newZoom;
+            clampPan(p);
+            redrawPanel(p);
+            showZoomBadge(p);
+        }
+    }, { passive: false });
+
+    const endDraw = e => {
+        if (e.pointerType === 'pen') {
+            if (p.drawing) {
+                p.drawing = false;
+                savePanel(p); // persist on pen lift
+            }
+        } else {
+            const g = panelGesture[idx];
+            g.pointers.delete(e.pointerId);
+            if (g.pointers.size < 2) g.mode = g.pointers.size === 1 ? 'pan' : 'idle';
+            if (g.pointers.size === 1) {
+                // Reset pan reference for remaining finger
+                const remaining = [...g.pointers.values()][0];
+                g.startX = remaining.x; g.startY = remaining.y;
+                g.initPanX = p.panX; g.initPanY = p.panY;
+            }
+        }
+    };
+
+    cvs.addEventListener('pointerup',     endDraw, { passive: true });
+    cvs.addEventListener('pointercancel', endDraw, { passive: true });
+}
+
+// ─── STROKE ───────────────────────────────────────────────────────────────────
+
+function applyStroke(p, x, y) {
+    const nibPx = (NIBS[nibKey] || 1.7) / p.zoom;  // compensate for zoom
+    applyTransform(p);
+
+    if (tool === 'eraser') {
+        p.ctx.globalCompositeOperation = 'source-over';
+        p.ctx.strokeStyle = '#F5F2EB';
+        p.ctx.lineWidth   = 24 / p.zoom;
+    } else {
+        p.ctx.globalCompositeOperation = 'source-over';
+        p.ctx.strokeStyle = inkColor;
+        p.ctx.lineWidth   = nibPx;
+    }
+    p.ctx.lineCap  = 'round';
+    p.ctx.lineJoin = 'round';
+    p.ctx.lineTo(x, y);
+    p.ctx.stroke();
+    p.ctx.beginPath();
+    p.ctx.moveTo(x, y);
+}
+
+// ─── UI ───────────────────────────────────────────────────────────────────────
+
+function togglePrivacy() {
+    isPrivate = !isPrivate;
+    const tog = document.getElementById('privacy-toggle');
+    const sta = document.getElementById('page-status');
+    if (isPrivate) {
+        tog.textContent = '// PRIVATE';
+        tog.classList.add('private');
+        sta.innerHTML = 'PRIVATE &middot; VOL_01 &middot; 001';
+    } else {
+        tog.textContent = '// OPEN';
+        tog.classList.remove('private');
+        sta.innerHTML = 'OPEN &middot; VOL_01 &middot; 001';
+    }
+}
+
+function startHold() {
+    holdTimer = setTimeout(() => {
+        paletteOpen = !paletteOpen;
+        document.getElementById('palette').style.display = paletteOpen ? 'flex' : 'none';
+    }, 400);
+}
+function cancelHold() { clearTimeout(holdTimer); }
+
+function setNib(n) {
+    nibKey = n;
+    document.querySelectorAll('.nib-btn').forEach(el => el.classList.remove('active'));
+    document.querySelector(`.nib-btn[data-nib="${n}"]`).classList.add('active');
+}
+
+function setColor(c) {
+    tool = 'ink';
+    inkColor = c;
+    document.querySelectorAll('.swatch').forEach(el => el.classList.remove('active'));
+    document.querySelector(`.swatch[data-color="${c}"]`).classList.add('active');
+    document.getElementById('eraser-btn').classList.remove('active');
+}
+
+function setEraser() {
+    tool = 'eraser';
+    document.querySelectorAll('.swatch').forEach(el => el.classList.remove('active'));
+    document.getElementById('eraser-btn').classList.add('active');
+}
+
+function toggleMenu(open) {
+    document.getElementById('menu-overlay').style.display = open ? 'flex' : 'none';
+}
+
+// ─── EVENT WIRING ─────────────────────────────────────────────────────────────
+
 function tap(id, fn) {
     const el = document.getElementById(id);
     if (!el) return;
@@ -644,99 +815,35 @@ function tap(id, fn) {
     el.addEventListener('click', fn);
 }
 
-tap('gate', ignite);
 tap('grid-lab', enterLab);
 tap('privacy-toggle', togglePrivacy);
-tap('eraser-mode-btn', setEraserMode);
-tap('nav-burger', () => toggleMenu(true));
-tap('nav-burger-top', () => toggleMenu(true));
-tap('ribbon', () => { /* Phase 2: jump to last modified page */ closeDrawer(); });
+tap('gate', ignite);
 
 document.querySelectorAll('.toc-module').forEach(el => {
     el.addEventListener('touchend', e => { e.preventDefault(); enterLab(); }, { passive: false });
-    el.addEventListener('click', enterLab);
+});
+
+document.querySelectorAll('.nib-btn').forEach(el => {
+    el.addEventListener('click',    () => setNib(el.dataset.nib));
+    el.addEventListener('touchend', e => { e.preventDefault(); setNib(el.dataset.nib); }, { passive: false });
 });
 
 document.querySelectorAll('.swatch').forEach(el => {
+    el.addEventListener('click',    () => setColor(el.dataset.color));
     el.addEventListener('touchend', e => { e.preventDefault(); setColor(el.dataset.color); }, { passive: false });
-    el.addEventListener('click', () => setColor(el.dataset.color));
 });
+
+tap('eraser-btn', setEraser);
+tap('nav-burger',  () => toggleMenu(true));
 
 const palTrigger = document.getElementById('pal-trigger');
-palTrigger.addEventListener('touchstart', e => { e.preventDefault(); startHold(); }, { passive: false });
-palTrigger.addEventListener('touchend',   e => { e.preventDefault(); cancelHold(); }, { passive: false });
-palTrigger.addEventListener('touchcancel',e => { cancelHold(); });
-palTrigger.addEventListener('mousedown', startHold);
-palTrigger.addEventListener('mouseup',   cancelHold);
-palTrigger.addEventListener('mouseleave',cancelHold);
+palTrigger.addEventListener('touchstart',  e => { e.preventDefault(); startHold(); }, { passive: false });
+palTrigger.addEventListener('touchend',    e => { e.preventDefault(); cancelHold(); }, { passive: false });
+palTrigger.addEventListener('touchcancel', e => { cancelHold(); }, { passive: false });
+palTrigger.addEventListener('mousedown',   startHold);
+palTrigger.addEventListener('mouseup',     cancelHold);
+palTrigger.addEventListener('mouseleave',  cancelHold);
 
-/* Close drawer when touching canvas */
-document.addEventListener('DOMContentLoaded', () => {
-    const cvs = document.getElementById('cvs');
-    if (cvs) {
-        cvs.addEventListener('pointerdown', () => { if (drawerOpen) closeDrawer(); });
-    }
-});
-
-/* ── CANVAS ── */
-function initCanvas() {
-    if (canvasReady) return;
-    canvasReady = true;
-
-    const cvs = document.getElementById('cvs');
-    const ctx = cvs.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-
-    function resize() {
-        const r = cvs.getBoundingClientRect();
-        cvs.width  = r.width  * dpr;
-        cvs.height = r.height * dpr;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        ctx.fillStyle = '#F5F2EB';
-        ctx.fillRect(0, 0, r.width, r.height);
-    }
-    resize();
-
-    cvs.addEventListener('pointerdown', e => {
-        e.preventDefault();
-        drawing = true;
-        const p = getPos(e);
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-    });
-
-    cvs.addEventListener('pointermove', e => {
-        e.preventDefault();
-        if (!drawing) return;
-        const p = getPos(e);
-        applyStroke(ctx, p.x, p.y);
-    });
-
-    window.addEventListener('pointerup',     () => { drawing = false; });
-    window.addEventListener('pointercancel', () => { drawing = false; });
-
-    function getPos(e) {
-        const r = cvs.getBoundingClientRect();
-        return { x: e.clientX - r.left, y: e.clientY - r.top };
-    }
-}
-
-function applyStroke(ctx, x, y) {
-    ctx.globalCompositeOperation = 'source-over';
-    if (tool === 'eraser') {
-        ctx.strokeStyle = '#F5F2EB';
-        ctx.lineWidth   = nibPx(activeEraserMm());
-    } else {
-        ctx.strokeStyle = inkColor;
-        ctx.lineWidth   = nibPx(activePencilMm());
-    }
-    ctx.lineCap  = 'round';
-    ctx.lineJoin = 'round';
-    ctx.lineTo(x, y);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-}
 </script>
 
 </body>
