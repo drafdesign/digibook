@@ -86,10 +86,29 @@
         .grid-cell {
             border: 1px solid var(--ink);
             display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            position: relative;
         }
 
         .grid-cell.sticky { background: #FFFDE7; }
         .mark { font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+
+        /* TOC grid shape variants */
+        .grid-cell.rounded-top    { border-radius: 18px 18px 0 0; }
+        .grid-cell.rounded-bottom { border-radius: 0 0 18px 18px; }
+        .grid-cell.rounded-all    { border-radius: 18px; }
+
+        /* Diagonal stripe fill (first cell) */
+        .stripe-fill {
+            position: absolute; inset: 0;
+            background: repeating-linear-gradient(
+                135deg,
+                var(--pink) 0px,
+                var(--pink) 18px,
+                transparent 18px,
+                transparent 36px
+            );
+        }
 
         .page-right {
             display: flex; flex-direction: column;
@@ -176,25 +195,19 @@
         }
         .zoom-badge.show { opacity: 1; }
 
-        #privacy-toggle {
-            position: absolute; bottom: 16px; left: 16px; z-index: 5;
-            font-size: 10px; font-weight: bold; letter-spacing: 2px;
-            border: 1px solid var(--gray); color: var(--gray);
-            padding: 4px 8px; cursor: pointer;
-        }
-        #privacy-toggle.private { border-color: var(--ink); color: var(--ink); }
-
         #pal-trigger {
-            position: absolute; bottom: 16px; left: 120px; z-index: 5;
-            font-size: 11px; font-weight: bold; letter-spacing: 1px;
-            border: 1px solid var(--gray); color: var(--gray);
-            padding: 4px 8px; cursor: pointer;
+            position: absolute; bottom: 16px; left: 16px; z-index: 5;
+            width: 32px; height: 32px;
+            background: var(--fired);
+            border-radius: 50%;
+            cursor: pointer;
             touch-action: none;
             -webkit-touch-callout: none;
+            display: flex; align-items: center; justify-content: center;
         }
 
         #palette {
-            position: absolute; bottom: 52px; left: 120px; z-index: 6;
+            position: absolute; bottom: 60px; left: 16px; z-index: 6;
             background: var(--bone); border: 1px solid var(--ink);
             padding: 16px; display: none; flex-direction: column; gap: 16px;
             min-width: 120px;
@@ -228,6 +241,20 @@
             font-size: 8px; font-weight: bold; cursor: pointer;
         }
         .eraser-btn.active { background: var(--ink); color: var(--bone); }
+
+        #privacy-toggle {
+            position: absolute; bottom: 16px; left: 60px; z-index: 5;
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--gray);
+            background: transparent;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        #privacy-toggle.private {
+            background: var(--fired);
+            border-color: var(--fired);
+        }
 
         #page-status {
             position: absolute; bottom: 16px; right: 16px; z-index: 5;
@@ -287,16 +314,20 @@
 <div id="toc-spread">
     <div class="page-left">
         <div class="grid-container">
-            <div class="grid-cell" id="grid-lab"><span class="mark">//|</span></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell sticky">
-                <span style="font-size:7px;color:var(--gray);text-align:center;padding:4px;line-height:1.6;">[ STICKY_INBOX ]</span>
+            <!-- Row 1: stripe cell + rounded-top cell -->
+            <div class="grid-cell rounded-all" id="grid-lab" onclick="enterLab()" style="cursor:pointer;">
+                <div class="stripe-fill"></div>
             </div>
+            <div class="grid-cell rounded-top"></div>
+            <!-- Row 2: plain squares -->
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <!-- Row 3: plain squares -->
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <!-- Row 4: U-shapes (rounded bottom) -->
+            <div class="grid-cell rounded-bottom"></div>
+            <div class="grid-cell rounded-bottom"></div>
         </div>
     </div>
     <div class="page-right">
@@ -326,8 +357,8 @@
         <!-- panels injected by JS based on orientation -->
     </div>
     <!-- UI overlays live outside panels so they don't split -->
-    <div id="privacy-toggle" class="private" onclick="togglePrivacy()">// PRIVATE</div>
-    <div id="pal-trigger">//|</div>
+    <div id="privacy-toggle" class="private" onclick="togglePrivacy()"></div>
+    <div id="pal-trigger"></div>
     <div id="palette">
         <div>
             <div class="pal-label">NIB</div>
@@ -764,11 +795,9 @@ function togglePrivacy() {
     const tog = document.getElementById('privacy-toggle');
     const sta = document.getElementById('page-status');
     if (isPrivate) {
-        tog.textContent = '// PRIVATE';
         tog.classList.add('private');
         sta.innerHTML = 'PRIVATE &middot; VOL_01 &middot; 001';
     } else {
-        tog.textContent = '// OPEN';
         tog.classList.remove('private');
         sta.innerHTML = 'OPEN &middot; VOL_01 &middot; 001';
     }
